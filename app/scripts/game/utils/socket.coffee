@@ -42,7 +42,8 @@ define(['events'], (events) ->
       socket.on 'leave', (data) ->
         # console.log "Leave triggered by #{data.user}, current user is #{user}"
         if data.user != user
-          console.log "#{data.user} just left the map"
+          actions.trigger 'player leave', data.user
+          # console.log "#{data.user} just left the map"
 
     _joinListener = (mapId, thisUser) ->
       # console.log "Register #{thisUser} for join events on #{mapId}"
