@@ -1,16 +1,27 @@
-define(['socketio'], (io) ->
+define(['events'], (events) ->
   return (rootUrl) ->
-    socket = io.connect(rootUrl)
+    socket = io.connect()
     actions = {}
+    # map
 
-    actions.join = (mapId, thisUser) ->
-      socket.emit 'join', mapId
-      _joinListener mapId, thisUser 
+    actions.join = (mapId, thisUser, initPos) ->
+      # map = mapId
+      socket.emit 'join',
+        user: thisUser
+        mapId: mapId
+        x: initPos.x
+        y: initPos.y
+
+      _joinListener mapId, thisUser
+      _leaveListener mapId, thisUser
+      _moveListener thisUser
 
     actions.leave = (mapId, thisUser) ->
       socket.emit 'leave', 
         user: thisUser
         mapId: mapId
+
+      # console.log "#{thisUser} emitted leave from #{mapId}"
 
     actions.message = (message, mapId, thisUser) ->
       socket.emit 'message',
@@ -18,30 +29,39 @@ define(['socketio'], (io) ->
         message: message
         room: mapId
 
-    actions.move = (x, y, mapId, thisUser) ->
+    actions.move = (dir, user, mapId, x, y) ->
       socket.emit 'move',
+        dir: dir
+        user: user
+        room: mapId
         x: x
         y: y
-        user: thisUser
-        mapId: mapId
 
     _leaveListener = (mapId, user) ->
-      socket.on 'leave', (mapId, user, thisUser) ->
-        
-
-    # _leaveListener = (mapId, user) ->
-    #   socket.on 'leave', (data) ->
-    #     if data.user is not user
-    #       console.log 
+      # console.log "Register #{user} for leave events on #{mapId}"
+      socket.on 'leave', (data) ->
+        # console.log "Leave triggered by #{data.user}, current user is #{user}"
+        if data.user != user
+          console.log "#{data.user} just left the map"
 
     _joinListener = (mapId, thisUser) ->
+      # console.log "Register #{thisUser} for join events on #{mapId}"
       socket.on mapId, (data) ->
-        if data.user is not thisUser
-          console.log data.message
+        if data.user != thisUser
+          actions.trigger('join', data)
+        else 
+          actions.trigger('others', data)
+          # console.log "#{data.user} just joined the map"
 
-    _moveListener = (x, y, mapId, user) ->
+
+    _moveListener = (user) ->
+      socket.on 'move', (data) ->
+        if data.user != user
+          actions.trigger('move', data)
+          # console.log "#{data.user} just moved to the #{data.dir}"
 
 
-
+    actions = events(actions)
+    window.actions = actions
     actions
   )
