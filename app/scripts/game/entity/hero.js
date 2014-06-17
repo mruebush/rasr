@@ -74,19 +74,15 @@
         if (this.upKey.isDown) {
           this.sprite.body.velocity.y = -this.speed;
           this.sprite.animations.play("up", 5, false);
-          this.actions.move('up', this.user, this.mapId, this.sprite.x, this.sprite.y);
         } else if (this.downKey.isDown) {
           this.sprite.body.velocity.y = this.speed;
           this.sprite.animations.play("down", 5, false);
-          this.actions.move('down', this.user, this.mapId, this.sprite.x, this.sprite.y);
         } else if (this.leftKey.isDown) {
           this.sprite.body.velocity.x = -this.speed;
           this.sprite.animations.play("left", 5, false);
-          this.actions.move('left', this.user, this.mapId, this.sprite.x, this.sprite.y);
         } else if (this.rightKey.isDown) {
           this.sprite.body.velocity.x = this.speed;
           this.sprite.animations.play("right", 5, false);
-          this.actions.move('right', this.user, this.mapId, this.sprite.x, this.sprite.y);
         }
         this.sprite.bringToTop();
       };

@@ -19,6 +19,7 @@ require.config
     events: 'utils/events'
     socket: 'utils/socket'
     player: 'entity/player'
+    arrows: 'entity/arrows'
 
 require [
   'hero'
@@ -102,27 +103,27 @@ require [
     hero.create()
 
     hero.on 'changeMap', (direction) ->
-      hero.actions.leave hero.mapId, user
+      # hero.actions.leave hero.mapId, user
       app.isLoaded = false
       map.reload(direction, hero)
       createEnemies(4)
         
     hero.on 'enterMap', () ->
       console.log 'enterMap'
-      hero.actions.join hero.mapId, user
+      # hero.actions.join hero.mapId, user
     
     players.on 'create', (player) ->
       player.create()
       players[player.user] = player
     
-    hero.actions.on 'join', (data) ->
-      console.log "#{data.user} joined the map ON #{data.x},#{data.y} !"
-      # console.log data
-      players.trigger('join', data)
+    # hero.actions.on 'join', (data) ->
+    #   console.log "#{data.user} joined the map ON #{data.x},#{data.y} !"
+    #   # console.log data
+    #   players.trigger('join', data)
     
-    hero.actions.on 'move', (data) ->
-      console.log "#{data.user} is now at #{data.x},#{data.y}"
-      players[data.user].trigger('move', data) 
+    # hero.actions.on 'move', (data) ->
+    #   console.log "#{data.user} is now at #{data.x},#{data.y}"
+    #   players[data.user].trigger('move', data) 
     
     map.on 'finishLoad', ->
       hero.sprite.bringToTop()
@@ -140,10 +141,10 @@ require [
     if app.isLoaded
       map.update()
       hero.update()
-      # for enemy in enemies
-      #   if enemy.alive
-      #     game.physics.arcade.collide(hero.sprite, enemy.sprite, collisionHandler, null, enemy)
-      #     enemy.update()
+      for enemy in enemies
+        if enemy.alive
+          game.physics.arcade.collide(hero.sprite, enemy.sprite, collisionHandler, null, enemy)
+          enemy.update()
       for player of players
         if player.update then do player.update
 

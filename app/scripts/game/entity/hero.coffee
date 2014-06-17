@@ -1,4 +1,4 @@
-define( ->
+define(['arrows'] = (arrows) ->
   fontStyle = { font: "20px Arial", fill: "#ffffff", align: "left" }
 
   class Hero
@@ -18,6 +18,8 @@ define( ->
       @downKey = null
       @leftKey = null
       @rightKey = null
+      @spaceBar = null
+      @directionFacing = 'down'
       
     preload: ->
       @game.load.spritesheet "roshan", "images/roshan.png", 32, 48
@@ -60,19 +62,22 @@ define( ->
       if @upKey.isDown
         @sprite.body.velocity.y = -@speed
         @sprite.animations.play "up", 5, false
-        @actions.move 'up', @user, @mapId, @sprite.x, @sprite.y
+        # @actions.move 'up', @user, @mapId, @sprite.x, @sprite.y
       else if @downKey.isDown
         @sprite.body.velocity.y = @speed
         @sprite.animations.play "down", 5, false
-        @actions.move 'down', @user, @mapId, @sprite.x, @sprite.y
+        # @actions.move 'down', @user, @mapId, @sprite.x, @sprite.y
       else if @leftKey.isDown
         @sprite.body.velocity.x = -@speed
         @sprite.animations.play "left", 5, false
-        @actions.move 'left', @user, @mapId, @sprite.x, @sprite.y
+        # @actions.move 'left', @user, @mapId, @sprite.x, @sprite.y
       else if @rightKey.isDown
         @sprite.body.velocity.x = @speed
         @sprite.animations.play "right", 5, false
-        @actions.move 'right', @user, @mapId, @sprite.x, @sprite.y
+        # @actions.move 'right', @user, @mapId, @sprite.x, @sprite.y
+
+      if @spaceBar.isDown
+        @
 
       @sprite.bringToTop()
 
@@ -83,6 +88,7 @@ define( ->
       @downKey = @game.input.keyboard.addKey(Phaser.Keyboard.DOWN)
       @leftKey = @game.input.keyboard.addKey(Phaser.Keyboard.LEFT)
       @rightKey = @game.input.keyboard.addKey(Phaser.Keyboard.RIGHT)
+      @spaceBar = @game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR)
 
   return Hero
 )

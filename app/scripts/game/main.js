@@ -20,7 +20,8 @@
       map: 'map/map',
       events: 'utils/events',
       socket: 'utils/socket',
-      player: 'entity/player'
+      player: 'entity/player',
+      arrows: 'entity/arrows'
     }
   });
 
@@ -105,26 +106,16 @@
       map.create();
       hero.create();
       hero.on('changeMap', function(direction) {
-        hero.actions.leave(hero.mapId, user);
         app.isLoaded = false;
         map.reload(direction, hero);
         return createEnemies(4);
       });
       hero.on('enterMap', function() {
-        console.log('enterMap');
-        return hero.actions.join(hero.mapId, user);
+        return console.log('enterMap');
       });
       players.on('create', function(player) {
         player.create();
         return players[player.user] = player;
-      });
-      hero.actions.on('join', function(data) {
-        console.log("" + data.user + " joined the map ON " + data.x + "," + data.y + " !");
-        return players.trigger('join', data);
-      });
-      hero.actions.on('move', function(data) {
-        console.log("" + data.user + " is now at " + data.x + "," + data.y);
-        return players[data.user].trigger('move', data);
       });
       map.on('finishLoad', function() {
         var enemy, _i, _len;
@@ -143,10 +134,17 @@
       return hero.actions.join(mapId, user, initPos);
     };
     update = function() {
-      var player, _results;
+      var enemy, player, _i, _len, _results;
       if (app.isLoaded) {
         map.update();
         hero.update();
+        for (_i = 0, _len = enemies.length; _i < _len; _i++) {
+          enemy = enemies[_i];
+          if (enemy.alive) {
+            game.physics.arcade.collide(hero.sprite, enemy.sprite, collisionHandler, null, enemy);
+            enemy.update();
+          }
+        }
         _results = [];
         for (player in players) {
           if (player.update) {
