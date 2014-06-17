@@ -23,9 +23,16 @@ define(['jquery'], ($) ->
         @_loadAssets.call(@, data, callback, hero)
         
     _loadAssets: (data, callback, hero) ->
-      console.log hero
-      hero && hero.set 'mapId', data._id
-      hero && hero.trigger 'enterMap'
+
+      if hero
+        hero.set 'mapId', data._id
+        console.log "Enter #{hero.mapId}"
+        console.log hero.sprite.x
+        console.log hero.sprite.y
+        hero.actions.join hero.mapId, hero.user,
+          x: 0
+          y: hero.sprite.y
+          
       @mapId = data._id
       @mapData = data
       @game.load.tilemap('map', "assets/tilemaps/maps/desert. json", data, @Phaser.Tilemap.TILED_JSON)

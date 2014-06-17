@@ -61,6 +61,7 @@ require [
       x: initPos.x
       y: initPos.y
       }))
+    window.hero = hero
     map = events(new Map(game, Phaser, mapId))
     game.physics.arcade.checkCollision.up = false
     game.physics.arcade.checkCollision.right = false
@@ -103,14 +104,30 @@ require [
     hero.create()
 
     hero.on 'changeMap', (direction) ->
+<<<<<<< HEAD
       # hero.actions.leave hero.mapId, user
       app.isLoaded = false
+=======
+      console.log "Leave #{hero.mapId}"
+      # hero.moveEnabled = false
+      hero.actions.leave hero.mapId, user
+      console.log 'Left map'
+>>>>>>> bd7ed6e398414b36f5975faf28bbf6d234c803c4
       map.reload(direction, hero)
+
+      app.isLoaded = false
       createEnemies(4)
+      # hero.moveEnabled = true
         
+<<<<<<< HEAD
     hero.on 'enterMap', () ->
       console.log 'enterMap'
       # hero.actions.join hero.mapId, user
+=======
+    # hero.on 'enterMap', () ->
+    #   console.log 'enterMap'
+    #   hero.actions.join hero.mapId, user
+>>>>>>> bd7ed6e398414b36f5975faf28bbf6d234c803c4
     
     players.on 'create', (player) ->
       player.create()
@@ -121,9 +138,15 @@ require [
     #   # console.log data
     #   players.trigger('join', data)
     
+<<<<<<< HEAD
     # hero.actions.on 'move', (data) ->
     #   console.log "#{data.user} is now at #{data.x},#{data.y}"
     #   players[data.user].trigger('move', data) 
+=======
+    hero.actions.on 'move', (data) ->
+      # console.log "#{data.user} is now at #{data.x},#{data.y}"
+      players[data.user].trigger('move', data) 
+>>>>>>> bd7ed6e398414b36f5975faf28bbf6d234c803c4
     
     map.on 'finishLoad', ->
       hero.sprite.bringToTop()
@@ -134,7 +157,7 @@ require [
     for enemy, index in enemies
       enemy.create()
 
-    console.log mapId, user, initPos
+    # console.log mapId, user, initPos
     hero.actions.join mapId, user, initPos
 
   update = ->
