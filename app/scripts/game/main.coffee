@@ -18,6 +18,7 @@ require.config
     map: 'map/map'
     events: 'utils/events'
     socket: 'utils/socket'
+    fx: 'entity/fx/fx'
 
 require [
   'hero'

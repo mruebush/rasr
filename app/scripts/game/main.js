@@ -19,7 +19,8 @@
       enemy: 'entity/enemy',
       map: 'map/map',
       events: 'utils/events',
-      socket: 'utils/socket'
+      socket: 'utils/socket',
+      fx: 'entity/fx/fx'
     }
   });
 

@@ -1,4 +1,4 @@
-define( ->
+define(['fx'], (Fx) ->
   fontStyle = { font: "20px Arial", fill: "#ffffff", align: "left" }
 
   class Player
@@ -15,6 +15,14 @@ define( ->
       @downKey = null
       @leftKey = null
       @rightKey = null
+
+      @animations = []
+
+      # @fx = new Fx
+      # for ability in abilities
+      #   @animations.push new Fx(ability)
+
+
       
     preload: ->
       @game.load.spritesheet "roshan", "images/roshan.png", 32, 48

@@ -1,5 +1,5 @@
 (function() {
-  define(function() {
+  define(['fx'], function(Fx) {
     var Player, fontStyle;
     fontStyle = {
       font: "20px Arial",
@@ -26,6 +26,7 @@
         this.downKey = null;
         this.leftKey = null;
         this.rightKey = null;
+        this.animations = [];
       }
 
       Player.prototype.preload = function() {
