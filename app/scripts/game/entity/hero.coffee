@@ -22,7 +22,6 @@ define(['fx'], (Fx) ->
       # for ability in abilities
       #   @animations.push new Fx(ability)
 
-
       
     preload: ->
       @game.load.spritesheet "roshan", "images/roshan.png", 32, 48
