@@ -4,17 +4,25 @@ define( ->
     constructor: (@index, @game, @phaser, @meta) ->
       @sprite = null
       @direction = null
-      @x = @game.world.randomX
-      @y = @game.world.randomY
-      @name = @index.toString()
+      @speed = 200
+      @margin = 50
+      @x = Math.min(Math.max(@game.world.randomX, @margin), @game.width - @margin)
+      @y = Math.min(Math.max(@game.world.randomY, @margin), @game.height - @margin)
+      @alive = true
+
+    damage: ->
+      console.log('damage damage')
+      @alive = false
+      @sprite.kill()
+      return true
 
     preload: ->
       @game.load.spritesheet "enemy", "images/leviathan.png", 96, 96
 
-    create: ->
+    create: () ->
       @sprite = @game.add.sprite(@x, @y, "enemy")
       @game.physics.enable(@sprite, @phaser.Physics.ARCADE)
-      @sprite.body.immovable = false
+      @sprite.body.immovable = true
       @sprite.body.collideWorldBounds = true
       @sprite.anchor.setTo(.3, .5)
       @sprite.body.bounce.set(1)
@@ -29,26 +37,28 @@ define( ->
       @sprite.animations.add "right", [8, 11], true
       @sprite.animations.add "up", [12, 15], true
 
-      @game.physics.arcade.velocityFromRotation(@sprite.rotation, 100, @sprite.body.velocity);
       setInterval(=>
         @direction = Math.floor(Math.random() * 4)
         setTimeout(=>
           @direction = null
-        , 1500)
+        , 500)
       , 2000)
 
     update: ->
-      if @direction is 0 
-        @sprite.body.y -= 2 
+      @sprite.body.velocity.x = 0
+      @sprite.body.velocity.y = 0
+
+      if @direction is 0 and @sprite.y > @margin
+        @sprite.body.velocity.y = -@speed 
         @sprite.animations.play 'up', 5, false
-      if @direction is 1
-        @sprite.body.y += 2
+      else if @direction is 1 and @sprite.y < @game.height - @margin
+        @sprite.body.velocity.y = @speed
         @sprite.animations.play 'down', 5, false
-      if @direction is 2 
-        @sprite.body.x -= 2
+      else if @direction is 2 and @sprite.x > @margin
+        @sprite.body.velocity.x = -@speed
         @sprite.animations.play 'left', 5, false
-      if @direction is 3 
-        @sprite.body.x += 2
+      else if @direction is 3 and @sprite.x < @game.width - @margin
+        @sprite.body.velocity.x = @speed
         @sprite.animations.play 'right', 5, false
       
   return Enemy
