@@ -28,7 +28,7 @@ define(['jquery'], ($) ->
       hero && hero.trigger 'enterMap'
       @mapId = data._id
       @mapData = data
-      @game.load.tilemap('map', "assets/tilemaps/maps/desert.json", data, @Phaser.Tilemap.TILED_JSON)
+      @game.load.tilemap('map', "assets/tilemaps/maps/desert. json", data, @Phaser.Tilemap.TILED_JSON)
       tilesetImage = @_getImageNameOfTileset(data)
       @game.load.image('tiles', "assets/tilemaps/tiles/" + tilesetImage)
       callback && callback.apply(@)

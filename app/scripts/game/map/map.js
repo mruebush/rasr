@@ -43,7 +43,7 @@
         hero && hero.trigger('enterMap');
         this.mapId = data._id;
         this.mapData = data;
-        this.game.load.tilemap('map', "assets/tilemaps/maps/desert.json", data, this.Phaser.Tilemap.TILED_JSON);
+        this.game.load.tilemap('map', "assets/tilemaps/maps/desert. json", data, this.Phaser.Tilemap.TILED_JSON);
         tilesetImage = this._getImageNameOfTileset(data);
         this.game.load.image('tiles', "assets/tilemaps/tiles/" + tilesetImage);
         callback && callback.apply(this);
