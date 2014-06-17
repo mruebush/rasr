@@ -24,7 +24,7 @@
   });
 
   require(['hero', 'map', 'enemy', 'events', 'socket', 'phaser'], function(Hero, Map, Enemy, events, socket, Phaser) {
-    var app, collisionHandler, create, enemies, game, hero, initialMap, map, mapId, preload, rootUrl, takeDmg, update, user;
+    var app, collisionHandler, create, createEnemies, downScreen, enemies, game, hero, initialMap, leftScreen, map, mapId, preload, rightScreen, rootUrl, upScreen, update, user;
     app = events({});
     game = null;
     hero = null;
@@ -32,10 +32,13 @@
     enemies = [];
     mapId = null;
     initialMap = null;
-    rootUrl = 'http:localhost:9000';
-    user = "test";
+    upScreen = null;
+    rightScreen = null;
+    downScreen = null;
+    leftScreen = null;
+    rootUrl = 'http://g4m3.azurewebsites.net';
+    user = 'test';
     preload = function() {
-      var enemy, i, _i, _results;
       hero = events(new Hero(game, Phaser, {
         exp: 150,
         health: 100,
@@ -45,37 +48,37 @@
         int: 10,
         luk: 10
       }));
-      map = new Map(game, Phaser, mapId);
-      map = events(map);
+      map = events(new Map(game, Phaser, mapId));
+      map.on('borderChange', function(border, exists) {
+        return game.physics.arcade.checkCollision[border.split('Screen')[0]] = !exists;
+      });
       hero.preload(null, initialMap);
-      map.preload('screen', initialMap);
+      map.preload();
       app.trigger('create');
       app.isLoaded = true;
-      _results = [];
-      for (i = _i = 0; _i < 14; i = ++_i) {
-        enemy = new Enemy(i, game, Phaser, {
-          rank: 1,
-          health: 10,
-          dmg: 1
-        });
-        enemies.push(enemy);
-        _results.push(enemy.preload());
-      }
-      return _results;
+      return createEnemies(4);
     };
     create = function() {
-      var enemy, _i, _len, _results;
+      var enemy, index, _i, _len, _results;
       map.create();
       hero.create();
-      hero.on('changeMap', function(direction) {
-        return map.reload(direction, hero);
-      });
       map.on('finishLoad', function() {
-        return hero.sprite.bringToTop();
+        var enemy, _i, _len;
+        hero.sprite.bringToTop();
+        for (_i = 0, _len = enemies.length; _i < _len; _i++) {
+          enemy = enemies[_i];
+          enemy.sprite.bringToTop();
+        }
+        return app.isLoaded = true;
+      });
+      hero.on('changeMap', function(direction) {
+        app.isLoaded = false;
+        map.reload(direction, hero);
+        return createEnemies(4);
       });
       _results = [];
-      for (_i = 0, _len = enemies.length; _i < _len; _i++) {
-        enemy = enemies[_i];
+      for (index = _i = 0, _len = enemies.length; _i < _len; index = ++_i) {
+        enemy = enemies[index];
         _results.push(enemy.create());
       }
       return _results;
@@ -88,39 +91,47 @@
         _results = [];
         for (_i = 0, _len = enemies.length; _i < _len; _i++) {
           enemy = enemies[_i];
-          game.physics.arcade.overlap(hero.sprite, enemy.sprite, hero.takeDmg, null, hero);
-          _results.push(enemy.update());
+          if (enemy.alive) {
+            game.physics.arcade.collide(hero.sprite, enemy.sprite, collisionHandler, null, enemy);
+            _results.push(enemy.update());
+          } else {
+            _results.push(void 0);
+          }
         }
         return _results;
       }
     };
-    takeDmg = function() {
-      return console.log('taking dmg');
+    collisionHandler = function(heroSprite, enemySprite) {
+      console.log('kill enemy', this);
+      return this.damage();
     };
-    collisionHandler = function() {
-      return console.log('hit');
+    createEnemies = function(num) {
+      var enemy, i, _i, _results;
+      enemies = [];
+      _results = [];
+      for (i = _i = 0; 0 <= num ? _i < num : _i > num; i = 0 <= num ? ++_i : --_i) {
+        enemy = new Enemy(i, game, Phaser, {
+          rank: 1,
+          health: 10,
+          dmg: 1
+        });
+        enemy.preload();
+        enemy.create();
+        _results.push(enemies.push(enemy));
+      }
+      return _results;
     };
     return $.ajax({
-      url: "/player/" + user,
-      error: function(err) {
-        return console.log("err: " + err);
-      }
+      url: "" + rootUrl + "/player/" + user
     }).done(function(playerInfo) {
-      var actions, url;
-      console.log('got player information');
+      var actions;
       mapId = playerInfo.mapId;
       actions = socket(rootUrl);
       actions.join(mapId, user);
-      url = "/screen/" + mapId;
-      return $.ajax({
-        url: url
-      }).done(function(mapData) {
-        initialMap = mapData;
-        return game = new Phaser.Game(800, 600, Phaser.AUTO, "", {
-          preload: preload,
-          create: create,
-          update: update
-        });
+      return game = new Phaser.Game(800, 600, Phaser.AUTO, "", {
+        preload: preload,
+        create: create,
+        update: update
       });
     });
   });

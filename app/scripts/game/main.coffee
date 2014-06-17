@@ -34,8 +34,12 @@ require [
   enemies = []
   mapId = null
   initialMap = null
-  rootUrl = 'http:localhost:9000'
-  user = "test"
+  upScreen = null
+  rightScreen = null
+  downScreen = null
+  leftScreen = null
+  rootUrl = 'http://g4m3.azurewebsites.net'
+  user = 'test'
 
   preload = ->
     hero = events(new Hero(game, Phaser, {
@@ -47,31 +51,32 @@ require [
       int: 10
       luk: 10
       }))
-    map = new Map(game, Phaser, mapId)
-    map = events(map)
+    map = events(new Map(game, Phaser, mapId))
+    map.on('borderChange', (border, exists) ->
+      game.physics.arcade.checkCollision[border.split('Screen')[0]] = !exists
+    )
+    # tell hero that he can move over non-blocked borders
     hero.preload(null, initialMap)
-    map.preload('screen', initialMap)
+    map.preload()
     app.trigger 'create'
     app.isLoaded = true
-    for i in [0...14]
-      enemy = new Enemy(i, game, Phaser, {
-        rank: 1
-        health: 10
-        dmg: 1
-      })
-      enemies.push enemy
-      enemy.preload()
+    createEnemies(4)
 
   create = ->
     map.create()
     hero.create()
-    hero.on('changeMap', (direction) ->
-      map.reload(direction, hero)
-    )
     map.on('finishLoad', ->
       hero.sprite.bringToTop()
+      for enemy in enemies
+        enemy.sprite.bringToTop()
+      app.isLoaded = true
     )
-    for enemy in enemies
+    hero.on('changeMap', (direction) ->
+      app.isLoaded = false
+      map.reload(direction, hero)
+      createEnemies(4)
+    )
+    for enemy, index in enemies
       enemy.create()
 
   update = ->
@@ -79,36 +84,40 @@ require [
       map.update()
       hero.update()
       for enemy in enemies
-        # if(game.physics.rectangle.intersects(hero.sprite, enemy.sprite))
-          # hero.takeDmg(enemy.meta.dmg)
-        game.physics.arcade.overlap(hero.sprite, enemy.sprite, hero.takeDmg, null, hero)
-        # game.physics.arcade.collide(hero.sprite, enemy.sprite)
-        enemy.update()
+        if enemy.alive
+          game.physics.arcade.collide(hero.sprite, enemy.sprite, collisionHandler, null, enemy)
+          enemy.update()
 
-  takeDmg = ->
-    console.log('taking dmg')
+  collisionHandler = (heroSprite, enemySprite) ->
+    # kill enemy
+    console.log('kill enemy', @)
+    @damage()
 
-  collisionHandler = ->
-    console.log('hit')
+  createEnemies = (num) ->
+    # for enemy in enemies
+    #   enemy.damage()
+    enemies = []
+    for i in [0...num]
+      enemy = new Enemy(i, game, Phaser, {
+        rank: 1
+        health: 10
+        dmg: 1
+      })
+      enemy.preload()
+      enemy.create()
+      enemies.push enemy
 
+  # MAKE INITIAL AJAX CALL FOR PLAYER INFO
   $.ajax({
-    url: "/player/#{user}"
-    error: (err)->
-      console.log "err: #{err}"
+    url: "#{rootUrl}/player/#{user}"
   }).done((playerInfo) ->
-    console.log('got player information')
     mapId = playerInfo.mapId
     actions = socket rootUrl
     actions.join mapId, user
-    url = "/screen/#{mapId}"
-    $.ajax({
-      url: url
-    }).done((mapData) ->
-      initialMap = mapData
-      game = new Phaser.Game(800, 600, Phaser.AUTO, "",
-        preload: preload
-        create: create
-        update: update
-      )
+    game = new Phaser.Game(800, 600, Phaser.AUTO, "",
+      preload: preload
+      create: create
+      update: update
     )
   )
+
