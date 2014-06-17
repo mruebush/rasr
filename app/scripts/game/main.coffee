@@ -78,6 +78,12 @@ require [
     app.trigger 'create'
     app.isLoaded = true
     createEnemies(4)
+
+    players.on 'player leave', (user) ->
+      console.log "#{user} left the screen"
+      players[user].sprite.kill()
+      delete players[user]
+
     players.on 'join', (data) ->
       player = new Player(game, Phaser, 
         x: data.x
@@ -101,6 +107,9 @@ require [
   create = ->
     map.create()
     hero.create()
+
+    hero.actions.on 'player leave', (user) ->
+      players.trigger 'player leave', user
 
     hero.on 'changeMap', (direction) ->
       console.log "Leave #{hero.mapId}"
