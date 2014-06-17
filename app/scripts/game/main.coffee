@@ -52,6 +52,10 @@ require [
       luk: 10
       }))
     map = events(new Map(game, Phaser, mapId))
+    game.physics.arcade.checkCollision.up = false
+    game.physics.arcade.checkCollision.right = false
+    game.physics.arcade.checkCollision.down = false
+    game.physics.arcade.checkCollision.left = false
     map.on('borderChange', (border, exists) ->
       game.physics.arcade.checkCollision[border.split('Screen')[0]] = !exists
     )
