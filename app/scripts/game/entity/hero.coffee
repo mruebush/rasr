@@ -1,10 +1,13 @@
 define( ->
   fontStyle = { font: "20px Arial", fill: "#ffffff", align: "left" }
 
-  class Player
+  class Hero
     expText = null
     healthText = null
     manaText = null
+
+    set: (property, value) ->
+      @[property] = value
 
     constructor: (@game, @phaser, @meta) ->
       @sprite = null
@@ -20,7 +23,7 @@ define( ->
       @game.load.spritesheet "roshan", "images/roshan.png", 32, 48
 
     create: ->
-      @sprite = @game.add.sprite(250, 250, "roshan")
+      @sprite = @game.add.sprite(@meta.x, @meta.y, "roshan")
       @game.physics.enable(@sprite, @phaser.Physics.ARCADE)
       @sprite.body.collideWorldBounds = true;
       @sprite.body.bounce.set(1)
@@ -35,37 +38,38 @@ define( ->
       @_setControls()
 
     update: ->
-      @sprite.body.velocity.x = 0
-      @sprite.body.velocity.y = 0
-
-      if @sprite.x < 0
-        @sprite.x = @game.width - @startOnScreenPos
+      if @sprite.x is 0
+        @sprite.x = @game.width - 20
         @trigger('changeMap', 'left')
 
-      if @sprite.x > @game.width
-        @sprite.x = @startOnScreenPos
+      if @sprite.x is @game.width
+        @sprite.x = 10
         @trigger('changeMap', 'right')
 
-      if @sprite.y < 0
-        @sprite.y = @game.height - @startOnScreenPos
+      if @sprite.y is 0
+        @sprite.y = @game.height - 20
         @trigger('changeMap', 'up')
 
-      if @sprite.y > @game.height
-        @sprite.y = @startOnScreenPos
+      if @sprite.y is @game.height
+        @sprite.y = 10
         @trigger('changeMap', 'down')
 
       if @upKey.isDown
-        @sprite.body.velocity.y = -@speed
+        @sprite.y -= 2
         @sprite.animations.play "up", 5, false
+        @actions.move 'up', @user, @mapId, @sprite.x, @sprite.y
       else if @downKey.isDown
-        @sprite.body.velocity.y = @speed
+        @sprite.y += 2
         @sprite.animations.play "down", 5, false
-      else if @leftKey.isDown
-        @sprite.body.velocity.x = -@speed
+        @actions.move 'down', @user, @mapId, @sprite.x, @sprite.y
+      if @leftKey.isDown
+        @sprite.x -= 2
         @sprite.animations.play "left", 5, false
+        @actions.move 'left', @user, @mapId, @sprite.x, @sprite.y
       else if @rightKey.isDown
-        @sprite.body.velocity.x = @speed
+        @sprite.x += 2
         @sprite.animations.play "right", 5, false
+        @actions.move 'right', @user, @mapId, @sprite.x, @sprite.y
 
       @sprite.bringToTop()
 
@@ -77,5 +81,5 @@ define( ->
       @leftKey = @game.input.keyboard.addKey(Phaser.Keyboard.LEFT)
       @rightKey = @game.input.keyboard.addKey(Phaser.Keyboard.RIGHT)
 
-  return Player
+  return Hero
 )
