@@ -18,6 +18,7 @@ require.config
     map: 'map/map'
     events: 'utils/events'
     socket: 'utils/socket'
+    player: 'entity/player'
 
 require [
   'hero'
@@ -33,7 +34,7 @@ require [
   hero = null
   map = null
   enemies = []
-  players = []
+  players = events({})
   mapId = null
   initialMap = null
   upScreen = null
@@ -43,6 +44,8 @@ require [
   rootUrl = 'http://g4m3.azurewebsites.net'
   # user = 'test'
   user = prompt 'Fullen Sie das user bitte !'
+  initPos = {}
+  actions = {}
 
 
   preload = ->
@@ -105,6 +108,7 @@ require [
       createEnemies(4)
         
     hero.on 'enterMap', () ->
+      console.log 'enterMap'
       hero.actions.join hero.mapId, user
     
     players.on 'create', (player) ->
@@ -129,16 +133,17 @@ require [
     for enemy, index in enemies
       enemy.create()
 
-    hero.actions.jin mapId, user, initPos
+    console.log mapId, user, initPos
+    hero.actions.join mapId, user, initPos
 
   update = ->
     if app.isLoaded
       map.update()
       hero.update()
-      for enemy in enemies
-        if enemy.alive
-          game.physics.arcade.collide(hero.sprite, enemy.sprite, collisionHandler, null, enemy)
-          enemy.update()
+      # for enemy in enemies
+      #   if enemy.alive
+      #     game.physics.arcade.collide(hero.sprite, enemy.sprite, collisionHandler, null, enemy)
+      #     enemy.update()
       for player of players
         if player.update then do player.update
 
@@ -164,15 +169,20 @@ require [
   # MAKE INITIAL AJAX CALL FOR PLAYER INFO
   $.ajax({
     url: "#{rootUrl}/player/#{user}"
-  }).done((playerInfo) ->
+  }).done (playerInfo) ->
     mapId = playerInfo.mapId
     initPos.x = playerInfo.x
     initPos.y = playerInfo.y
     actions = socket rootUrl, events
-    game = new Phaser.Game(800, 600, Phaser.AUTO, "",
-      preload: preload
-      create: create
-      update: update
-    )
-  )
+    url = "#{rootUrl}/screen/#{mapId}"
+    $.ajax({
+      url: url
+    }).done (mapData) ->
+      initialMap = mapData
+      # debugger
+      game = new Phaser.Game(800, 600, Phaser.AUTO, "",
+        preload: preload
+        create: create
+        update: update
+      )
 

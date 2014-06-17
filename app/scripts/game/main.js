@@ -19,17 +19,19 @@
       enemy: 'entity/enemy',
       map: 'map/map',
       events: 'utils/events',
-      socket: 'utils/socket'
+      socket: 'utils/socket',
+      player: 'entity/player'
     }
   });
 
-  require(['hero', 'map', 'enemy', 'events', 'socket', 'phaser'], function(Hero, Map, Enemy, events, socket, Phaser) {
-    var app, collisionHandler, create, createEnemies, downScreen, enemies, game, hero, initialMap, leftScreen, map, mapId, preload, rightScreen, rootUrl, upScreen, update, user;
+  require(['hero', 'map', 'enemy', 'events', 'socket', 'phaser', 'player'], function(Hero, Map, Enemy, events, socket, Phaser, Player) {
+    var actions, app, collisionHandler, create, createEnemies, downScreen, enemies, game, hero, initPos, initialMap, leftScreen, map, mapId, players, preload, rightScreen, rootUrl, upScreen, update, user;
     app = events({});
     game = null;
     hero = null;
     map = null;
     enemies = [];
+    players = events({});
     mapId = null;
     initialMap = null;
     upScreen = null;
@@ -37,7 +39,9 @@
     downScreen = null;
     leftScreen = null;
     rootUrl = 'http://g4m3.azurewebsites.net';
-    user = 'test';
+    user = prompt('Fullen Sie das user bitte !');
+    initPos = {};
+    actions = {};
     preload = function() {
       hero = events(new Hero(game, Phaser, {
         exp: 150,
@@ -46,7 +50,9 @@
         str: 10,
         dex: 10,
         int: 10,
-        luk: 10
+        luk: 10,
+        x: initPos.x,
+        y: initPos.y
       }));
       map = events(new Map(game, Phaser, mapId));
       game.physics.arcade.checkCollision.up = false;
@@ -56,16 +62,70 @@
       map.on('borderChange', function(border, exists) {
         return game.physics.arcade.checkCollision[border.split('Screen')[0]] = !exists;
       });
+      hero.actions = actions;
+      hero.user = user;
       hero.preload(null, initialMap);
+      hero.set('mapId', mapId);
       map.preload();
       app.trigger('create');
       app.isLoaded = true;
-      return createEnemies(4);
+      createEnemies(4);
+      players.on('join', function(data) {
+        var player;
+        player = new Player(game, Phaser, {
+          x: data.x,
+          y: data.y
+        });
+        player.user = data.user;
+        player.preload();
+        player = events(player);
+        player.on('move', function(data) {
+          return player.move(data.dir);
+        });
+        return players.trigger('create', player);
+      });
+      return hero.actions.on('others', function(data) {
+        var index, other, _i, _len, _ref, _results;
+        _ref = data.others;
+        _results = [];
+        for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
+          other = _ref[index];
+          console.log("" + other.user + " joined the map on " + other.x + "," + other.y);
+          _results.push(players.trigger('join', {
+            user: other.user,
+            x: other.x,
+            y: other.y
+          }));
+        }
+        return _results;
+      });
     };
     create = function() {
-      var enemy, index, _i, _len, _results;
+      var enemy, index, _i, _len;
       map.create();
       hero.create();
+      hero.on('changeMap', function(direction) {
+        hero.actions.leave(hero.mapId, user);
+        app.isLoaded = false;
+        map.reload(direction, hero);
+        return createEnemies(4);
+      });
+      hero.on('enterMap', function() {
+        console.log('enterMap');
+        return hero.actions.join(hero.mapId, user);
+      });
+      players.on('create', function(player) {
+        player.create();
+        return players[player.user] = player;
+      });
+      hero.actions.on('join', function(data) {
+        console.log("" + data.user + " joined the map ON " + data.x + "," + data.y + " !");
+        return players.trigger('join', data);
+      });
+      hero.actions.on('move', function(data) {
+        console.log("" + data.user + " is now at " + data.x + "," + data.y);
+        return players[data.user].trigger('move', data);
+      });
       map.on('finishLoad', function() {
         var enemy, _i, _len;
         hero.sprite.bringToTop();
@@ -75,29 +135,22 @@
         }
         return app.isLoaded = true;
       });
-      hero.on('changeMap', function(direction) {
-        app.isLoaded = false;
-        map.reload(direction, hero);
-        return createEnemies(4);
-      });
-      _results = [];
       for (index = _i = 0, _len = enemies.length; _i < _len; index = ++_i) {
         enemy = enemies[index];
-        _results.push(enemy.create());
+        enemy.create();
       }
-      return _results;
+      console.log(mapId, user, initPos);
+      return hero.actions.join(mapId, user, initPos);
     };
     update = function() {
-      var enemy, _i, _len, _results;
+      var player, _results;
       if (app.isLoaded) {
         map.update();
         hero.update();
         _results = [];
-        for (_i = 0, _len = enemies.length; _i < _len; _i++) {
-          enemy = enemies[_i];
-          if (enemy.alive) {
-            game.physics.arcade.collide(hero.sprite, enemy.sprite, collisionHandler, null, enemy);
-            _results.push(enemy.update());
+        for (player in players) {
+          if (player.update) {
+            _results.push(player.update());
           } else {
             _results.push(void 0);
           }
@@ -128,14 +181,21 @@
     return $.ajax({
       url: "" + rootUrl + "/player/" + user
     }).done(function(playerInfo) {
-      var actions;
+      var url;
       mapId = playerInfo.mapId;
-      actions = socket(rootUrl);
-      actions.join(mapId, user);
-      return game = new Phaser.Game(800, 600, Phaser.AUTO, "", {
-        preload: preload,
-        create: create,
-        update: update
+      initPos.x = playerInfo.x;
+      initPos.y = playerInfo.y;
+      actions = socket(rootUrl, events);
+      url = "" + rootUrl + "/screen/" + mapId;
+      return $.ajax({
+        url: url
+      }).done(function(mapData) {
+        initialMap = mapData;
+        return game = new Phaser.Game(800, 600, Phaser.AUTO, "", {
+          preload: preload,
+          create: create,
+          update: update
+        });
       });
     });
   });

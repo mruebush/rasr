@@ -22,7 +22,8 @@ define(['jquery'], ($) ->
       else
         @_loadAssets.call(@, data, callback, hero)
         
-    _loadAssets: (data, callback) ->
+    _loadAssets: (data, callback, hero) ->
+      console.log hero
       hero && hero.set 'mapId', data._id
       hero && hero.trigger 'enterMap'
       @mapId = data._id
@@ -54,8 +55,8 @@ define(['jquery'], ($) ->
       @layer.debug = false
       @trigger 'finishLoad'
 
-    reload: (direction) ->
-      @preload(direction, null, @create)
+    reload: (direction, hero) ->
+      @preload(direction, null, @create, hero)
 
     update: ->
 

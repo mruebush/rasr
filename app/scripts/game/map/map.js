@@ -16,7 +16,7 @@
         };
       }
 
-      Map.prototype.preload = function(direction, data, callback) {
+      Map.prototype.preload = function(direction, data, callback, hero) {
         var that, url,
           _this = this;
         if (direction == null) {
@@ -28,16 +28,19 @@
           return $.ajax({
             url: url,
             success: function(data) {
-              return that._loadAssets.call(that, data, callback);
+              return that._loadAssets.call(that, data, callback, hero);
             }
           });
         } else {
-          return this._loadAssets.call(this, data, callback);
+          return this._loadAssets.call(this, data, callback, hero);
         }
       };
 
-      Map.prototype._loadAssets = function(data, callback) {
+      Map.prototype._loadAssets = function(data, callback, hero) {
         var border, tilesetImage, value, _ref, _results;
+        console.log(hero);
+        hero && hero.set('mapId', data._id);
+        hero && hero.trigger('enterMap');
         this.mapId = data._id;
         this.mapData = data;
         this.game.load.tilemap('map', "assets/tilemaps/maps/desert.json", data, this.Phaser.Tilemap.TILED_JSON);
@@ -77,8 +80,8 @@
         return this.trigger('finishLoad');
       };
 
-      Map.prototype.reload = function(direction) {
-        return this.preload(direction, null, this.create);
+      Map.prototype.reload = function(direction, hero) {
+        return this.preload(direction, null, this.create, hero);
       };
 
       Map.prototype.update = function() {};
