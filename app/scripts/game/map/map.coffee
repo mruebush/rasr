@@ -30,9 +30,9 @@ define(['jquery'], ($) ->
         console.log hero.sprite.x
         console.log hero.sprite.y
         hero.actions.join hero.mapId, hero.user,
-          x: 0
+          x: hero.sprite.x
           y: hero.sprite.y
-          
+
       @mapId = data._id
       @mapData = data
       @game.load.tilemap('map', "assets/tilemaps/maps/desert.json", data, @Phaser.Tilemap.TILED_JSON)

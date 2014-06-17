@@ -93,7 +93,7 @@ require [
       do player.preload
       player = events(player)
       player.on 'move', (data) ->
-        player.move(data.dir)
+        player.move(data)
       players.trigger 'create', player
 
     hero.actions.on 'others', (data) ->
@@ -136,6 +136,7 @@ require [
       players.trigger('join', data)
     
     hero.actions.on 'move', (data) ->
+      # console.log data
       # console.log "#{data.user} is now at #{data.x},#{data.y}"
       players[data.user].trigger('move', data) 
     

@@ -11,7 +11,7 @@ define( ->
 
     constructor: (@game, @phaser, @meta) ->
       @sprite = null
-      @speed = 400
+      @speed = 200
       @startOnScreenPos = 10
 
       @upKey = null
@@ -25,7 +25,7 @@ define( ->
     create: ->
       @sprite = @game.add.sprite(@meta.x, @meta.y, "roshan")
       @game.physics.enable(@sprite, @phaser.Physics.ARCADE)
-      @sprite.body.collideWorldBounds = true;
+      @sprite.body.collideWorldBounds = true
       @sprite.body.bounce.set(1)
       expText = @game.add.text(20, 10, "exp: #{@meta.exp}", fontStyle)
       healthText = @game.add.text(20, 30, "health: #{@meta.health}", fontStyle)
