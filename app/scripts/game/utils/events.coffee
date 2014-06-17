@@ -8,14 +8,14 @@ define(->
         obj._listeners[key] = [callback]
       return
 
-    obj.trigger = (key) ->
+    obj.trigger = (key, data...) ->
       if obj._listeners[key]
         callbacks = obj._listeners[key]
         i = 0
 
         while i < callbacks.length
           callback = callbacks[i]
-          callback.apply null, Array::slice.call(arguments, 1)
+          callback.apply null, data
           i++
       return
 

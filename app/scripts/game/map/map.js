@@ -7,6 +7,13 @@
         this.Phaser = Phaser;
         this.mapId = mapId;
         this.layer = null;
+        this.oldBorders = null;
+        this.borders = {
+          upScreen: true,
+          rightScreen: true,
+          downScreen: true,
+          leftScreen: true
+        };
       }
 
       Map.prototype.preload = function(direction, data, callback) {
@@ -16,7 +23,7 @@
           direction = 'screen';
         }
         that = this;
-        url = "/move/" + direction + "/" + this.mapId;
+        url = "http://g4m3.azurewebsites.net/" + direction + "/" + this.mapId;
         if (!data) {
           return $.ajax({
             url: url,
@@ -30,13 +37,32 @@
       };
 
       Map.prototype._loadAssets = function(data, callback) {
-        var tilesetImage;
+        var border, tilesetImage, value, _ref, _results;
         this.mapId = data._id;
         this.mapData = data;
-        this.game.load.tilemap('map', null, data, this.Phaser.Tilemap.TILED_JSON);
+        this.game.load.tilemap('map', "assets/tilemaps/maps/desert.json", data, this.Phaser.Tilemap.TILED_JSON);
         tilesetImage = this._getImageNameOfTileset(data);
         this.game.load.image('tiles', "assets/tilemaps/tiles/" + tilesetImage);
-        return callback && callback.apply(this);
+        callback && callback.apply(this);
+        this.oldBorders = this.borders;
+        this.borders = {
+          upScreen: data.upScreen,
+          rightScreen: data.rightScreen,
+          downScreen: data.downScreen,
+          leftScreen: data.leftScreen
+        };
+        _ref = this.borders;
+        _results = [];
+        for (border in _ref) {
+          value = _ref[border];
+          if (!!value !== !!this.oldBorders[border]) {
+            $("." + border).toggleClass('no-bordering-screen');
+            _results.push(this.trigger('borderChange', border, !!value));
+          } else {
+            _results.push(void 0);
+          }
+        }
+        return _results;
       };
 
       Map.prototype.create = function() {
@@ -47,7 +73,7 @@
         layername = this._getLayerName(this.mapData);
         this.layer = map.createLayer(layername);
         this.layer.resizeWorld();
-        this.layer.debug = true;
+        this.layer.debug = false;
         return this.trigger('finishLoad');
       };
 
