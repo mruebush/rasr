@@ -4,32 +4,35 @@ angular.module('komApp', [
   'ngCookies',
   'ngResource',
   'ngSanitize',
-  'ngRoute'
+  'ui.router'
 ])
-  .config(function ($routeProvider, $locationProvider, $httpProvider) {
-    $routeProvider
-      .when('/', {
+  .config(function ($stateProvider, $locationProvider, $httpProvider, $urlRouterProvider) {
+    $urlRouterProvider.otherwise('landing');
+    $stateProvider
+      .state('landing', {
+        url: '/',
         templateUrl: 'partials/main',
         controller: 'MainCtrl'
       })
-      .when('/login', {
+      .state('login', {
+        url: '/login',
         templateUrl: 'partials/login',
         controller: 'LoginCtrl'
       })
-      .when('/signup', {
+      .state('signup', {
+        url: '/signup',
         templateUrl: 'partials/signup',
         controller: 'SignupCtrl'
       })
-      .when('/play', {
+      .state('play', {
+        url: '/play',
         templateUrl: 'partials/game'
       })
-      .when('/settings', {
+      .state('settings', {
+        url: '/settings',
         templateUrl: 'partials/settings',
         controller: 'SettingsCtrl',
         authenticate: true
-      })
-      .otherwise({
-        redirectTo: '/'
       });
       
     $locationProvider.html5Mode(true);
@@ -52,8 +55,7 @@ angular.module('komApp', [
   .run(function ($rootScope, $location, Auth) {
 
     // Redirect to login if route requires auth and you're not logged in
-    $rootScope.$on('$routeChangeStart', function (event, next) {
-      
+    $rootScope.$on('$stateChangeStart', function (event, next) {
       if (next.authenticate && !Auth.isLoggedIn()) {
         $location.path('/login');
       }
