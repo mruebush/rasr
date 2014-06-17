@@ -8,7 +8,12 @@
         this.mapId = mapId;
         this.layer = null;
         this.oldBorders = null;
-        this.borders = {};
+        this.borders = {
+          upScreen: true,
+          rightScreen: true,
+          downScreen: true,
+          leftScreen: true
+        };
       }
 
       Map.prototype.preload = function(direction, data, callback) {

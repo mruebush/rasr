@@ -3,7 +3,11 @@ define(['jquery'], ($) ->
     constructor: (@game, @Phaser, @mapId) ->
       @layer = null
       @oldBorders = null
-      @borders = {}
+      @borders = 
+        upScreen: true
+        rightScreen: true
+        downScreen: true
+        leftScreen: true
 
 
     preload: (direction = 'screen', data, callback) ->
