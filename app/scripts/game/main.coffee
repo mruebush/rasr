@@ -26,12 +26,14 @@ require [
   'events'
   'socket'
   'phaser'
-], (Hero, Map, Enemy, events, socket, Phaser) ->
+  'player'
+], (Hero, Map, Enemy, events, socket, Phaser, Player) ->
   app = events({})
   game = null
   hero = null
   map = null
   enemies = []
+  players = []
   mapId = null
   initialMap = null
   upScreen = null
@@ -39,7 +41,9 @@ require [
   downScreen = null
   leftScreen = null
   rootUrl = 'http://g4m3.azurewebsites.net'
-  user = 'test'
+  # user = 'test'
+  user = prompt 'Fullen Sie das user bitte !'
+
 
   preload = ->
     hero = events(new Hero(game, Phaser, {
@@ -50,34 +54,78 @@ require [
       dex: 10
       int: 10
       luk: 10
+      x: initPos.x
+      y: initPos.y
       }))
     map = events(new Map(game, Phaser, mapId))
     map.on('borderChange', (border, exists) ->
       game.physics.arcade.checkCollision[border.split('Screen')[0]] = !exists
     )
+    hero.actions = actions
+    hero.user = user
     # tell hero that he can move over non-blocked borders
     hero.preload(null, initialMap)
+    hero.set 'mapId', mapId
     map.preload()
     app.trigger 'create'
     app.isLoaded = true
     createEnemies(4)
+    players.on 'join', (data) ->
+      player = new Player(game, Phaser, 
+        x: data.x
+        y: data.y
+      )
+      player.user = data.user
+      do player.preload
+      player = events(player)
+      player.on 'move', (data) ->
+        player.move(data.dir)
+      players.trigger 'create', player
+
+    hero.actions.on 'others', (data) ->
+      for other, index in data.others
+        console.log "#{other.user} joined the map on #{other.x},#{other.y}"
+        players.trigger 'join',
+          user: other.user
+          x: other.x
+          y: other.y
 
   create = ->
     map.create()
     hero.create()
-    map.on('finishLoad', ->
+
+    hero.on 'changeMap', (direction) ->
+      hero.actions.leave hero.mapId, user
+      app.isLoaded = false
+      map.reload(direction, hero)
+      createEnemies(4)
+        
+    hero.on 'enterMap', () ->
+      hero.actions.join hero.mapId, user
+    
+    players.on 'create', (player) ->
+      player.create()
+      players[player.user] = player
+    
+    hero.actions.on 'join', (data) ->
+      console.log "#{data.user} joined the map ON #{data.x},#{data.y} !"
+      # console.log data
+      players.trigger('join', data)
+    
+    hero.actions.on 'move', (data) ->
+      console.log "#{data.user} is now at #{data.x},#{data.y}"
+      players[data.user].trigger('move', data) 
+    
+    map.on 'finishLoad', ->
       hero.sprite.bringToTop()
       for enemy in enemies
         enemy.sprite.bringToTop()
       app.isLoaded = true
-    )
-    hero.on('changeMap', (direction) ->
-      app.isLoaded = false
-      map.reload(direction, hero)
-      createEnemies(4)
-    )
+    
     for enemy, index in enemies
       enemy.create()
+
+    hero.actions.jin mapId, user, initPos
 
   update = ->
     if app.isLoaded
@@ -87,6 +135,8 @@ require [
         if enemy.alive
           game.physics.arcade.collide(hero.sprite, enemy.sprite, collisionHandler, null, enemy)
           enemy.update()
+      for player of players
+        if player.update then do player.update
 
   collisionHandler = (heroSprite, enemySprite) ->
     # kill enemy
@@ -112,8 +162,9 @@ require [
     url: "#{rootUrl}/player/#{user}"
   }).done((playerInfo) ->
     mapId = playerInfo.mapId
-    actions = socket rootUrl
-    actions.join mapId, user
+    initPos.x = playerInfo.x
+    initPos.y = playerInfo.y
+    actions = socket rootUrl, events
     game = new Phaser.Game(800, 600, Phaser.AUTO, "",
       preload: preload
       create: create
