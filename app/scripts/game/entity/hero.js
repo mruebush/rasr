@@ -53,37 +53,38 @@
       };
 
       Hero.prototype.update = function() {
-        if (this.sprite.x === 0) {
-          this.sprite.x = this.game.width - 20;
+        this.sprite.body.velocity.x = 0;
+        this.sprite.body.velocity.y = 0;
+        if (this.sprite.x < 0) {
+          this.sprite.x = this.game.width - this.startOnScreenPos;
           this.trigger('changeMap', 'left');
         }
-        if (this.sprite.x === this.game.width) {
-          this.sprite.x = 10;
+        if (this.sprite.x > this.game.width) {
+          this.sprite.x = this.startOnScreenPos;
           this.trigger('changeMap', 'right');
         }
-        if (this.sprite.y === 0) {
-          this.sprite.y = this.game.height - 20;
+        if (this.sprite.y < 0) {
+          this.sprite.y = this.game.height - this.startOnScreenPos;
           this.trigger('changeMap', 'up');
         }
-        if (this.sprite.y === this.game.height) {
-          this.sprite.y = 10;
+        if (this.sprite.y > this.game.height) {
+          this.sprite.y = this.startOnScreenPos;
           this.trigger('changeMap', 'down');
         }
         if (this.upKey.isDown) {
-          this.sprite.y -= 2;
+          this.sprite.body.velocity.y = -this.speed;
           this.sprite.animations.play("up", 5, false);
           this.actions.move('up', this.user, this.mapId, this.sprite.x, this.sprite.y);
         } else if (this.downKey.isDown) {
-          this.sprite.y += 2;
+          this.sprite.body.velocity.y = this.speed;
           this.sprite.animations.play("down", 5, false);
           this.actions.move('down', this.user, this.mapId, this.sprite.x, this.sprite.y);
-        }
-        if (this.leftKey.isDown) {
-          this.sprite.x -= 2;
+        } else if (this.leftKey.isDown) {
+          this.sprite.body.velocity.x = -this.speed;
           this.sprite.animations.play("left", 5, false);
           this.actions.move('left', this.user, this.mapId, this.sprite.x, this.sprite.y);
         } else if (this.rightKey.isDown) {
-          this.sprite.x += 2;
+          this.sprite.body.velocity.x = this.speed;
           this.sprite.animations.play("right", 5, false);
           this.actions.move('right', this.user, this.mapId, this.sprite.x, this.sprite.y);
         }

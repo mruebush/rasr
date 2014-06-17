@@ -38,36 +38,39 @@ define( ->
       @_setControls()
 
     update: ->
-      if @sprite.x is 0
-        @sprite.x = @game.width - 20
+      @sprite.body.velocity.x = 0
+      @sprite.body.velocity.y = 0
+
+      if @sprite.x < 0
+        @sprite.x = @game.width - @startOnScreenPos
         @trigger('changeMap', 'left')
 
-      if @sprite.x is @game.width
-        @sprite.x = 10
+      if @sprite.x > @game.width
+        @sprite.x = @startOnScreenPos
         @trigger('changeMap', 'right')
 
-      if @sprite.y is 0
-        @sprite.y = @game.height - 20
+      if @sprite.y < 0
+        @sprite.y = @game.height - @startOnScreenPos
         @trigger('changeMap', 'up')
 
-      if @sprite.y is @game.height
-        @sprite.y = 10
+      if @sprite.y > @game.height
+        @sprite.y = @startOnScreenPos
         @trigger('changeMap', 'down')
 
       if @upKey.isDown
-        @sprite.y -= 2
+        @sprite.body.velocity.y = -@speed
         @sprite.animations.play "up", 5, false
         @actions.move 'up', @user, @mapId, @sprite.x, @sprite.y
       else if @downKey.isDown
-        @sprite.y += 2
+        @sprite.body.velocity.y = @speed
         @sprite.animations.play "down", 5, false
         @actions.move 'down', @user, @mapId, @sprite.x, @sprite.y
-      if @leftKey.isDown
-        @sprite.x -= 2
+      else if @leftKey.isDown
+        @sprite.body.velocity.x = -@speed
         @sprite.animations.play "left", 5, false
         @actions.move 'left', @user, @mapId, @sprite.x, @sprite.y
       else if @rightKey.isDown
-        @sprite.x += 2
+        @sprite.body.velocity.x = @speed
         @sprite.animations.play "right", 5, false
         @actions.move 'right', @user, @mapId, @sprite.x, @sprite.y
 
