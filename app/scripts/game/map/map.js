@@ -35,7 +35,7 @@
         this.mapData = data;
         this.game.load.tilemap('map', null, data, this.Phaser.Tilemap.TILED_JSON);
         tilesetImage = this._getImageNameOfTileset(data);
-        this.game.load.image('tiles', "../../assets/tilemaps/tiles/" + tilesetImage);
+        this.game.load.image('tiles', "assets/tilemaps/tiles/" + tilesetImage);
         return callback && callback.apply(this);
       };
 
@@ -58,7 +58,6 @@
       Map.prototype.update = function() {};
 
       Map.prototype._getImageNameOfTileset = function(data) {
-        debugger;
         return data.tilesets[0].image;
       };
 

@@ -20,7 +20,7 @@ define(['jquery'], ($) ->
       @mapData = data
       @game.load.tilemap('map', null, data, @Phaser.Tilemap.TILED_JSON)
       tilesetImage = @_getImageNameOfTileset(data)
-      @game.load.image('tiles', "../../assets/tilemaps/tiles/" + tilesetImage)
+      @game.load.image('tiles', "assets/tilemaps/tiles/" + tilesetImage)
       callback && callback.apply(@)
 
     create: ->
@@ -39,7 +39,6 @@ define(['jquery'], ($) ->
     update: ->
 
     _getImageNameOfTileset: (data) ->
-      debugger
       return data.tilesets[0].image
 
     _getNameOfTileset: (data) ->
