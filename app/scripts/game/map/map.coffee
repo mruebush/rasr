@@ -10,19 +10,22 @@ define(['jquery'], ($) ->
         leftScreen: true
 
 
-    preload: (direction = 'screen', data, callback) ->
+    preload: (direction = 'screen', data, callback, hero) ->
       that = @
       url = "http://g4m3.azurewebsites.net/#{direction}/#{@mapId}"
       if !data
         $.ajax({
           url: url
           success: (data) =>
-            that._loadAssets.call(that, data, callback)
+            that._loadAssets.call(that, data, callback, hero)
         })
       else
-        @_loadAssets.call(@, data, callback)
+        @_loadAssets.call(@, data, callback, hero)
         
-    _loadAssets: (data, callback) ->
+    _loadAssets: (data, callback, hero) ->
+      console.log hero
+      hero && hero.set 'mapId', data._id
+      hero && hero.trigger 'enterMap'
       @mapId = data._id
       @mapData = data
       @game.load.tilemap('map', "assets/tilemaps/maps/desert.json", data, @Phaser.Tilemap.TILED_JSON)
@@ -52,8 +55,8 @@ define(['jquery'], ($) ->
       @layer.debug = false
       @trigger 'finishLoad'
 
-    reload: (direction) ->
-      @preload(direction, null, @create)
+    reload: (direction, hero) ->
+      @preload(direction, null, @create, hero)
 
     update: ->
 
