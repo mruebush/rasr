@@ -44,8 +44,9 @@ define(['jquery'], ($) ->
         y: 0
 
       @mapData = data
-      @game.load.tilemap('map', "assets/tilemaps/maps/desert. json", data, @Phaser.Tilemap.TILED_JSON)
+      @game.load.tilemap('map', "assets/tilemaps/maps/desert.json", data, @Phaser.Tilemap.TILED_JSON)
       tilesetImage = @_getImageNameOfTileset(data)
+      console.log tilesetImage
       @game.load.image('tiles', "assets/tilemaps/tiles/" + tilesetImage)
       callback && callback.apply(@)
 
@@ -69,7 +70,9 @@ define(['jquery'], ($) ->
       tilesetName = @_getNameOfTileset(@mapData)
       map.addTilesetImage(tilesetName, 'tiles')
       layername = @_getLayerName(@mapData)
+      # console.log layername
       @layer = map.createLayer(layername)
+      # console.log @layer
       @layer.resizeWorld()
       @layer.debug = false
       @trigger 'finishLoad'

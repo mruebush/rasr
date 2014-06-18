@@ -154,13 +154,10 @@ require [
     mapId = playerInfo.mapId
     initPos.x = playerInfo.x
     initPos.y = playerInfo.y
-<<<<<<< HEAD
-    # actions = socket rootUrl, 
-    png = playerInfo.png
-=======
-    actions = socket rootUrl, events
+    # png = playerInfo.png
+    # actions = socket rootUrl, events
     png = playerInfo.png || 'roshan'
->>>>>>> master
+
     url = "#{rootUrl}/screen/#{mapId}"
     $.ajax({
       url: url
