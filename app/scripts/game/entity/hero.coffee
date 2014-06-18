@@ -139,7 +139,7 @@ define( ->
         else if @directionFacing is 'left'
           baseAngle = -Math.PI/2
 
-        @game.shoot @user, @mapId, @sprite.x, @sprite.y, baseAngle, numArrowsShot
+        @game.shoot @game.user, @game.mapId, @sprite.x, @sprite.y, baseAngle, numArrowsShot
         @renderMissiles @sprite.x, @sprite.y, baseAngle, numArrowsShot
         nextFire = @game.time.now + fireRate;
 

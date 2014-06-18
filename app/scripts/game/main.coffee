@@ -126,7 +126,7 @@ require [
 
   arrowEnemy = (enemySprite, arrow) ->
     # kill enemy
-    console.log('kill enemy', @)
+    # console.log('kill enemy', @)
     @damage()
     arrow.kill()
 
@@ -150,7 +150,7 @@ require [
   $.ajax({
     url: "#{rootUrl}/player/#{user}"
   }).done (playerInfo) ->
-    console.log playerInfo
+    # console.log playerInfo
     mapId = playerInfo.mapId
     initPos.x = playerInfo.x
     initPos.y = playerInfo.y
@@ -162,6 +162,7 @@ require [
     $.ajax({
       url: url
     }).done (mapData) ->
+      # console.log mapData
       initialMap = mapData
       # debugger
       game = new Phaser.Game(800, 600, Phaser.AUTO, "",
