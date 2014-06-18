@@ -2,15 +2,11 @@ define(['events','player','phaser'], (events, Player, Phaser) ->
   return (rootUrl, game, players) ->
     socket = io.connect()
     
-    # game.user = game.user
+    
     mapId = game.mapId
 
-    # game.on 'join', (data) ->
-      
-
     game.on 'shoot', (data) ->
-      console.log "Someone shooting stuff"
-      hero.renderMissiles data.x, data.y, data.angle, data.num
+      game.hero.renderMissiles data.x, data.y, data.angle, data.num
 
     game.on 'move', (data) ->
       players[data.user].move data 

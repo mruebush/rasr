@@ -124,7 +124,7 @@ define( ->
       return
 
     renderMissiles: (x, y, angle, num) ->
-      console.log "Shoot #{num} arrows starting at #{x},#{y} with angle #{angle}" 
+      
       for i in [0...num]
         console.log(arrowIndex)
         arrow = @arrows.children[arrowIndex]

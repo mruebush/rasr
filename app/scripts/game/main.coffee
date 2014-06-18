@@ -92,6 +92,7 @@ require [
     createEnemies(4)
 
     window.game = game
+    game.hero = hero
 
   create = ->
     map.create()
