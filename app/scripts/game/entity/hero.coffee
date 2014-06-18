@@ -1,45 +1,62 @@
-define(['fx'], (Fx) ->
+define(['arrows'], (Arrows) ->
   fontStyle = { font: "20px Arial", fill: "#ffffff", align: "left" }
 
-  class Player
+  class Hero
     expText = null
     healthText = null
     manaText = null
+    fireRate = 400
+    nextFire = 0
+    arrowIndex = 0
+    arrowSpeed = 600
+    numArrows = 30
+    numArrowsShot = 5
+
+    set: (property, value) ->
+      @[property] = value
 
     constructor: (@game, @phaser, @meta) ->
       @sprite = null
-      @speed = 400
+      @speed = 200
       @startOnScreenPos = 10
+      @png = @meta.png
 
       @upKey = null
       @downKey = null
       @leftKey = null
       @rightKey = null
+      @spaceBar = null
+      @directionFacing = 'up'
 
-      @animations = []
-
-      # @fx = new Fx
-      # for ability in abilities
-      #   @animations.push new Fx(ability)
-
+    createArrows: ->
+      @arrows = @game.add.group()
+      @arrows.enableBody = true
+      @arrows.physicsBodyType = Phaser.Physics.ARCADE
+      @arrows.createMultiple(numArrows, 'arrow', 0, false)
+      @arrows.setAll('anchor.x', 0.5)
+      @arrows.setAll('anchor.y', 0.5)
+      @arrows.setAll('outOfBoundsKill', true)
+      @arrows.setAll('checkWorldBounds', true)
       
     preload: ->
-      @game.load.spritesheet "roshan", "images/roshan.png", 32, 48
+      @game.load.spritesheet "#{@png}", "images/#{@png}.png", 32, 48
+      @game.load.image('arrow', 'images/bullet.png')
 
     create: ->
-      @sprite = @game.add.sprite(250, 250, "roshan")
+      @sprite = @game.add.sprite(@meta.x, @meta.y, "#{@png}")
       @game.physics.enable(@sprite, @phaser.Physics.ARCADE)
-      @sprite.body.collideWorldBounds = true;
+      @sprite.body.collideWorldBounds = true
       @sprite.body.bounce.set(1)
       expText = @game.add.text(20, 10, "exp: #{@meta.exp}", fontStyle)
       healthText = @game.add.text(20, 30, "health: #{@meta.health}", fontStyle)
       mana = @game.add.text(20, 50, "mana: #{@meta.mana}", fontStyle)
-     
+
       @sprite.animations.add "down", [0, 3], false
       @sprite.animations.add "left", [4, 7], false
       @sprite.animations.add "right", [8, 11], false
       @sprite.animations.add "up", [12, 15], false
       @_setControls()
+      @createArrows()
 
     update: ->
       @sprite.body.velocity.x = 0
@@ -64,25 +81,75 @@ define(['fx'], (Fx) ->
       if @upKey.isDown
         @sprite.body.velocity.y = -@speed
         @sprite.animations.play "up", 5, false
+        @directionFacing = 'up'
+        @actions.move 'up', @user, @mapId, @sprite.x, @sprite.y
       else if @downKey.isDown
         @sprite.body.velocity.y = @speed
         @sprite.animations.play "down", 5, false
+        @directionFacing = 'down'
+        @actions.move 'down', @user, @mapId, @sprite.x, @sprite.y
       else if @leftKey.isDown
         @sprite.body.velocity.x = -@speed
         @sprite.animations.play "left", 5, false
+        @directionFacing = 'left'
+        @actions.move 'left', @user, @mapId, @sprite.x, @sprite.y
       else if @rightKey.isDown
         @sprite.body.velocity.x = @speed
         @sprite.animations.play "right", 5, false
+        @directionFacing = 'right'
+        @actions.move 'right', @user, @mapId, @sprite.x, @sprite.y
 
-      @sprite.bringToTop()
+      if @spaceBar.isDown
+        console.log('space bar is down')
+        @fire();
+
+      # @sprite.bringToTop()
 
       return
+
+    renderMissiles: (x, y, angle, num) ->
+      arrowIndex = 0
+      console.log "Shoot #{num} arrows starting at #{x},#{y} with angle #{angle}" 
+      for i in [0...num]
+        arrow = @arrows.children[arrowIndex]
+        arrow.reset(x, y)
+        thisAngle = angle + (i - 2) * 0.2
+        console.log(thisAngle)
+        arrow.rotation = @game.physics.arcade.moveToXY(
+          arrow, 
+          x + 1000*Math.sin(thisAngle), 
+          y + 1000*Math.cos(thisAngle), 
+          arrowSpeed
+          )
+        arrowIndex = (arrowIndex + 1) % numArrows
+
+    fire: ->
+      if @game.time.now > nextFire
+
+        if @directionFacing is 'up'
+          baseAngle = Math.PI
+        else if @directionFacing is 'right'
+          baseAngle = Math.PI/2
+        else if @directionFacing is 'down'
+          baseAngle = 0
+        else if @directionFacing is 'left'
+          baseAngle = -Math.PI/2
+
+        @actions.shoot @user, @mapId, @sprite.x, @sprite.y, baseAngle, numArrowsShot
+
+        @renderMissiles @sprite.x, @sprite.y, baseAngle, numArrowsShot
+
+        nextFire = @game.time.now + fireRate;
+
+
+
 
     _setControls: ->
       @upKey = @game.input.keyboard.addKey(Phaser.Keyboard.UP)
       @downKey = @game.input.keyboard.addKey(Phaser.Keyboard.DOWN)
       @leftKey = @game.input.keyboard.addKey(Phaser.Keyboard.LEFT)
       @rightKey = @game.input.keyboard.addKey(Phaser.Keyboard.RIGHT)
+      @spaceBar = @game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR)
 
-  return Player
+  return Hero
 )

@@ -10,22 +10,31 @@ define(['jquery'], ($) ->
         leftScreen: true
 
 
-    preload: (direction = 'screen', data, callback) ->
+    preload: (direction = 'screen', data, callback, hero) ->
       that = @
       url = "http://g4m3.azurewebsites.net/#{direction}/#{@mapId}"
       if !data
         $.ajax({
           url: url
           success: (data) =>
-            that._loadAssets.call(that, data, callback)
+            that._loadAssets.call(that, data, callback, hero)
         })
       else
-        @_loadAssets.call(@, data, callback)
+        @_loadAssets.call(@, data, callback, hero)
         
-    _loadAssets: (data, callback) ->
+    _loadAssets: (data, callback, hero) ->
+      if hero
+        hero.set 'mapId', data._id
+        console.log "Enter #{hero.mapId}"
+        console.log hero.sprite.x
+        console.log hero.sprite.y
+        hero.actions.join hero.mapId, hero.user,
+          x: hero.sprite.x
+          y: hero.sprite.y
+
       @mapId = data._id
       @mapData = data
-      @game.load.tilemap('map', "assets/tilemaps/maps/desert.json", data, @Phaser.Tilemap.TILED_JSON)
+      @game.load.tilemap('map', "assets/tilemaps/maps/desert. json", data, @Phaser.Tilemap.TILED_JSON)
       tilesetImage = @_getImageNameOfTileset(data)
       @game.load.image('tiles', "assets/tilemaps/tiles/" + tilesetImage)
       callback && callback.apply(@)
@@ -52,8 +61,8 @@ define(['jquery'], ($) ->
       @layer.debug = false
       @trigger 'finishLoad'
 
-    reload: (direction) ->
-      @preload(direction, null, @create)
+    reload: (direction, hero) ->
+      @preload(direction, null, @create, hero)
 
     update: ->
 

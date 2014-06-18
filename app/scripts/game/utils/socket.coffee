@@ -1,47 +1,87 @@
-define(['socketio'], (io) ->
+define(['events'], (events) ->
   return (rootUrl) ->
-    socket = io.connect(rootUrl)
+    socket = io.connect()
     actions = {}
 
-    actions.join = (mapId, thisUser) ->
-      socket.emit 'join', mapId
-      _joinListener mapId, thisUser 
+    actions.shoot = (user, mapId, x, y, angle, num) ->
+      socket.emit 'shoot',
+        user: user
+        mapId: mapId
+        x: x
+        y: y
+        angle: angle
+        num: num
+    
+    actions.logout = (mapId, user, x, y) ->
+      socket.emit 'logout',
+        user: user
+        mapId: mapId
+        x: x
+        y: y
 
-    actions.leave = (mapId, thisUser) ->
+    actions.join = (mapId, user, initPos) ->
+      # map = mapId
+      socket.emit 'join',
+        user: user
+        mapId: mapId
+        x: initPos.x
+        y: initPos.y
+
+      _joinListener mapId, user
+      _leaveListener mapId, user
+      _moveListener user
+      _shootListener user
+
+    _shootListener = (user) ->
+      socket.on 'shoot', (data) ->
+        if data.user != user
+          actions.trigger 'shoot', data
+
+
+    actions.leave = (mapId, user) ->
       socket.emit 'leave', 
-        user: thisUser
+        user: user
         mapId: mapId
 
-    actions.message = (message, mapId, thisUser) ->
+
+    actions.message = (message, mapId, user) ->
       socket.emit 'message',
-        user: thisUser
+        user: user
         message: message
         room: mapId
 
-    actions.move = (x, y, mapId, thisUser) ->
+    actions.move = (dir, user, mapId, x, y) ->
       socket.emit 'move',
+        dir: dir
+        user: user
+        room: mapId
         x: x
         y: y
-        user: thisUser
-        mapId: mapId
 
     _leaveListener = (mapId, user) ->
-      socket.on 'leave', (mapId, user, thisUser) ->
-        
+      socket.on 'leave', (data) ->
 
-    # _leaveListener = (mapId, user) ->
-    #   socket.on 'leave', (data) ->
-    #     if data.user is not user
-    #       console.log 
+        if data.user != user
+          actions.trigger 'player leave', data.user
+  
 
-    _joinListener = (mapId, thisUser) ->
+    _joinListener = (mapId, user) ->
       socket.on mapId, (data) ->
-        if data.user is not thisUser
-          console.log data.message
+        if data.user != user
+          actions.trigger('join', data)
+        else 
+          actions.trigger('others', data)
+  
 
-    _moveListener = (x, y, mapId, user) ->
+
+    _moveListener = (user) ->
+      socket.on 'move', (data) ->
+        if data.user != user
+          actions.trigger('move', data)
+  
 
 
-
+    actions = events(actions)
+    window.actions = actions
     actions
   )
