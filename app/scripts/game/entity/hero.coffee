@@ -12,17 +12,12 @@ define( ->
     numArrows = 50
     numArrowsShot = 5
 
-    set: (property, value) ->
-      @[property] = value
-
     damage: ->
       @meta.health--
       @render()
       
-
     render: ->
       @game.debug.text("health: #{@meta.health}", 20, 30, fontStyle)
-
 
     constructor: (@game, @phaser, @meta) ->
       @sprite = null
@@ -92,22 +87,34 @@ define( ->
         @sprite.body.velocity.y = -@speed
         @sprite.animations.play "up", 5, false
         @directionFacing = 'up'
-        @actions.move 'up', @user, @mapId, @sprite.x, @sprite.y
+        @game.move 
+          dir: 'up'
+          x: @sprite.x
+          y: @sprite.y
       else if @downKey.isDown
         @sprite.body.velocity.y = @speed
         @sprite.animations.play "down", 5, false
         @directionFacing = 'down'
-        @actions.move 'down', @user, @mapId, @sprite.x, @sprite.y
+        @game.move 
+          dir:'down'
+          x: @sprite.x
+          y: @sprite.y
       else if @leftKey.isDown
         @sprite.body.velocity.x = -@speed
         @sprite.animations.play "left", 5, false
         @directionFacing = 'left'
-        @actions.move 'left', @user, @mapId, @sprite.x, @sprite.y
+        @game.move 
+         dir:'left'
+         x: @sprite.x
+         y: @sprite.y
       else if @rightKey.isDown
         @sprite.body.velocity.x = @speed
         @sprite.animations.play "right", 5, false
         @directionFacing = 'right'
-        @actions.move 'right', @user, @mapId, @sprite.x, @sprite.y
+        @game.move 
+          dir: 'right'
+          x: @sprite.x
+          y: @sprite.y
 
       if @spaceBar.isDown
         @fire();
@@ -117,7 +124,7 @@ define( ->
       return
 
     renderMissiles: (x, y, angle, num) ->
-      console.log "Shoot #{num} arrows starting at #{x},#{y} with angle #{angle}" 
+      
       for i in [0...num]
         console.log(arrowIndex)
         arrow = @arrows.children[arrowIndex]
@@ -144,10 +151,8 @@ define( ->
         else if @directionFacing is 'left'
           baseAngle = -Math.PI/2
 
-        @actions.shoot @user, @mapId, @sprite.x, @sprite.y, baseAngle, numArrowsShot
-
+        @game.shoot @game.user, @game.mapId, @sprite.x, @sprite.y, baseAngle, numArrowsShot
         @renderMissiles @sprite.x, @sprite.y, baseAngle, numArrowsShot
-
         nextFire = @game.time.now + fireRate;
 
 

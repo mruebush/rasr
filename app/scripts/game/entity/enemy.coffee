@@ -12,7 +12,7 @@ define( ->
       @alive = true
 
     damage: ->
-      console.log('damage damage')
+      # console.log('damage damage')
       @health--
       if @health <= 0
         @alive = false
