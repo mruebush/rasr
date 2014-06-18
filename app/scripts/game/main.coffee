@@ -13,6 +13,7 @@ require.config
     underscore: '../../bower_components/underscore/underscore'
     socketio: '../../bower_components/socket.io-client/socket.io'
     phaser: '../../bower_components/phaser/phaser'
+    arrows: 'entity/arrows'
     hero: 'entity/hero'
     enemy: 'entity/enemy'
     map: 'map/map'
@@ -112,28 +113,31 @@ require [
       players.trigger 'player leave', user
 
     hero.on 'changeMap', (direction) ->
+      app.isLoaded = false
       console.log "Leave #{hero.mapId}"
       # hero.moveEnabled = false
       hero.actions.leave hero.mapId, user
       console.log 'Left map'
       map.reload(direction, hero)
-
-      app.isLoaded = false
       createEnemies(4)
     
     players.on 'create', (player) ->
       player.create()
       players[player.user] = player
     
+
     hero.actions.on 'join', (data) ->
       console.log "#{data.user} joined the map ON #{data.x},#{data.y} !"
       players.trigger('join', data)
+
     
     hero.actions.on 'move', (data) ->
       players[data.user].trigger('move', data) 
     
     map.on 'finishLoad', ->
       hero.sprite.bringToTop()
+      hero.arrows.forEach (arrow) ->
+        arrow.bringToTop()
       for enemy in enemies
         enemy.sprite.bringToTop()
       app.isLoaded = true
@@ -147,17 +151,20 @@ require [
     if app.isLoaded
       map.update()
       hero.update()
-      # for enemy in enemies
-      #   if enemy.alive
-      #     game.physics.arcade.collide(hero.sprite, enemy.sprite, collisionHandler, null, enemy)
-      #     enemy.update()
+      for enemy in enemies
+        if enemy.alive
+          # game.physics.arcade.collide(hero.sprite, enemy.sprite, collisionHandler, null, enemy)
+          game.physics.arcade.collide(hero.arrows, enemy.sprite, collisionHandler, null, enemy)
+          enemy.update()
       for player of players
         if player.update then do player.update
 
-  collisionHandler = (heroSprite, enemySprite) ->
+  collisionHandler = (enemySprite, arrow) ->
     # kill enemy
     console.log('kill enemy', @)
     @damage()
+    arrow.kill()
+
 
   createEnemies = (num) ->
     # for enemy in enemies
