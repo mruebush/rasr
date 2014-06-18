@@ -13,13 +13,17 @@
         this.margin = 50;
         this.x = Math.min(Math.max(this.game.world.randomX, this.margin), this.game.width - this.margin);
         this.y = Math.min(Math.max(this.game.world.randomY, this.margin), this.game.height - this.margin);
+        this.health = 5;
         this.alive = true;
       }
 
       Enemy.prototype.damage = function() {
         console.log('damage damage');
-        this.alive = false;
-        this.sprite.kill();
+        this.health--;
+        if (this.health <= 0) {
+          this.alive = false;
+          this.sprite.kill();
+        }
         return true;
       };
 
