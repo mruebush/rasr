@@ -81,22 +81,22 @@ define(['arrows'], (Arrows) ->
         @sprite.body.velocity.y = -@speed
         @sprite.animations.play "up", 5, false
         @directionFacing = 'up'
-        # @actions.move 'up', @user, @mapId, @sprite.x, @sprite.y
+        @actions.move 'up', @user, @mapId, @sprite.x, @sprite.y
       else if @downKey.isDown
         @sprite.body.velocity.y = @speed
         @sprite.animations.play "down", 5, false
         @directionFacing = 'down'
-        # @actions.move 'down', @user, @mapId, @sprite.x, @sprite.y
+        @actions.move 'down', @user, @mapId, @sprite.x, @sprite.y
       else if @leftKey.isDown
         @sprite.body.velocity.x = -@speed
         @sprite.animations.play "left", 5, false
         @directionFacing = 'left'
-        # @actions.move 'left', @user, @mapId, @sprite.x, @sprite.y
+        @actions.move 'left', @user, @mapId, @sprite.x, @sprite.y
       else if @rightKey.isDown
         @sprite.body.velocity.x = @speed
         @sprite.animations.play "right", 5, false
         @directionFacing = 'right'
-        # @actions.move 'right', @user, @mapId, @sprite.x, @sprite.y
+        @actions.move 'right', @user, @mapId, @sprite.x, @sprite.y
 
       if @spaceBar.isDown
         console.log('space bar is down')
