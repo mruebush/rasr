@@ -8,7 +8,10 @@ define(['jquery'], ($) ->
         rightScreen: true
         downScreen: true
         leftScreen: true
-
+      @game.physics.arcade.checkCollision.up = false
+      @game.physics.arcade.checkCollision.right = false
+      @game.physics.arcade.checkCollision.down = false
+      @game.physics.arcade.checkCollision.left = false
 
     preload: (direction = 'screen', data, callback, hero) ->
       that = @
@@ -49,7 +52,10 @@ define(['jquery'], ($) ->
       for border, value of @borders
         if !!value != !!@oldBorders[border]
           $(".#{border}").toggleClass('no-bordering-screen')
-          @trigger 'borderChange', border, !!value
+
+          @game.physics.arcade.checkCollision[border.split('Screen')[0]] = !value
+          # console.log(!exists, @game.physics.arcade.checkCollision[border.split('Screen')[0]])
+          # @trigger 'borderChange', border, !!value
 
     create: ->
       map = @game.add.tilemap('map')
