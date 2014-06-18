@@ -36,7 +36,8 @@ define(function() {
 		var template = Editor.$(e.currentTarget).attr("data-template"),
 		    title = Editor.$(e.currentTarget).text();
 
-		$.get("templates/" + template + ".tpl", function(data) {
+		$.get("/partials/edit/" + template + ".html", function(data) {
+			debugger
 
 			Editor.$("#dialog").html(data).dialog({
 				title: title,

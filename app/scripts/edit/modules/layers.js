@@ -195,7 +195,7 @@ define(function() {
 
 		Layers.contextTarget = $(e.currentTarget).parent();
 
-		Editor.$.get("templates/cm_layer.tpl", function(data) {
+		Editor.$.get("views/partials/edit/cm_layer.tpl", function(data) {
 			Editor.$("body").append(data);
 			Editor.$("#contextmenu").css("left", e.pageX);
 			Editor.$("#contextmenu").css("top", e.pageY);
