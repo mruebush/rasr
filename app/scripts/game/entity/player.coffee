@@ -27,7 +27,7 @@ define( ->
       dir = data.dir
       @sprite.y = data.y
       @sprite.x = data.x
-      
+
       if dir is 'up'
         # @sprite.y = data.y
         @sprite.animations.play "up", 5, false

@@ -13,7 +13,7 @@ require.config
     underscore: '../../bower_components/underscore/underscore'
     socketio: '../../bower_components/socket.io-client/socket.io'
     phaser: '../../bower_components/phaser/phaser'
-    arrows: 'entity/arrows'
+    # arrows: 'entity/arrows'
     hero: 'entity/hero'
     enemy: 'entity/enemy'
     map: 'map/map'
