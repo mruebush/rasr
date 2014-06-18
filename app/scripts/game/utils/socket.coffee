@@ -20,7 +20,6 @@ define(['events'], (events) ->
         y: y
 
     actions.join = (mapId, user, initPos) ->
-      # map = mapId
       socket.emit 'join',
         user: user
         mapId: mapId
@@ -31,11 +30,6 @@ define(['events'], (events) ->
       _leaveListener mapId, user
       _moveListener user
       _shootListener user
-
-    _shootListener = (user) ->
-      socket.on 'shoot', (data) ->
-        if data.user != user
-          actions.trigger 'shoot', data
 
 
     actions.leave = (mapId, user) ->
@@ -58,6 +52,11 @@ define(['events'], (events) ->
         x: x
         y: y
 
+    _shootListener = (user) ->
+      socket.on 'shoot', (data) ->
+        if data.user != user
+          actions.trigger 'shoot', data
+
     _leaveListener = (mapId, user) ->
       socket.on 'leave', (data) ->
 
@@ -72,8 +71,6 @@ define(['events'], (events) ->
         else 
           actions.trigger('others', data)
   
-
-
     _moveListener = (user) ->
       socket.on 'move', (data) ->
         if data.user != user

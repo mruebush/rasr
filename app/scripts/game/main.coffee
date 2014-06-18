@@ -118,7 +118,7 @@ require [
       players.trigger 'player leave', user
 
     hero.on 'changeMap', (direction) ->
-      app.isLoaded = false
+      # app.isLoaded = flse
       console.log "Leave #{hero.mapId}"
       # hero.moveEnabled = false
       hero.actions.leave hero.mapId, user
