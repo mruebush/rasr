@@ -37,7 +37,6 @@ define(function() {
 		    title = Editor.$(e.currentTarget).text();
 
 		$.get("/partials/edit/" + template + ".html", function(data) {
-			debugger
 
 			Editor.$("#dialog").html(data).dialog({
 				title: title,
