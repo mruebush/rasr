@@ -23,7 +23,6 @@ define(['jquery'], ($) ->
         @_loadAssets.call(@, data, callback, hero)
         
     _loadAssets: (data, callback, hero) ->
-
       if hero
         hero.set 'mapId', data._id
         console.log "Enter #{hero.mapId}"
@@ -35,7 +34,7 @@ define(['jquery'], ($) ->
           
       @mapId = data._id
       @mapData = data
-      @game.load.tilemap('map', "assets/tilemaps/maps/desert.json", data, @Phaser.Tilemap.TILED_JSON)
+      @game.load.tilemap('map', "assets/tilemaps/maps/desert. json", data, @Phaser.Tilemap.TILED_JSON)
       tilesetImage = @_getImageNameOfTileset(data)
       @game.load.image('tiles', "assets/tilemaps/tiles/" + tilesetImage)
       callback && callback.apply(@)

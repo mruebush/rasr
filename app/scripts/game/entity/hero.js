@@ -1,5 +1,5 @@
 (function() {
-  define(function() {
+  define(['arrows'], function(Arrows) {
     var Hero, fontStyle;
     fontStyle = {
       font: "20px Arial",
@@ -7,13 +7,25 @@
       align: "left"
     };
     Hero = (function() {
-      var expText, healthText, manaText;
+      var arrowIndex, arrowSpeed, expText, fireRate, healthText, manaText, nextFire, numArrows, numArrowsShot;
 
       expText = null;
 
       healthText = null;
 
       manaText = null;
+
+      fireRate = 400;
+
+      nextFire = 0;
+
+      arrowIndex = 0;
+
+      arrowSpeed = 600;
+
+      numArrows = 30;
+
+      numArrowsShot = 5;
 
       Hero.prototype.set = function(property, value) {
         return this[property] = value;
@@ -30,10 +42,24 @@
         this.downKey = null;
         this.leftKey = null;
         this.rightKey = null;
+        this.spaceBar = null;
+        this.directionFacing = 'up';
       }
 
+      Hero.prototype.createArrows = function() {
+        this.arrows = this.game.add.group();
+        this.arrows.enableBody = true;
+        this.arrows.physicsBodyType = Phaser.Physics.ARCADE;
+        this.arrows.createMultiple(numArrows, 'arrow', 0, false);
+        this.arrows.setAll('anchor.x', 0.5);
+        this.arrows.setAll('anchor.y', 0.5);
+        this.arrows.setAll('outOfBoundsKill', true);
+        return this.arrows.setAll('checkWorldBounds', true);
+      };
+
       Hero.prototype.preload = function() {
-        return this.game.load.spritesheet("roshan", "images/roshan.png", 32, 48);
+        this.game.load.spritesheet("roshan", "images/roshan.png", 32, 48);
+        return this.game.load.image('arrow', 'images/bullet.png');
       };
 
       Hero.prototype.create = function() {
@@ -49,7 +75,8 @@
         this.sprite.animations.add("left", [4, 7], false);
         this.sprite.animations.add("right", [8, 11], false);
         this.sprite.animations.add("up", [12, 15], false);
-        return this._setControls();
+        this._setControls();
+        return this.createArrows();
       };
 
       Hero.prototype.update = function() {
@@ -74,28 +101,56 @@
         if (this.upKey.isDown) {
           this.sprite.body.velocity.y = -this.speed;
           this.sprite.animations.play("up", 5, false);
-          this.actions.move('up', this.user, this.mapId, this.sprite.x, this.sprite.y);
+          this.directionFacing = 'up';
         } else if (this.downKey.isDown) {
           this.sprite.body.velocity.y = this.speed;
           this.sprite.animations.play("down", 5, false);
-          this.actions.move('down', this.user, this.mapId, this.sprite.x, this.sprite.y);
+          this.directionFacing = 'down';
         } else if (this.leftKey.isDown) {
           this.sprite.body.velocity.x = -this.speed;
           this.sprite.animations.play("left", 5, false);
-          this.actions.move('left', this.user, this.mapId, this.sprite.x, this.sprite.y);
+          this.directionFacing = 'left';
         } else if (this.rightKey.isDown) {
           this.sprite.body.velocity.x = this.speed;
           this.sprite.animations.play("right", 5, false);
-          this.actions.move('right', this.user, this.mapId, this.sprite.x, this.sprite.y);
+          this.directionFacing = 'right';
         }
-        this.sprite.bringToTop();
+        if (this.spaceBar.isDown) {
+          console.log('space bar is down');
+          this.fire();
+        }
+      };
+
+      Hero.prototype.fire = function() {
+        var arrow, baseAngle, i, thisAngle, _i;
+        if (this.game.time.now > nextFire) {
+          if (this.directionFacing === 'up') {
+            baseAngle = Math.PI;
+          } else if (this.directionFacing === 'right') {
+            baseAngle = Math.PI / 2;
+          } else if (this.directionFacing === 'down') {
+            baseAngle = 0;
+          } else if (this.directionFacing === 'left') {
+            baseAngle = -Math.PI / 2;
+          }
+          for (i = _i = 0; 0 <= numArrowsShot ? _i < numArrowsShot : _i > numArrowsShot; i = 0 <= numArrowsShot ? ++_i : --_i) {
+            arrow = this.arrows.children[arrowIndex];
+            arrow.reset(this.sprite.x, this.sprite.y);
+            thisAngle = baseAngle + (i - 2) * 0.2;
+            console.log(thisAngle);
+            arrow.rotation = this.game.physics.arcade.moveToXY(arrow, this.sprite.x + 1000 * Math.sin(thisAngle), this.sprite.y + 1000 * Math.cos(thisAngle), arrowSpeed);
+            arrowIndex = (arrowIndex + 1) % numArrows;
+          }
+          return nextFire = this.game.time.now + fireRate;
+        }
       };
 
       Hero.prototype._setControls = function() {
         this.upKey = this.game.input.keyboard.addKey(Phaser.Keyboard.UP);
         this.downKey = this.game.input.keyboard.addKey(Phaser.Keyboard.DOWN);
         this.leftKey = this.game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
-        return this.rightKey = this.game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
+        this.rightKey = this.game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
+        return this.spaceBar = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
       };
 
       return Hero;

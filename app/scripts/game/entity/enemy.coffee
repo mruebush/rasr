@@ -8,12 +8,15 @@ define( ->
       @margin = 50
       @x = Math.min(Math.max(@game.world.randomX, @margin), @game.width - @margin)
       @y = Math.min(Math.max(@game.world.randomY, @margin), @game.height - @margin)
+      @health = 5
       @alive = true
 
     damage: ->
       console.log('damage damage')
-      @alive = false
-      @sprite.kill()
+      @health--
+      if @health <= 0
+        @alive = false
+        @sprite.kill()
       return true
 
     preload: ->
