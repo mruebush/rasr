@@ -43,8 +43,8 @@ require [
   leftScreen = null
   png = null
   rootUrl = 'http://g4m3.azurewebsites.net'
-  # user = 'test'
-  user = prompt 'Fullen Sie das user bitte !'
+  user = 'test'
+  # user = prompt 'Fullen Sie das user bitte !'
   initPos = {}
   # actions = {}
 

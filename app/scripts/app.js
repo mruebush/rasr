@@ -26,7 +26,9 @@ angular.module('komApp', [
       })
       .state('play', {
         url: '/play',
-        templateUrl: 'partials/game'
+        templateUrl: 'partials/game',
+        controller: 'GameCtrl',
+        authenticate: true
       })
       .state('edit', {
         url: '/edit',
