@@ -31,6 +31,15 @@
         return this[property] = value;
       };
 
+      Hero.prototype.damage = function() {
+        this.meta.health--;
+        return console.log(healthText);
+      };
+
+      Hero.prototype.render = function() {
+        return this.game.debug.text("health: " + this.meta.health, 20, 30, fontStyle);
+      };
+
       function Hero(game, phaser, meta) {
         this.game = game;
         this.phaser = phaser;
@@ -69,7 +78,6 @@
         this.sprite.body.collideWorldBounds = true;
         this.sprite.body.bounce.set(1);
         expText = this.game.add.text(20, 10, "exp: " + this.meta.exp, fontStyle);
-        healthText = this.game.add.text(20, 30, "health: " + this.meta.health, fontStyle);
         mana = this.game.add.text(20, 50, "mana: " + this.meta.mana, fontStyle);
         this.sprite.animations.add("down", [0, 3], false);
         this.sprite.animations.add("left", [4, 7], false);
@@ -136,6 +144,9 @@
           for (i = _i = 0; 0 <= numArrowsShot ? _i < numArrowsShot : _i > numArrowsShot; i = 0 <= numArrowsShot ? ++_i : --_i) {
             arrow = this.arrows.children[arrowIndex];
             arrow.reset(this.sprite.x, this.sprite.y);
+            console.log(arrow);
+            arrow.bringToTop();
+            console.log(arrow);
             thisAngle = baseAngle + (i - 2) * 0.2;
             console.log(thisAngle);
             arrow.rotation = this.game.physics.arcade.moveToXY(arrow, this.sprite.x + 1000 * Math.sin(thisAngle), this.sprite.y + 1000 * Math.cos(thisAngle), arrowSpeed);

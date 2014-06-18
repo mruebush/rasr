@@ -15,6 +15,15 @@ define(['arrows'], (Arrows) ->
     set: (property, value) ->
       @[property] = value
 
+    damage: ->
+      @meta.health--
+      console.log(healthText)
+      
+
+    render: ->
+      @game.debug.text("health: #{@meta.health}", 20, 30, fontStyle)
+
+
     constructor: (@game, @phaser, @meta) ->
       @sprite = null
       @speed = 400
@@ -47,7 +56,7 @@ define(['arrows'], (Arrows) ->
       @sprite.body.collideWorldBounds = true;
       @sprite.body.bounce.set(1)
       expText = @game.add.text(20, 10, "exp: #{@meta.exp}", fontStyle)
-      healthText = @game.add.text(20, 30, "health: #{@meta.health}", fontStyle)
+      # healthText = @game.add.text(20, 30, "health: #{@meta.health}", fontStyle)
       mana = @game.add.text(20, 50, "mana: #{@meta.mana}", fontStyle)
 
       @sprite.animations.add "down", [0, 3], false
@@ -121,6 +130,9 @@ define(['arrows'], (Arrows) ->
         for i in [0...numArrowsShot]
           arrow = @arrows.children[arrowIndex]
           arrow.reset(@sprite.x, @sprite.y)
+          console.log(arrow)
+          arrow.bringToTop()
+          console.log(arrow)
           thisAngle = baseAngle + (i - 2) * 0.2
           console.log(thisAngle)
           arrow.rotation = @game.physics.arcade.moveToXY(
