@@ -26,7 +26,7 @@
   });
 
   require(['hero', 'map', 'enemy', 'events', 'socket', 'phaser', 'player'], function(Hero, Map, Enemy, events, socket, Phaser, Player) {
-    var actions, app, collisionHandler, create, createEnemies, downScreen, enemies, game, hero, initPos, initialMap, leftScreen, map, mapId, players, preload, rightScreen, rootUrl, upScreen, update, user;
+    var actions, app, arrowEnemy, create, createEnemies, downScreen, enemies, game, hero, hurtHero, initPos, initialMap, leftScreen, map, mapId, players, preload, rightScreen, rootUrl, upScreen, update, user;
     app = events({});
     game = null;
     hero = null;
@@ -147,7 +147,8 @@
         for (_i = 0, _len = enemies.length; _i < _len; _i++) {
           enemy = enemies[_i];
           if (enemy.alive) {
-            game.physics.arcade.collide(hero.arrows, enemy.sprite, collisionHandler, null, enemy);
+            game.physics.arcade.collide(hero.sprite, enemy.sprite, hurtHero, null, hero);
+            game.physics.arcade.collide(hero.arrows, enemy.sprite, arrowEnemy, null, enemy);
             enemy.update();
           }
         }
@@ -162,7 +163,10 @@
         return _results;
       }
     };
-    collisionHandler = function(enemySprite, arrow) {
+    hurtHero = function(enemySprite, heroSprite) {
+      return this.damage();
+    };
+    arrowEnemy = function(enemySprite, arrow) {
       console.log('kill enemy', this);
       this.damage();
       return arrow.kill();

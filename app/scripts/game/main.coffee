@@ -152,13 +152,16 @@ require [
       hero.update()
       for enemy in enemies
         if enemy.alive
-          # game.physics.arcade.collide(hero.sprite, enemy.sprite, collisionHandler, null, enemy)
-          game.physics.arcade.collide(hero.arrows, enemy.sprite, collisionHandler, null, enemy)
+          game.physics.arcade.collide(hero.sprite, enemy.sprite, hurtHero, null, hero)
+          game.physics.arcade.collide(hero.arrows, enemy.sprite, arrowEnemy, null, enemy)
           enemy.update()
       for player of players
         if player.update then do player.update
 
-  collisionHandler = (enemySprite, arrow) ->
+  hurtHero = (enemySprite, heroSprite) ->
+    @damage()
+
+  arrowEnemy = (enemySprite, arrow) ->
     # kill enemy
     console.log('kill enemy', @)
     @damage()
