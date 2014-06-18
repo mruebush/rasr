@@ -1,4 +1,4 @@
-define(['arrows'], (Arrows) ->
+define( ->
   fontStyle = { font: "20px Arial", fill: "#ffffff", align: "left" }
 
   class Hero
@@ -9,7 +9,7 @@ define(['arrows'], (Arrows) ->
     nextFire = 0
     arrowIndex = 0
     arrowSpeed = 600
-    numArrows = 30
+    numArrows = 50
     numArrowsShot = 5
 
     set: (property, value) ->
@@ -17,7 +17,7 @@ define(['arrows'], (Arrows) ->
 
     damage: ->
       @meta.health--
-      console.log(healthText)
+      @render()
       
 
     render: ->
@@ -58,6 +58,7 @@ define(['arrows'], (Arrows) ->
       @sprite.body.bounce.set(1)
       expText = @game.add.text(20, 10, "exp: #{@meta.exp}", fontStyle)
       # healthText = @game.add.text(20, 30, "health: #{@meta.health}", fontStyle)
+      @render()
       mana = @game.add.text(20, 50, "mana: #{@meta.mana}", fontStyle)
 
       @sprite.animations.add "down", [0, 3], false
@@ -109,7 +110,6 @@ define(['arrows'], (Arrows) ->
         @actions.move 'right', @user, @mapId, @sprite.x, @sprite.y
 
       if @spaceBar.isDown
-        console.log('space bar is down')
         @fire();
 
       # @sprite.bringToTop()
@@ -117,17 +117,17 @@ define(['arrows'], (Arrows) ->
       return
 
     renderMissiles: (x, y, angle, num) ->
-      arrowIndex = 0
       console.log "Shoot #{num} arrows starting at #{x},#{y} with angle #{angle}" 
       for i in [0...num]
+        console.log(arrowIndex)
         arrow = @arrows.children[arrowIndex]
         arrow.reset(x, y)
         thisAngle = angle + (i - 2) * 0.2
-        console.log(thisAngle)
+        # console.log(thisAngle)
         arrow.rotation = @game.physics.arcade.moveToXY(
           arrow, 
-          x + 1000*Math.sin(thisAngle), 
-          y + 1000*Math.cos(thisAngle), 
+          x + Math.sin(thisAngle), 
+          y + Math.cos(thisAngle), 
           arrowSpeed
           )
         arrowIndex = (arrowIndex + 1) % numArrows
@@ -144,23 +144,6 @@ define(['arrows'], (Arrows) ->
         else if @directionFacing is 'left'
           baseAngle = -Math.PI/2
 
-# <<<<<<< HEAD
-#         for i in [0...numArrowsShot]
-#           arrow = @arrows.children[arrowIndex]
-#           arrow.reset(@sprite.x, @sprite.y)
-#           console.log(arrow)
-#           arrow.bringToTop()
-#           console.log(arrow)
-#           thisAngle = baseAngle + (i - 2) * 0.2
-#           console.log(thisAngle)
-#           arrow.rotation = @game.physics.arcade.moveToXY(
-#             arrow, 
-#             @sprite.x + 1000*Math.sin(thisAngle), 
-#             @sprite.y + 1000*Math.cos(thisAngle), 
-#             arrowSpeed
-#             )
-#           arrowIndex = (arrowIndex + 1) % numArrows
-# =======
         @actions.shoot @user, @mapId, @sprite.x, @sprite.y, baseAngle, numArrowsShot
 
         @renderMissiles @sprite.x, @sprite.y, baseAngle, numArrowsShot
