@@ -2,29 +2,35 @@ define(['events'], (events) ->
   return (rootUrl) ->
     socket = io.connect()
     actions = {}
-    # map
+    
+    actions.logout = (mapId, user, x, y) ->
+      socket.emit 'logout',
+        user: user
+        mapId: mapId
+        x: x
+        y: y
 
-    actions.join = (mapId, thisUser, initPos) ->
+    actions.join = (mapId, user, initPos) ->
       # map = mapId
       socket.emit 'join',
-        user: thisUser
+        user: user
         mapId: mapId
         x: initPos.x
         y: initPos.y
 
-      _joinListener mapId, thisUser
-      _leaveListener mapId, thisUser
-      _moveListener thisUser
+      _joinListener mapId, user
+      _leaveListener mapId, user
+      _moveListener user
 
-    actions.leave = (mapId, thisUser) ->
+    actions.leave = (mapId, user) ->
       socket.emit 'leave', 
-        user: thisUser
+        user: user
         mapId: mapId
 
 
-    actions.message = (message, mapId, thisUser) ->
+    actions.message = (message, mapId, user) ->
       socket.emit 'message',
-        user: thisUser
+        user: user
         message: message
         room: mapId
 
@@ -43,9 +49,9 @@ define(['events'], (events) ->
           actions.trigger 'player leave', data.user
   
 
-    _joinListener = (mapId, thisUser) ->
+    _joinListener = (mapId, user) ->
       socket.on mapId, (data) ->
-        if data.user != thisUser
+        if data.user != user
           actions.trigger('join', data)
         else 
           actions.trigger('others', data)
