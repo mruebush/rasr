@@ -108,6 +108,12 @@ require [
     for enemy, index in enemies
       enemy.create()
 
+    # game.mapId = @mapId
+    console.log "Joining #{@game.mapId} on #{hero.sprite.x},#{hero.sprite.y}"
+    @game.join   
+      x: hero.sprite.x
+      y: hero.sprite.y
+
 
   update = ->
     if app.isLoaded

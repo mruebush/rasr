@@ -1,28 +1,18 @@
-define(['events','player'], (events, Player) ->
+define(['events','player','phaser'], (events, Player, Phaser) ->
   return (rootUrl, game, players) ->
     socket = io.connect()
     
     # game.user = game.user
     mapId = game.mapId
 
-    game.on 'join', (data) ->
-      console.log "#{data.user} joined the map ON #{data.x},#{data.y} !"
-      player = new Player(game, Phaser, 
-        x: data.x
-        y: data.y
-      )
-      player.user = data.user
-      do player.preload
-      player.create()
-      players[player.user] = player
+    # game.on 'join', (data) ->
+      
 
     game.on 'shoot', (data) ->
       console.log "Someone shooting stuff"
       hero.renderMissiles data.x, data.y, data.angle, data.num
 
     game.on 'move', (data) ->
-      console.log "Someone moving"
-      console.log players
       players[data.user].move data 
 
     game.on 'player leave', (user) ->
@@ -35,14 +25,29 @@ define(['events','player'], (events, Player) ->
       game.leave game.mapId, game.user
       game.map.reload(direction)
 
-    game.on 'others', (data) ->
-      console.log 'Other dude joined'
-      for other, index in data.others
-        console.log "#{other.user} joined the map on #{other.x},#{other.y}"
-        game.trigger 'join',
-          user: other.user
+    game.on 'player joined', (data) ->
+      console.log "#{data.user} joined on #{data.x},#{data.y}"
+      player = new Player(game, Phaser,
+        x: data.x
+        y: data.y
+      )
+      player.user = data.user
+      do player.preload
+      do player.create
+      players[player.user] = player
+
+    game.on 'i joined', (data) ->
+      console.log 'render all other players'
+      for other in data.others
+        console.log "rendering #{other.user}"
+        player = new Player(game, Phaser,
           x: other.x
           y: other.y
+        )
+        player.user = other.user
+        do player.preload
+        do player.create
+        players[player.user] = player
 
     game.shoot = (user, mapId, x, y, angle, num) ->
       console.log "#{user} shoots in #{mapId}"
@@ -56,7 +61,7 @@ define(['events','player'], (events, Player) ->
     
     game.logout = (x, y) ->
       socket.emit 'logout',
-        user: user
+        user: game.user
         mapId: game.mapId
         x: x
         y: y
@@ -65,14 +70,13 @@ define(['events','player'], (events, Player) ->
 
       x = data.x
       y = data.y
-      console.log "#{game.user} joining #{game.mapId}"
+
       socket.emit 'join',
         user: game.user
         mapId: game.mapId
         x: x
         y: y
 
-      console.log "Register event on #{game.user}"
       _joinListener game.user
 
 
@@ -110,11 +114,11 @@ define(['events','player'], (events, Player) ->
 
     _joinListener = (user) ->
       socket.on game.mapId, (data) ->
-        console.log 'Recieve join from server'
         if data.user != game.user
-          game.trigger('join', data)
-        else 
-          game.trigger('others', data)
+          game.trigger('player joined', data)
+        else
+          game.trigger('i joined', data)
+
   
     _moveListener = (user) ->
       socket.on 'move', (data) ->

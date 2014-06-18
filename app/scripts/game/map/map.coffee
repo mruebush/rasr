@@ -37,16 +37,15 @@ define(['jquery'], ($) ->
       @mapId = data._id
 
       @game.mapId = @mapId
-      console.log "Setting game.mapid to #{@game.mapId}"
-      @game.join
-        mapId: @mapId
-        x: 0
-        y: 0
+      # console.log "Joining #{@game.mapId}"
+      # @game.join
+      #   mapId: @mapId
+      #   x: 0
+      #   y: 0
 
       @mapData = data
       @game.load.tilemap('map', "assets/tilemaps/maps/desert.json", data, @Phaser.Tilemap.TILED_JSON)
       tilesetImage = @_getImageNameOfTileset(data)
-      console.log tilesetImage
       @game.load.image('tiles', "assets/tilemaps/tiles/" + tilesetImage)
       callback && callback.apply(@)
 

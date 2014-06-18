@@ -87,22 +87,34 @@ define( ->
         @sprite.body.velocity.y = -@speed
         @sprite.animations.play "up", 5, false
         @directionFacing = 'up'
-        @game.move 'up', @sprite.x, @sprite.y
+        @game.move 
+          dir: 'up'
+          x: @sprite.x
+          y: @sprite.y
       else if @downKey.isDown
         @sprite.body.velocity.y = @speed
         @sprite.animations.play "down", 5, false
         @directionFacing = 'down'
-        @game.move 'down', @sprite.x, @sprite.y
+        @game.move 
+          dir:'down'
+          x: @sprite.x
+          y: @sprite.y
       else if @leftKey.isDown
         @sprite.body.velocity.x = -@speed
         @sprite.animations.play "left", 5, false
         @directionFacing = 'left'
-        @game.move 'left', @sprite.x, @sprite.y
+        @game.move 
+         dir:'left'
+         x: @sprite.x
+         y: @sprite.y
       else if @rightKey.isDown
         @sprite.body.velocity.x = @speed
         @sprite.animations.play "right", 5, false
         @directionFacing = 'right'
-        @game.move 'right', @sprite.x, @sprite.y
+        @game.move 
+          dir: 'right'
+          x: @sprite.x
+          y: @sprite.y
 
       if @spaceBar.isDown
         @fire();
