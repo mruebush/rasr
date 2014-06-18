@@ -47,7 +47,7 @@ require [
   # user = 'test'
   user = prompt 'Fullen Sie das user bitte !'
   initPos = {}
-  actions = {}
+  # actions = {}
 
 
   preload = ->
@@ -72,7 +72,7 @@ require [
     map.on('borderChange', (border, exists) ->
       game.physics.arcade.checkCollision[border.split('Screen')[0]] = !exists
     )
-    hero.actions = actions
+    hero.actions = socket()
     hero.user = user
     # tell hero that he can move over non-blocked borders
     hero.preload(null, initialMap)
@@ -192,7 +192,7 @@ require [
     mapId = playerInfo.mapId
     initPos.x = playerInfo.x
     initPos.y = playerInfo.y
-    actions = socket rootUrl, events
+    # actions = socket rootUrl, 
     png = playerInfo.png
     url = "#{rootUrl}/screen/#{mapId}"
     $.ajax({
