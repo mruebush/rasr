@@ -13,7 +13,6 @@ require.config
     underscore: '../../bower_components/underscore/underscore'
     socketio: '../../bower_components/socket.io-client/socket.io'
     phaser: '../../bower_components/phaser/phaser'
-    # arrows: 'entity/arrows'
     hero: 'entity/hero'
     enemy: 'entity/enemy'
     map: 'map/map'
@@ -65,19 +64,12 @@ require [
       }))
     window.hero = hero
     map = events(new Map(game, Phaser, mapId))
-    game.physics.arcade.checkCollision.up = false
-    game.physics.arcade.checkCollision.right = false
-    game.physics.arcade.checkCollision.down = false
-    game.physics.arcade.checkCollision.left = false
-    map.on('borderChange', (border, exists) ->
-      game.physics.arcade.checkCollision[border.split('Screen')[0]] = !exists
-    )
     hero.actions = actions
     hero.user = user
     # tell hero that he can move over non-blocked borders
-    hero.preload(null, initialMap)
+    hero.preload()
     hero.set 'mapId', mapId
-    map.preload()
+    map.preload(null, initialMap)
     app.trigger 'create'
     app.isLoaded = true
     createEnemies(4)
@@ -196,7 +188,7 @@ require [
     initPos.x = playerInfo.x
     initPos.y = playerInfo.y
     actions = socket rootUrl, events
-    png = playerInfo.png
+    png = playerInfo.png || 'roshan'
     url = "#{rootUrl}/screen/#{mapId}"
     $.ajax({
       url: url
