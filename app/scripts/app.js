@@ -7,7 +7,7 @@ angular.module('komApp', [
   'ui.router'
 ])
   .config(function ($stateProvider, $locationProvider, $httpProvider, $urlRouterProvider) {
-    $urlRouterProvider.otherwise('landing');
+    $urlRouterProvider.otherwise('/');
     $stateProvider
       .state('landing', {
         url: '/',
@@ -27,6 +27,10 @@ angular.module('komApp', [
       .state('play', {
         url: '/play',
         templateUrl: 'partials/game'
+      })
+      .state('edit', {
+        url: '/edit',
+        templateUrl: 'partials/edit'
       })
       .state('settings', {
         url: '/settings',

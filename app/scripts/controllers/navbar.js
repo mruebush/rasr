@@ -12,6 +12,10 @@ angular.module('komApp')
     {
       'title': 'Play',
       'link': '/play'
+    },
+    {
+      'title': 'Editor',
+      'link': '/edit'
     }];
     
     $scope.logout = function() {
