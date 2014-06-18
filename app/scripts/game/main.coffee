@@ -13,7 +13,7 @@ require.config
     underscore: '../../bower_components/underscore/underscore'
     socketio: '../../bower_components/socket.io-client/socket.io'
     phaser: '../../bower_components/phaser/phaser'
-    arrows: 'entity/arrows'
+    # arrows: 'entity/arrows'
     hero: 'entity/hero'
     enemy: 'entity/enemy'
     map: 'map/map'
@@ -42,6 +42,7 @@ require [
   rightScreen = null
   downScreen = null
   leftScreen = null
+  png = null
   rootUrl = 'http://g4m3.azurewebsites.net'
   # user = 'test'
   user = prompt 'Fullen Sie das user bitte !'
@@ -60,6 +61,7 @@ require [
       luk: 10
       x: initPos.x
       y: initPos.y
+      png: png
       }))
     window.hero = hero
     map = events(new Map(game, Phaser, mapId))
@@ -79,6 +81,12 @@ require [
     app.trigger 'create'
     app.isLoaded = true
     createEnemies(4)
+
+    players.on 'player leave', (user) ->
+      console.log "#{user} left the screen"
+      players[user].sprite.kill()
+      delete players[user]
+
     players.on 'join', (data) ->
       player = new Player(game, Phaser, 
         x: data.x
@@ -88,7 +96,7 @@ require [
       do player.preload
       player = events(player)
       player.on 'move', (data) ->
-        player.move(data.dir)
+        player.move(data)
       players.trigger 'create', player
 
     hero.actions.on 'others', (data) ->
@@ -103,6 +111,12 @@ require [
     map.create()
     hero.create()
 
+    hero.actions.on 'shoot', (data) ->
+      hero.renderMissiles data.x, data.y, data.angle, data.num 
+
+    hero.actions.on 'player leave', (user) ->
+      players.trigger 'player leave', user
+
     hero.on 'changeMap', (direction) ->
       app.isLoaded = false
       console.log "Leave #{hero.mapId}"
@@ -111,25 +125,18 @@ require [
       console.log 'Left map'
       map.reload(direction, hero)
       createEnemies(4)
-
-      # hero.moveEnabled = true
-        
-    # hero.on 'enterMap', () ->
-    #   console.log 'enterMap'
-    #   hero.actions.join hero.mapId, user
-
     
     players.on 'create', (player) ->
       player.create()
       players[player.user] = player
     
-    # hero.actions.on 'join', (data) ->
-    #   console.log "#{data.user} joined the map ON #{data.x},#{data.y} !"
-    #   # console.log data
-    #   players.trigger('join', data)
+
+    hero.actions.on 'join', (data) ->
+      console.log "#{data.user} joined the map ON #{data.x},#{data.y} !"
+      players.trigger('join', data)
+
     
     hero.actions.on 'move', (data) ->
-      # console.log "#{data.user} is now at #{data.x},#{data.y}"
       players[data.user].trigger('move', data) 
     
     map.on 'finishLoad', ->
@@ -143,7 +150,6 @@ require [
     for enemy, index in enemies
       enemy.create()
 
-    # console.log mapId, user, initPos
     hero.actions.join mapId, user, initPos
 
   update = ->
@@ -187,6 +193,7 @@ require [
     initPos.x = playerInfo.x
     initPos.y = playerInfo.y
     actions = socket rootUrl, events
+    png = playerInfo.png
     url = "#{rootUrl}/screen/#{mapId}"
     $.ajax({
       url: url

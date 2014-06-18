@@ -17,8 +17,9 @@ define(['arrows'], (Arrows) ->
 
     constructor: (@game, @phaser, @meta) ->
       @sprite = null
-      @speed = 400
+      @speed = 200
       @startOnScreenPos = 10
+      @png = @meta.png
 
       @upKey = null
       @downKey = null
@@ -38,13 +39,13 @@ define(['arrows'], (Arrows) ->
       @arrows.setAll('checkWorldBounds', true)
       
     preload: ->
-      @game.load.spritesheet "roshan", "images/roshan.png", 32, 48
+      @game.load.spritesheet "#{@png}", "images/#{@png}.png", 32, 48
       @game.load.image('arrow', 'images/bullet.png')
 
     create: ->
-      @sprite = @game.add.sprite(@meta.x, @meta.y, "roshan")
+      @sprite = @game.add.sprite(@meta.x, @meta.y, "#{@png}")
       @game.physics.enable(@sprite, @phaser.Physics.ARCADE)
-      @sprite.body.collideWorldBounds = true;
+      @sprite.body.collideWorldBounds = true
       @sprite.body.bounce.set(1)
       expText = @game.add.text(20, 10, "exp: #{@meta.exp}", fontStyle)
       healthText = @game.add.text(20, 30, "health: #{@meta.health}", fontStyle)
@@ -81,22 +82,22 @@ define(['arrows'], (Arrows) ->
         @sprite.body.velocity.y = -@speed
         @sprite.animations.play "up", 5, false
         @directionFacing = 'up'
-        # @actions.move 'up', @user, @mapId, @sprite.x, @sprite.y
+        @actions.move 'up', @user, @mapId, @sprite.x, @sprite.y
       else if @downKey.isDown
         @sprite.body.velocity.y = @speed
         @sprite.animations.play "down", 5, false
         @directionFacing = 'down'
-        # @actions.move 'down', @user, @mapId, @sprite.x, @sprite.y
+        @actions.move 'down', @user, @mapId, @sprite.x, @sprite.y
       else if @leftKey.isDown
         @sprite.body.velocity.x = -@speed
         @sprite.animations.play "left", 5, false
         @directionFacing = 'left'
-        # @actions.move 'left', @user, @mapId, @sprite.x, @sprite.y
+        @actions.move 'left', @user, @mapId, @sprite.x, @sprite.y
       else if @rightKey.isDown
         @sprite.body.velocity.x = @speed
         @sprite.animations.play "right", 5, false
         @directionFacing = 'right'
-        # @actions.move 'right', @user, @mapId, @sprite.x, @sprite.y
+        @actions.move 'right', @user, @mapId, @sprite.x, @sprite.y
 
       if @spaceBar.isDown
         console.log('space bar is down')
@@ -105,6 +106,22 @@ define(['arrows'], (Arrows) ->
       # @sprite.bringToTop()
 
       return
+
+    renderMissiles: (x, y, angle, num) ->
+      arrowIndex = 0
+      console.log "Shoot #{num} arrows starting at #{x},#{y} with angle #{angle}" 
+      for i in [0...num]
+        arrow = @arrows.children[arrowIndex]
+        arrow.reset(x, y)
+        thisAngle = angle + (i - 2) * 0.2
+        console.log(thisAngle)
+        arrow.rotation = @game.physics.arcade.moveToXY(
+          arrow, 
+          x + 1000*Math.sin(thisAngle), 
+          y + 1000*Math.cos(thisAngle), 
+          arrowSpeed
+          )
+        arrowIndex = (arrowIndex + 1) % numArrows
 
     fire: ->
       if @game.time.now > nextFire
@@ -118,18 +135,9 @@ define(['arrows'], (Arrows) ->
         else if @directionFacing is 'left'
           baseAngle = -Math.PI/2
 
-        for i in [0...numArrowsShot]
-          arrow = @arrows.children[arrowIndex]
-          arrow.reset(@sprite.x, @sprite.y)
-          thisAngle = baseAngle + (i - 2) * 0.2
-          console.log(thisAngle)
-          arrow.rotation = @game.physics.arcade.moveToXY(
-            arrow, 
-            @sprite.x + 1000*Math.sin(thisAngle), 
-            @sprite.y + 1000*Math.cos(thisAngle), 
-            arrowSpeed
-            )
-          arrowIndex = (arrowIndex + 1) % numArrows
+        @actions.shoot @user, @mapId, @sprite.x, @sprite.y, baseAngle, numArrowsShot
+
+        @renderMissiles @sprite.x, @sprite.y, baseAngle, numArrowsShot
 
         nextFire = @game.time.now + fireRate;
 

@@ -22,21 +22,26 @@ define( ->
       @sprite.animations.add "up", [12, 15], false
 
 
-    move: (dir) ->
+    move: (data) ->
+
+      dir = data.dir
+      @sprite.y = data.y
+      @sprite.x = data.x
+
       if dir is 'up'
-        @sprite.y -= 2
+        # @sprite.y = data.y
         @sprite.animations.play "up", 5, false
       else if dir is 'down'
         # @actions.move 'down', @user, @mapId
-        @sprite.y += 2
+        # @sprite.y = 2
         @sprite.animations.play "down", 5, false
       if dir is 'left'
         # @actions.move 'left', @user, @mapId
-        @sprite.x -= 2
+        # @sprite.x -= 2
         @sprite.animations.play "left", 5, false
       else if dir is 'right'
         # @actions.move 'right', @user, @mapId
-        @sprite.x += 2
+        # @sprite.x += 2
         @sprite.animations.play "right", 5, false
 
       do @update
