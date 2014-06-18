@@ -13,7 +13,7 @@ define(["views/tileset_view"], function(TilesetView) {
 		this.view = TilesetView.initialize();
 
 		this.add({
-			image: "img/tilesets/mage_city.png",
+			image: "/assets/tilemaps/tiles/mage_city.png",
 			tilewidth: 32,
 			tileheight: 32
 		});
