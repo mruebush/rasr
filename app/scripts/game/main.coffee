@@ -42,6 +42,7 @@ require [
   rightScreen = null
   downScreen = null
   leftScreen = null
+  png = null
   rootUrl = 'http://g4m3.azurewebsites.net'
   # user = 'test'
   user = prompt 'Fullen Sie das user bitte !'
@@ -60,6 +61,7 @@ require [
       luk: 10
       x: initPos.x
       y: initPos.y
+      png: png
       }))
     window.hero = hero
     map = events(new Map(game, Phaser, mapId))
@@ -108,6 +110,9 @@ require [
   create = ->
     map.create()
     hero.create()
+
+    hero.actions.on 'shoot', (data) ->
+      hero.renderMissiles data.x, data.y, data.angle, data.num 
 
     hero.actions.on 'player leave', (user) ->
       players.trigger 'player leave', user
@@ -188,6 +193,7 @@ require [
     initPos.x = playerInfo.x
     initPos.y = playerInfo.y
     actions = socket rootUrl, events
+    png = playerInfo.png
     url = "#{rootUrl}/screen/#{mapId}"
     $.ajax({
       url: url
