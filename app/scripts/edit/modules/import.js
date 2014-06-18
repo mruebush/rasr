@@ -29,6 +29,14 @@ define(function() {
 				reader.readAsText(Import.tmp);
 				reader.onload = function(e) { Import.process(e.target.result, type); };
 			} else { Import.process(Import.tmp, type); }
+		},
+		"click #load": function(e) {
+			$.ajax({
+				url: 'http://localhost:9000/screen/53a21e6d43d080e226718dec',
+				success: function(data) {
+					Import.process(JSON.stringify(data), 'json'); 
+				}
+			});
 		}
 	};
 
@@ -70,7 +78,6 @@ define(function() {
 				width: Editor.$(data).find("canvas").attr("width"),
 				height: Editor.$(data).find("canvas").attr("height")
 			};
-
 			data = json;
 		}
 
@@ -107,7 +114,9 @@ define(function() {
 		data.layers.forEach(function(layer) {
 
 			Editor.Layers.add(layer.name);
-			if (!layer.tileset) { return; }
+			if (!layer.tileset) { 
+				layer.tileset = 'tmw_desert_spacing.png'; 
+			}
 
 			var tilesetId;
 
@@ -119,9 +128,21 @@ define(function() {
 			});
 
 			var tileset = data.tilesets[tilesetId];
+
+			if(!data.canvas) {
+				data.canvas = {
+					"width": 800,
+					"height": 600
+				};
+			}
+
 			var w = Math.round(data.canvas.width / tileset.tilewidth);
 			var tw = tileset.tilewidth;
 			var th = tileset.tileheight;
+			var tilesWidthCount = data.tilesets[tilesetId];
+			var tilesYCount = Math.round(tileset.imageheight / tileset.tileheight);
+			var tilesXCount = Math.round(tileset.imagewidth / tileset.tilewidth);
+
 			var className = "ts_" + tileset.name.replace(/[^a-zA-Z]/g, '_');
 
 			Editor.$(".layer[data-name=" + layer.name + "]").addClass(className);
@@ -130,12 +151,14 @@ define(function() {
 			layer.data.forEach(function(coords, i) {
 
 				if (coords == -1) { return true; }
+				coords = (coords % tilesXCount - 1) + "." + Math.floor(coords / tilesXCount)  
 
 				coords = coords.toString();
 				if (coords.length == 1) { coords += ".0"; }
 
 				var x = i%w;
 				var y = ~~(i/w);
+
 				var bgpos = coords.split(".");
 
 				var $div = Editor.$("<div>").css({
