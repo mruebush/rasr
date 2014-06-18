@@ -2,6 +2,15 @@ define(['events'], (events) ->
   return (rootUrl) ->
     socket = io.connect()
     actions = {}
+
+    actions.shoot = (user, mapId, x, y, angle, num) ->
+      socket.emit 'shoot',
+        user: user
+        mapId: mapId
+        x: x
+        y: y
+        angle: angle
+        num: num
     
     actions.logout = (mapId, user, x, y) ->
       socket.emit 'logout',
@@ -21,6 +30,13 @@ define(['events'], (events) ->
       _joinListener mapId, user
       _leaveListener mapId, user
       _moveListener user
+      _shootListener user
+
+    _shootListener = (user) ->
+      socket.on 'shoot', (data) ->
+        if data.user != user
+          actions.trigger 'shoot', data
+
 
     actions.leave = (mapId, user) ->
       socket.emit 'leave', 
