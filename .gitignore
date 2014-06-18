@@ -6,4 +6,4 @@ app/bower_components
 heroku
 /views
 dist
-/app/scripts/game/main.js
+/app/scripts/game/**/*.js
