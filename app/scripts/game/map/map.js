@@ -38,9 +38,16 @@
 
       Map.prototype._loadAssets = function(data, callback, hero) {
         var border, tilesetImage, value, _ref, _results;
-        console.log(hero);
-        hero && hero.set('mapId', data._id);
-        hero && hero.trigger('enterMap');
+        if (hero) {
+          hero.set('mapId', data._id);
+          console.log("Enter " + hero.mapId);
+          console.log(hero.sprite.x);
+          console.log(hero.sprite.y);
+          hero.actions.join(hero.mapId, hero.user, {
+            x: hero.sprite.x,
+            y: hero.sprite.y
+          });
+        }
         this.mapId = data._id;
         this.mapData = data;
         this.game.load.tilemap('map', "assets/tilemaps/maps/desert.json", data, this.Phaser.Tilemap.TILED_JSON);

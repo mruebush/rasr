@@ -24,7 +24,7 @@
         this.phaser = phaser;
         this.meta = meta;
         this.sprite = null;
-        this.speed = 400;
+        this.speed = 200;
         this.startOnScreenPos = 10;
         this.upKey = null;
         this.downKey = null;

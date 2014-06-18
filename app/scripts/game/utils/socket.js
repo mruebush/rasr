@@ -4,27 +4,34 @@
       var actions, socket, _joinListener, _leaveListener, _moveListener;
       socket = io.connect();
       actions = {};
-      actions.join = function(mapId, thisUser, initPos) {
+      actions.logout = function(mapId, user, x, y) {
+        return socket.emit('logout', {
+          user: user,
+          mapId: mapId,
+          x: x,
+          y: y
+        });
+      };
+      actions.join = function(mapId, user, initPos) {
         socket.emit('join', {
-          user: thisUser,
+          user: user,
           mapId: mapId,
           x: initPos.x,
           y: initPos.y
         });
-        console.log("" + thisUser + " emitted join on " + mapId);
-        _joinListener(mapId, thisUser);
-        _leaveListener(mapId, thisUser);
-        return _moveListener(thisUser);
+        _joinListener(mapId, user);
+        _leaveListener(mapId, user);
+        return _moveListener(user);
       };
-      actions.leave = function(mapId, thisUser) {
+      actions.leave = function(mapId, user) {
         return socket.emit('leave', {
-          user: thisUser,
+          user: user,
           mapId: mapId
         });
       };
-      actions.message = function(message, mapId, thisUser) {
+      actions.message = function(message, mapId, user) {
         return socket.emit('message', {
-          user: thisUser,
+          user: user,
           message: message,
           room: mapId
         });
@@ -41,13 +48,13 @@
       _leaveListener = function(mapId, user) {
         return socket.on('leave', function(data) {
           if (data.user !== user) {
-            return console.log("" + data.user + " just left the map");
+            return actions.trigger('player leave', data.user);
           }
         });
       };
-      _joinListener = function(mapId, thisUser) {
+      _joinListener = function(mapId, user) {
         return socket.on(mapId, function(data) {
-          if (data.user !== thisUser) {
+          if (data.user !== user) {
             return actions.trigger('join', data);
           } else {
             return actions.trigger('others', data);

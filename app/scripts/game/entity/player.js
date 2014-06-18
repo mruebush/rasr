@@ -29,19 +29,19 @@
         return this.sprite.animations.add("up", [12, 15], false);
       };
 
-      Player.prototype.move = function(dir) {
+      Player.prototype.move = function(data) {
+        var dir;
+        dir = data.dir;
+        this.sprite.y = data.y;
+        this.sprite.x = data.x;
         if (dir === 'up') {
-          this.sprite.y -= 2;
           this.sprite.animations.play("up", 5, false);
         } else if (dir === 'down') {
-          this.sprite.y += 2;
           this.sprite.animations.play("down", 5, false);
         }
         if (dir === 'left') {
-          this.sprite.x -= 2;
           this.sprite.animations.play("left", 5, false);
         } else if (dir === 'right') {
-          this.sprite.x += 2;
           this.sprite.animations.play("right", 5, false);
         }
         return this.update();

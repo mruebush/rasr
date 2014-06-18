@@ -54,6 +54,7 @@
         x: initPos.x,
         y: initPos.y
       }));
+      window.hero = hero;
       map = events(new Map(game, Phaser, mapId));
       game.physics.arcade.checkCollision.up = false;
       game.physics.arcade.checkCollision.right = false;
@@ -70,6 +71,11 @@
       app.trigger('create');
       app.isLoaded = true;
       createEnemies(4);
+      players.on('player leave', function(user) {
+        console.log("" + user + " left the screen");
+        players[user].sprite.kill();
+        return delete players[user];
+      });
       players.on('join', function(data) {
         var player;
         player = new Player(game, Phaser, {
@@ -80,7 +86,7 @@
         player.preload();
         player = events(player);
         player.on('move', function(data) {
-          return player.move(data.dir);
+          return player.move(data);
         });
         return players.trigger('create', player);
       });
@@ -104,15 +110,16 @@
       var enemy, index, _i, _len;
       map.create();
       hero.create();
-      hero.on('changeMap', function(direction) {
-        hero.actions.leave(hero.mapId, user);
-        app.isLoaded = false;
-        map.reload(direction, hero);
-        return createEnemies(4);
+      hero.actions.on('player leave', function(user) {
+        return players.trigger('player leave', user);
       });
-      hero.on('enterMap', function() {
-        console.log('enterMap');
-        return hero.actions.join(hero.mapId, user);
+      hero.on('changeMap', function(direction) {
+        console.log("Leave " + hero.mapId);
+        hero.actions.leave(hero.mapId, user);
+        console.log('Left map');
+        map.reload(direction, hero);
+        app.isLoaded = false;
+        return createEnemies(4);
       });
       players.on('create', function(player) {
         player.create();
@@ -123,7 +130,6 @@
         return players.trigger('join', data);
       });
       hero.actions.on('move', function(data) {
-        console.log("" + data.user + " is now at " + data.x + "," + data.y);
         return players[data.user].trigger('move', data);
       });
       map.on('finishLoad', function() {
@@ -139,7 +145,6 @@
         enemy = enemies[index];
         enemy.create();
       }
-      console.log(mapId, user, initPos);
       return hero.actions.join(mapId, user, initPos);
     };
     update = function() {
