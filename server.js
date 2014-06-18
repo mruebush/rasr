@@ -16,8 +16,8 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 var config = require('./lib/config/config');
 
 var troll = 'mongodb://MongoLab-tc:lU1rRUfd7CNAuXw3Da5D.GssiVw9OR8HaqvXi4WP3.c-@ds048537.mongolab.com:48537/MongoLab-tc'
-var db = mongoose.connect(troll, config.mongo.options);
-
+mongoose.connect(troll, config.mongo.options);
+var db = require('./lib/models')(app);
 
 // var db = mongoose.connect(config.mongo.uri, config.mongo.options);
 
@@ -39,7 +39,7 @@ var passport = require('./lib/config/passport');
 var app = express();
 var server = require('http').createServer(app);
 require('./lib/config/express')(app);
-require('./lib/routes')(app);
+require('./lib/routes')(app, db);
 
 // Start server
 // app.listen(config.port, config.ip, function () {
@@ -49,7 +49,7 @@ server.listen(config.port, function(){
   console.log('Server listening on port: ' + config.port);
 });
 
-require('./lib/controllers/socket').init(server);
+require('./lib/controllers/socket').init(server, db);
 
 // Expose app
 exports = module.exports = app;
