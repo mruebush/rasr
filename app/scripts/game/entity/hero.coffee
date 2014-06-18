@@ -11,10 +11,7 @@ define(['arrows'], (Arrows) ->
     arrowSpeed = 600
     numArrows = 30
     numArrowsShot = 5
-
-    set: (property, value) ->
-      @[property] = value
-
+    
     constructor: (@game, @phaser, @meta) ->
       @sprite = null
       @speed = 200
@@ -82,22 +79,22 @@ define(['arrows'], (Arrows) ->
         @sprite.body.velocity.y = -@speed
         @sprite.animations.play "up", 5, false
         @directionFacing = 'up'
-        @actions.move 'up', @user, @mapId, @sprite.x, @sprite.y
+        @game.move 'up', @sprite.x, @sprite.y
       else if @downKey.isDown
         @sprite.body.velocity.y = @speed
         @sprite.animations.play "down", 5, false
         @directionFacing = 'down'
-        @actions.move 'down', @user, @mapId, @sprite.x, @sprite.y
+        @game.move 'down', @sprite.x, @sprite.y
       else if @leftKey.isDown
         @sprite.body.velocity.x = -@speed
         @sprite.animations.play "left", 5, false
         @directionFacing = 'left'
-        @actions.move 'left', @user, @mapId, @sprite.x, @sprite.y
+        @game.move 'left', @sprite.x, @sprite.y
       else if @rightKey.isDown
         @sprite.body.velocity.x = @speed
         @sprite.animations.play "right", 5, false
         @directionFacing = 'right'
-        @actions.move 'right', @user, @mapId, @sprite.x, @sprite.y
+        @game.move 'right', @sprite.x, @sprite.y
 
       if @spaceBar.isDown
         console.log('space bar is down')
@@ -135,10 +132,8 @@ define(['arrows'], (Arrows) ->
         else if @directionFacing is 'left'
           baseAngle = -Math.PI/2
 
-        @actions.shoot @user, @mapId, @sprite.x, @sprite.y, baseAngle, numArrowsShot
-
+        @game.shoot @user, @mapId, @sprite.x, @sprite.y, baseAngle, numArrowsShot
         @renderMissiles @sprite.x, @sprite.y, baseAngle, numArrowsShot
-
         nextFire = @game.time.now + fireRate;
 
 
