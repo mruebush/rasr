@@ -1,4 +1,4 @@
-define(['arrows'], (Arrows) ->
+define( ->
   fontStyle = { font: "20px Arial", fill: "#ffffff", align: "left" }
 
   class Hero
@@ -9,9 +9,16 @@ define(['arrows'], (Arrows) ->
     nextFire = 0
     arrowIndex = 0
     arrowSpeed = 600
-    numArrows = 30
+    numArrows = 50
     numArrowsShot = 5
-    
+
+    damage: ->
+      @meta.health--
+      @render()
+      
+    render: ->
+      @game.debug.text("health: #{@meta.health}", 20, 30, fontStyle)
+
     constructor: (@game, @phaser, @meta) ->
       @sprite = null
       @speed = 200
@@ -45,7 +52,8 @@ define(['arrows'], (Arrows) ->
       @sprite.body.collideWorldBounds = true
       @sprite.body.bounce.set(1)
       expText = @game.add.text(20, 10, "exp: #{@meta.exp}", fontStyle)
-      healthText = @game.add.text(20, 30, "health: #{@meta.health}", fontStyle)
+      # healthText = @game.add.text(20, 30, "health: #{@meta.health}", fontStyle)
+      @render()
       mana = @game.add.text(20, 50, "mana: #{@meta.mana}", fontStyle)
 
       @sprite.animations.add "down", [0, 3], false
@@ -97,7 +105,6 @@ define(['arrows'], (Arrows) ->
         @game.move 'right', @sprite.x, @sprite.y
 
       if @spaceBar.isDown
-        console.log('space bar is down')
         @fire();
 
       # @sprite.bringToTop()
@@ -105,17 +112,17 @@ define(['arrows'], (Arrows) ->
       return
 
     renderMissiles: (x, y, angle, num) ->
-      arrowIndex = 0
       console.log "Shoot #{num} arrows starting at #{x},#{y} with angle #{angle}" 
       for i in [0...num]
+        console.log(arrowIndex)
         arrow = @arrows.children[arrowIndex]
         arrow.reset(x, y)
         thisAngle = angle + (i - 2) * 0.2
-        console.log(thisAngle)
+        # console.log(thisAngle)
         arrow.rotation = @game.physics.arcade.moveToXY(
           arrow, 
-          x + 1000*Math.sin(thisAngle), 
-          y + 1000*Math.cos(thisAngle), 
+          x + Math.sin(thisAngle), 
+          y + Math.cos(thisAngle), 
           arrowSpeed
           )
         arrowIndex = (arrowIndex + 1) % numArrows

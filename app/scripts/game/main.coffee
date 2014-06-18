@@ -13,7 +13,6 @@ require.config
     underscore: '../../bower_components/underscore/underscore'
     socketio: '../../bower_components/socket.io-client/socket.io'
     phaser: '../../bower_components/phaser/phaser'
-    # arrows: 'entity/arrows'
     hero: 'entity/hero'
     enemy: 'entity/enemy'
     map: 'map/map'
@@ -81,6 +80,13 @@ require [
     # hero.set 'mapId', mapId
     # hero.mapId = mapId
     map.preload()
+    # hero.actions = actions
+    # hero.user = user
+    # tell hero that he can move over non-blocked borders
+    hero.preload()
+    # hero.set 'mapId', mapId
+    map.preload(null, initialMap)
+
     app.trigger 'create'
     app.isLoaded = true
     createEnemies(4)
@@ -109,13 +115,16 @@ require [
       hero.update()
       for enemy in enemies
         if enemy.alive
-          # game.physics.arcade.collide(hero.sprite, enemy.sprite, collisionHandler, null, enemy)
-          game.physics.arcade.collide(hero.arrows, enemy.sprite, collisionHandler, null, enemy)
+          game.physics.arcade.collide(hero.sprite, enemy.sprite, hurtHero, null, hero)
+          game.physics.arcade.collide(hero.arrows, enemy.sprite, arrowEnemy, null, enemy)
           enemy.update()
       for player of players
         if player.update then do player.update
 
-  collisionHandler = (enemySprite, arrow) ->
+  hurtHero = (enemySprite, heroSprite) ->
+    @damage()
+
+  arrowEnemy = (enemySprite, arrow) ->
     # kill enemy
     console.log('kill enemy', @)
     @damage()
@@ -145,8 +154,13 @@ require [
     mapId = playerInfo.mapId
     initPos.x = playerInfo.x
     initPos.y = playerInfo.y
+<<<<<<< HEAD
     # actions = socket rootUrl, 
     png = playerInfo.png
+=======
+    actions = socket rootUrl, events
+    png = playerInfo.png || 'roshan'
+>>>>>>> master
     url = "#{rootUrl}/screen/#{mapId}"
     $.ajax({
       url: url
