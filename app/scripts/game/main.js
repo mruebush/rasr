@@ -15,13 +15,13 @@
       underscore: '../../bower_components/underscore/underscore',
       socketio: '../../bower_components/socket.io-client/socket.io',
       phaser: '../../bower_components/phaser/phaser',
+      arrows: 'entity/arrows',
       hero: 'entity/hero',
       enemy: 'entity/enemy',
       map: 'map/map',
       events: 'utils/events',
       socket: 'utils/socket',
-      player: 'entity/player',
-      arrows: 'entity/arrows'
+      player: 'entity/player'
     }
   });
 
@@ -55,6 +55,7 @@
         x: initPos.x,
         y: initPos.y
       }));
+      window.hero = hero;
       map = events(new Map(game, Phaser, mapId));
       game.physics.arcade.checkCollision.up = false;
       game.physics.arcade.checkCollision.right = false;
@@ -107,19 +108,25 @@
       hero.create();
       hero.on('changeMap', function(direction) {
         app.isLoaded = false;
+        console.log("Leave " + hero.mapId);
+        hero.actions.leave(hero.mapId, user);
+        console.log('Left map');
         map.reload(direction, hero);
         return createEnemies(4);
-      });
-      hero.on('enterMap', function() {
-        return console.log('enterMap');
       });
       players.on('create', function(player) {
         player.create();
         return players[player.user] = player;
       });
+      hero.actions.on('move', function(data) {
+        return players[data.user].trigger('move', data);
+      });
       map.on('finishLoad', function() {
         var enemy, _i, _len;
         hero.sprite.bringToTop();
+        hero.arrows.forEach(function(arrow) {
+          return arrow.bringToTop();
+        });
         for (_i = 0, _len = enemies.length; _i < _len; _i++) {
           enemy = enemies[_i];
           enemy.sprite.bringToTop();
@@ -130,7 +137,6 @@
         enemy = enemies[index];
         enemy.create();
       }
-      console.log(mapId, user, initPos);
       return hero.actions.join(mapId, user, initPos);
     };
     update = function() {
@@ -141,7 +147,7 @@
         for (_i = 0, _len = enemies.length; _i < _len; _i++) {
           enemy = enemies[_i];
           if (enemy.alive) {
-            game.physics.arcade.collide(hero.sprite, enemy.sprite, collisionHandler, null, enemy);
+            game.physics.arcade.collide(hero.arrows, enemy.sprite, collisionHandler, null, enemy);
             enemy.update();
           }
         }
@@ -156,9 +162,10 @@
         return _results;
       }
     };
-    collisionHandler = function(heroSprite, enemySprite) {
+    collisionHandler = function(enemySprite, arrow) {
       console.log('kill enemy', this);
-      return this.damage();
+      this.damage();
+      return arrow.kill();
     };
     createEnemies = function(num) {
       var enemy, i, _i, _results;

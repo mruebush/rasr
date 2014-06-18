@@ -13,13 +13,13 @@ require.config
     underscore: '../../bower_components/underscore/underscore'
     socketio: '../../bower_components/socket.io-client/socket.io'
     phaser: '../../bower_components/phaser/phaser'
+    arrows: 'entity/arrows'
     hero: 'entity/hero'
     enemy: 'entity/enemy'
     map: 'map/map'
     events: 'utils/events'
     socket: 'utils/socket'
     player: 'entity/player'
-    arrows: 'entity/arrows'
 
 require [
   'hero'
@@ -104,30 +104,20 @@ require [
     hero.create()
 
     hero.on 'changeMap', (direction) ->
-<<<<<<< HEAD
-      # hero.actions.leave hero.mapId, user
       app.isLoaded = false
-=======
       console.log "Leave #{hero.mapId}"
       # hero.moveEnabled = false
       hero.actions.leave hero.mapId, user
       console.log 'Left map'
->>>>>>> bd7ed6e398414b36f5975faf28bbf6d234c803c4
       map.reload(direction, hero)
-
-      app.isLoaded = false
       createEnemies(4)
+
       # hero.moveEnabled = true
         
-<<<<<<< HEAD
-    hero.on 'enterMap', () ->
-      console.log 'enterMap'
-      # hero.actions.join hero.mapId, user
-=======
     # hero.on 'enterMap', () ->
     #   console.log 'enterMap'
     #   hero.actions.join hero.mapId, user
->>>>>>> bd7ed6e398414b36f5975faf28bbf6d234c803c4
+
     
     players.on 'create', (player) ->
       player.create()
@@ -138,18 +128,14 @@ require [
     #   # console.log data
     #   players.trigger('join', data)
     
-<<<<<<< HEAD
-    # hero.actions.on 'move', (data) ->
-    #   console.log "#{data.user} is now at #{data.x},#{data.y}"
-    #   players[data.user].trigger('move', data) 
-=======
     hero.actions.on 'move', (data) ->
       # console.log "#{data.user} is now at #{data.x},#{data.y}"
       players[data.user].trigger('move', data) 
->>>>>>> bd7ed6e398414b36f5975faf28bbf6d234c803c4
     
     map.on 'finishLoad', ->
       hero.sprite.bringToTop()
+      hero.arrows.forEach (arrow) ->
+        arrow.bringToTop()
       for enemy in enemies
         enemy.sprite.bringToTop()
       app.isLoaded = true
@@ -166,15 +152,18 @@ require [
       hero.update()
       for enemy in enemies
         if enemy.alive
-          game.physics.arcade.collide(hero.sprite, enemy.sprite, collisionHandler, null, enemy)
+          # game.physics.arcade.collide(hero.sprite, enemy.sprite, collisionHandler, null, enemy)
+          game.physics.arcade.collide(hero.arrows, enemy.sprite, collisionHandler, null, enemy)
           enemy.update()
       for player of players
         if player.update then do player.update
 
-  collisionHandler = (heroSprite, enemySprite) ->
+  collisionHandler = (enemySprite, arrow) ->
     # kill enemy
     console.log('kill enemy', @)
     @damage()
+    arrow.kill()
+
 
   createEnemies = (num) ->
     # for enemy in enemies
