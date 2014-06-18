@@ -120,11 +120,6 @@ require [
 
       app.isLoaded = false
       createEnemies(4)
-      # hero.moveEnabled = true
-        
-    # hero.on 'enterMap', () ->
-    #   console.log 'enterMap'
-    #   hero.actions.join hero.mapId, user
     
     players.on 'create', (player) ->
       player.create()
@@ -132,12 +127,9 @@ require [
     
     hero.actions.on 'join', (data) ->
       console.log "#{data.user} joined the map ON #{data.x},#{data.y} !"
-      # console.log data
       players.trigger('join', data)
     
     hero.actions.on 'move', (data) ->
-      # console.log data
-      # console.log "#{data.user} is now at #{data.x},#{data.y}"
       players[data.user].trigger('move', data) 
     
     map.on 'finishLoad', ->
@@ -149,7 +141,6 @@ require [
     for enemy, index in enemies
       enemy.create()
 
-    # console.log mapId, user, initPos
     hero.actions.join mapId, user, initPos
 
   update = ->
