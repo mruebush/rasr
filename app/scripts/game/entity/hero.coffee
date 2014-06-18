@@ -19,6 +19,7 @@ define(['arrows'], (Arrows) ->
       @sprite = null
       @speed = 200
       @startOnScreenPos = 10
+      @png = @meta.png
 
       @upKey = null
       @downKey = null
@@ -38,11 +39,11 @@ define(['arrows'], (Arrows) ->
       @arrows.setAll('checkWorldBounds', true)
       
     preload: ->
-      @game.load.spritesheet "roshan", "images/roshan.png", 32, 48
+      @game.load.spritesheet "#{@png}", "images/#{@png}.png", 32, 48
       @game.load.image('arrow', 'images/bullet.png')
 
     create: ->
-      @sprite = @game.add.sprite(@meta.x, @meta.y, "roshan")
+      @sprite = @game.add.sprite(@meta.x, @meta.y, "#{@png}")
       @game.physics.enable(@sprite, @phaser.Physics.ARCADE)
       @sprite.body.collideWorldBounds = true
       @sprite.body.bounce.set(1)
@@ -106,6 +107,22 @@ define(['arrows'], (Arrows) ->
 
       return
 
+    renderMissiles: (x, y, angle, num) ->
+      arrowIndex = 0
+      console.log "Shoot #{num} arrows starting at #{x},#{y} with angle #{angle}" 
+      for i in [0...num]
+        arrow = @arrows.children[arrowIndex]
+        arrow.reset(x, y)
+        thisAngle = angle + (i - 2) * 0.2
+        console.log(thisAngle)
+        arrow.rotation = @game.physics.arcade.moveToXY(
+          arrow, 
+          x + 1000*Math.sin(thisAngle), 
+          y + 1000*Math.cos(thisAngle), 
+          arrowSpeed
+          )
+        arrowIndex = (arrowIndex + 1) % numArrows
+
     fire: ->
       if @game.time.now > nextFire
 
@@ -118,18 +135,9 @@ define(['arrows'], (Arrows) ->
         else if @directionFacing is 'left'
           baseAngle = -Math.PI/2
 
-        for i in [0...numArrowsShot]
-          arrow = @arrows.children[arrowIndex]
-          arrow.reset(@sprite.x, @sprite.y)
-          thisAngle = baseAngle + (i - 2) * 0.2
-          console.log(thisAngle)
-          arrow.rotation = @game.physics.arcade.moveToXY(
-            arrow, 
-            @sprite.x + 1000*Math.sin(thisAngle), 
-            @sprite.y + 1000*Math.cos(thisAngle), 
-            arrowSpeed
-            )
-          arrowIndex = (arrowIndex + 1) % numArrows
+        @actions.shoot @user, @mapId, @sprite.x, @sprite.y, baseAngle, numArrowsShot
+
+        @renderMissiles @sprite.x, @sprite.y, baseAngle, numArrowsShot
 
         nextFire = @game.time.now + fireRate;
 
