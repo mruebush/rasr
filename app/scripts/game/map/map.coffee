@@ -59,7 +59,6 @@ define(['jquery'], ($) ->
       for border, value of @borders
         if !!value != !!@oldBorders[border]
           $(".#{border}").toggleClass('no-bordering-screen')
-
           @game.physics.arcade.checkCollision[border.split('Screen')[0]] = !value
           # console.log(!exists, @game.physics.arcade.checkCollision[border.split('Screen')[0]])
           # @trigger 'borderChange', border, !!value
