@@ -126,11 +126,9 @@ define( ->
     renderMissiles: (x, y, angle, num) ->
       
       for i in [0...num]
-        console.log(arrowIndex)
         arrow = @arrows.children[arrowIndex]
         arrow.reset(x, y)
         thisAngle = angle + (i - 2) * 0.2
-        # console.log(thisAngle)
         arrow.rotation = @game.physics.arcade.moveToXY(
           arrow, 
           x + Math.sin(thisAngle), 

@@ -16,9 +16,9 @@ define(['jquery'], ($) ->
         @reload(direction)
       )
 
-    preload: (direction = 'screen', data, callback) ->
+    preload: (direction, data, callback) ->
       that = @
-      url = "http://g4m3.azurewebsites.net/#{direction}/#{@mapId}"
+      url = "#{@game.rootUrl}/move/#{direction}/#{@mapId}"
       if !data
         $.ajax({
           url: url
@@ -40,7 +40,6 @@ define(['jquery'], ($) ->
       @mapId = data._id
 
       @game.mapId = @mapId
-      # console.log "Joining #{@game.mapId}"
       # @game.join
       #   mapId: @mapId
       #   x: 0
@@ -63,8 +62,6 @@ define(['jquery'], ($) ->
         if !!value != !!@oldBorders[border]
           $(".#{border}").toggleClass('no-bordering-screen')
           @game.physics.arcade.checkCollision[border.split('Screen')[0]] = !value
-          # console.log(!exists, @game.physics.arcade.checkCollision[border.split('Screen')[0]])
-          # @trigger 'borderChange', border, !!value
 
     create: ->
       map = @game.add.tilemap('map')

@@ -8,7 +8,7 @@ define( ->
       @margin = 50
       @x = Math.min(Math.max(@game.world.randomX, @margin), @game.width - @margin)
       @y = Math.min(Math.max(@game.world.randomY, @margin), @game.height - @margin)
-      @health = 5
+      @health = 10
       @alive = true
 
     damage: ->
