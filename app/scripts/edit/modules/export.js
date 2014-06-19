@@ -1,4 +1,4 @@
-define(function() {
+define(['underscore'], function(_) {
 
 	var Export = {}, Editor;
 
@@ -35,7 +35,8 @@ define(function() {
 
 		    w = Editor.$("#canvas").width() / tileset.tilewidth,
 		    h = Editor.$("#canvas").height() / tileset.tileheight,
-
+		    tilesYCount = Math.round(tileset.height / tileset.tileheight),
+		    tilesXCount = Math.round(tileset.width / tileset.tilewidth),
 		    output, layer, coords, y, x, query, elem, data;
 
 		anchor.download = "map." + type.toLowerCase();
@@ -50,13 +51,29 @@ define(function() {
 				layer = {
 					name: Editor.$(this).attr("data-name"),
 					tileset: Editor.$(this).attr("data-tileset"),
-					data: []
+					data: [],
+					x: 0,
+					y: 0,
+					height: h,
+					width: w,
+					visible: true,
+					type: "tilelayer",
+					opacity: 1
+
 				};
 
 				for (y = 0; y < h; y++) {
 					for (x = 0; x < w; x++) {
 						query = Editor.$(this).find("div[data-coords='" + x + "." + y + "']");
 						coords = query.length ? parseFloat(query.attr("data-coords-tileset"), 10) : -1;
+						coords = coords.toString().split('.');
+
+						var temp = coords;
+						if(coords.length === 1) {
+							coords.push("0");
+						}
+						coords = (tilesXCount) * (parseInt(coords[1], 10)) + parseInt(coords[0], 10) + 1;
+
 						layer.data.push(coords);
 					}
 				}
@@ -75,14 +92,18 @@ define(function() {
 					imagewidth: tileset.width,
 					imageheight: tileset.height,
 					tilewidth: tileset.tilewidth,
-					tileheight: tileset.tileheight
+					tileheight: tileset.tileheight,
+					firstgid: 1
 				});
 			}
+
 
 			output.canvas = {
 				width: window.parseInt(Editor.$("#canvas").css("width"), 10),
 				height: window.parseInt(Editor.$("#canvas").css("height"), 10)
 			};
+
+			_.extend(output, Editor.cached)
 
 			output = JSON.stringify(output);
 			anchor.href = "data:application/json;charset=UTF-8;," + encodeURIComponent(output);
@@ -143,8 +164,21 @@ define(function() {
 			output = encodeURIComponent((new XMLSerializer()).serializeToString(output[0]));
 			anchor.href = "data:text/xml;charset=UTF-8;," + output;
 		}
-
-		anchor.click();
+		console.log('posting');
+		$.ajax({
+			url: '/save/' + Editor.cached._id,
+			data: {
+				map: output },
+			dataType: 'json',
+			type: 'PUT',
+			success: function() {
+				console.log('success');
+			},
+			error: function(err) {
+				console.log('err', err);
+			}
+		})
+		// anchor.click();
 	};
 
 	return Export;
