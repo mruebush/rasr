@@ -42,8 +42,11 @@ require [
   downScreen = null
   leftScreen = null
   png = null
-  rootUrl = 'http://g4m3.azurewebsites.net'
-  user = 'test'
+  # rootUrl = 'http://g4m3.azurewebsites.net'
+  rootUrl = 'http://localhost:9000'
+  # console.log window.userData
+  user = window.userData.name
+  # user = 'jquery'
   # user = prompt 'Fullen Sie das user bitte !'
   initPos = {}
   # actions = {}
@@ -76,14 +79,15 @@ require [
     socket rootUrl, game, players
     
     # tell hero that he can move over non-blocked borders
+    console.log initialMap
     hero.preload(null, initialMap)
     # hero.set 'mapId', mapId
     # hero.mapId = mapId
-    map.preload()
+    # map.preload()
     # hero.actions = actions
     # hero.user = user
     # tell hero that he can move over non-blocked borders
-    hero.preload()
+    # hero.preload()
     # hero.set 'mapId', mapId
     map.preload(null, initialMap)
 

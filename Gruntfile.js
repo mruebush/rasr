@@ -518,11 +518,6 @@ module.exports = function (grunt) {
     'coffee'
   ]);
 
-  grunt.registerTask('heroku', function () {
-    grunt.log.warn('The `heroku` task has been deprecated. Use `grunt build` to build for deployment.');
-    grunt.task.run(['build']);
-  });
-
   grunt.registerTask('default', [
     'test',
     'build'
