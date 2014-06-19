@@ -45,6 +45,7 @@ require [
   # rootUrl = 'http://g4m3.azurewebsites.net'
   rootUrl = 'http://localhost:9000'
   # console.log window.userData
+  debugger;
   user = window.userData.name
   # user = 'jquery'
   # user = prompt 'Fullen Sie das user bitte !'
