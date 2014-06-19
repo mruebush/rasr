@@ -15,7 +15,8 @@ define(['jquery'], ($) ->
 
     preload: (direction = 'screen', data, callback) ->
       that = @
-      url = "http://g4m3.azurewebsites.net/#{direction}/#{@mapId}"
+      # url = "http://g4m3.azurewebsites.net/#{direction}/#{@mapId}"
+      url = "http://localhost:9000/#{direction}/#{@mapId}"
       if !data
         $.ajax({
           url: url
