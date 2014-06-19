@@ -32,8 +32,32 @@ define(function() {
 		},
 		"click #load": function(e) {
 			$.ajax({
-				url: 'http://localhost:9000/screen/53a21e6d43d080e226718dec',
+				url: '/screen/53a2633de721f3c82fcb0c74',
 				success: function(data) {
+					console.log(data);
+					var cached = {};
+					if(data.upScreen) {
+						cached.upScreen = data.upScreen;
+					}
+					if(data.rightScreen) {
+						cached.rightScreen = data.rightScreen;
+					}
+					if(data.downScreen) {
+						cached.downScreen = data.downScreen;
+					}
+					if(data.leftScreen) {
+						cached.leftScreen = data.leftScreen;
+					}
+					cached._id = data._id;
+					cached.orientation = data.orientation;
+					cached.tileheight = data.tileheight;
+					cached.tilewidth = data.tilewidth;
+					cached.version = data.version;
+					cached.width = data.width;
+					cached.height = data.height;
+
+					Editor.cached = cached;
+
 					Import.process(JSON.stringify(data), 'json'); 
 				}
 			});
@@ -87,7 +111,7 @@ define(function() {
 
 		data.tilesets.forEach(function(tileset) {
 
-			var id = tileset.name.replace(/[^a-zA-Z]/g, '_');
+			var id = tileset.image.replace(/[^a-zA-Z]/g, '_');
 			var hasSrc = tileset.image.indexOf("data:image") === 0;
 
 			if (!hasSrc && !Editor.$("#tileset_" + id).length) {
@@ -109,7 +133,7 @@ define(function() {
 		});
 
 		if (error) { return; }
-		Editor.Tilesets.set(data.tilesets[0].name);
+		Editor.Tilesets.set(data.tilesets[0].image);
 
 		data.layers.forEach(function(layer) {
 
