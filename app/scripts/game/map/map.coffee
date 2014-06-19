@@ -12,6 +12,9 @@ define(['jquery'], ($) ->
       @game.physics.arcade.checkCollision.right = false
       @game.physics.arcade.checkCollision.down = false
       @game.physics.arcade.checkCollision.left = false
+      @game.on('changeMap', (direction) =>
+        @reload(direction)
+      )
 
     preload: (direction = 'screen', data, callback) ->
       that = @
