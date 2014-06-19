@@ -29,6 +29,38 @@ define(function() {
 				reader.readAsText(Import.tmp);
 				reader.onload = function(e) { Import.process(e.target.result, type); };
 			} else { Import.process(Import.tmp, type); }
+		},
+		"click #load": function(e) {
+			$.ajax({
+				url: '/screen/53a2633de721f3c82fcb0c74',
+				success: function(data) {
+					console.log(data);
+					var cached = {};
+					if(data.upScreen) {
+						cached.upScreen = data.upScreen;
+					}
+					if(data.rightScreen) {
+						cached.rightScreen = data.rightScreen;
+					}
+					if(data.downScreen) {
+						cached.downScreen = data.downScreen;
+					}
+					if(data.leftScreen) {
+						cached.leftScreen = data.leftScreen;
+					}
+					cached._id = data._id;
+					cached.orientation = data.orientation;
+					cached.tileheight = data.tileheight;
+					cached.tilewidth = data.tilewidth;
+					cached.version = data.version;
+					cached.width = data.width;
+					cached.height = data.height;
+
+					Editor.cached = cached;
+
+					Import.process(JSON.stringify(data), 'json'); 
+				}
+			});
 		}
 	};
 
@@ -70,7 +102,6 @@ define(function() {
 				width: Editor.$(data).find("canvas").attr("width"),
 				height: Editor.$(data).find("canvas").attr("height")
 			};
-
 			data = json;
 		}
 
@@ -80,7 +111,7 @@ define(function() {
 
 		data.tilesets.forEach(function(tileset) {
 
-			var id = tileset.name.replace(/[^a-zA-Z]/g, '_');
+			var id = tileset.image.replace(/[^a-zA-Z]/g, '_');
 			var hasSrc = tileset.image.indexOf("data:image") === 0;
 
 			if (!hasSrc && !Editor.$("#tileset_" + id).length) {
@@ -102,12 +133,14 @@ define(function() {
 		});
 
 		if (error) { return; }
-		Editor.Tilesets.set(data.tilesets[0].name);
+		Editor.Tilesets.set(data.tilesets[0].image);
 
 		data.layers.forEach(function(layer) {
 
 			Editor.Layers.add(layer.name);
-			if (!layer.tileset) { return; }
+			if (!layer.tileset) { 
+				layer.tileset = 'tmw_desert_spacing.png'; 
+			}
 
 			var tilesetId;
 
@@ -119,9 +152,21 @@ define(function() {
 			});
 
 			var tileset = data.tilesets[tilesetId];
+
+			if(!data.canvas) {
+				data.canvas = {
+					"width": 800,
+					"height": 600
+				};
+			}
+
 			var w = Math.round(data.canvas.width / tileset.tilewidth);
 			var tw = tileset.tilewidth;
 			var th = tileset.tileheight;
+			var tilesWidthCount = data.tilesets[tilesetId];
+			var tilesYCount = Math.round(tileset.imageheight / tileset.tileheight);
+			var tilesXCount = Math.round(tileset.imagewidth / tileset.tilewidth);
+
 			var className = "ts_" + tileset.name.replace(/[^a-zA-Z]/g, '_');
 
 			Editor.$(".layer[data-name=" + layer.name + "]").addClass(className);
@@ -130,12 +175,14 @@ define(function() {
 			layer.data.forEach(function(coords, i) {
 
 				if (coords == -1) { return true; }
+				coords = (coords % tilesXCount - 1) + "." + Math.floor(coords / tilesXCount)  
 
 				coords = coords.toString();
 				if (coords.length == 1) { coords += ".0"; }
 
 				var x = i%w;
 				var y = ~~(i/w);
+
 				var bgpos = coords.split(".");
 
 				var $div = Editor.$("<div>").css({

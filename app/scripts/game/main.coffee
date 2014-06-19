@@ -42,8 +42,9 @@ require [
   downScreen = null
   leftScreen = null
   png = null
-  rootUrl = ''
-  user = 'test@test.com'
+  # rootUrl = ''
+  rootUrl = 'http://localhost:9000'
+  user = window.userData.name
   # user = prompt 'Fullen Sie das user bitte !'
   initPos = {}
   # actions = {}
@@ -69,12 +70,16 @@ require [
     socket rootUrl, game, players
     
     # tell hero that he can move over non-blocked borders
+    console.log initialMap
+    hero.preload()
     # hero.set 'mapId', mapId
     # hero.mapId = mapId
+    # map.preload()
+
     # hero.actions = actions
     # hero.user = user
     # tell hero that he can move over non-blocked borders
-    hero.preload()
+    # hero.preload()
     # hero.set 'mapId', mapId
     map.preload(null, initialMap)
 

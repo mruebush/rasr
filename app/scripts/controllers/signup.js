@@ -4,7 +4,7 @@ angular.module('komApp')
   .controller('SignupCtrl', function ($scope, Auth, $location) {
     $scope.user = {};
     $scope.errors = {};
-
+    console.log('submit stuff');
     $scope.register = function(form) {
       $scope.submitted = true;
   
@@ -16,6 +16,18 @@ angular.module('komApp')
         })
         .then( function() {
           // Account created, redirect to home
+
+         $.ajax({
+          method: 'POST',
+          url: '/makeuser',
+          data: {
+            user: $scope.user.name
+          }
+         });
+
+          window.userData = Object.freeze({
+            name: $scope.user.name,
+          });
           $location.path('/');
         })
         .catch( function(err) {

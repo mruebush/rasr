@@ -5,6 +5,9 @@ angular.module('komApp')
     
     // Get currentUser from cookie
     $rootScope.currentUser = $cookieStore.get('user') || null;
+    window.userData = Object.freeze({
+      name: $rootScope.currentUser.name
+    });
     $cookieStore.remove('user');
 
     return {
@@ -23,7 +26,9 @@ angular.module('komApp')
           email: user.email,
           password: user.password
         }, function(user) {
+          console.log('troll')
           $rootScope.currentUser = user;
+          window.userData = Object.freeze(user);
           return cb();
         }, function(err) {
           return cb(err);
