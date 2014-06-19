@@ -23,7 +23,9 @@ angular.module('komApp')
           email: user.email,
           password: user.password
         }, function(user) {
+          console.log('troll')
           $rootScope.currentUser = user;
+          window.userData = Object.freeze(user);
           return cb();
         }, function(err) {
           return cb(err);
