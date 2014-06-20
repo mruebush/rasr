@@ -45,6 +45,7 @@ require [
   # rootUrl = ''
   rootUrl = 'http://localhost:9000'
   user = window.userData.name
+  console.log(user);
   # user = prompt 'Fullen Sie das user bitte !'
   initPos = {}
   # actions = {}
@@ -98,8 +99,9 @@ require [
       hero.sprite.bringToTop()
       hero.arrows.forEach (arrow) ->
         arrow.bringToTop()
-      for enemy in enemies
-        enemy.sprite.bringToTop()
+      createEnemies(4)
+      # for enemy in enemies
+      #   enemy.sprite.bringToTop()
       app.isLoaded = true
     
     for enemy, index in enemies
