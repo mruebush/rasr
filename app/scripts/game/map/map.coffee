@@ -2,6 +2,7 @@ define(['jquery'], ($) ->
   class Map
     constructor: (@game, @Phaser, @mapId) ->
       @layer = null
+      @layers = []
       @oldBorders = null
       @borders = 
         upScreen: true
@@ -46,7 +47,7 @@ define(['jquery'], ($) ->
       #   y: 0
 
       @mapData = data
-      @game.load.tilemap('map', "assets/tilemaps/maps/desert.json", data, @Phaser.Tilemap.TILED_JSON)
+      @game.load.tilemap('map', null, data, @Phaser.Tilemap.TILED_JSON)
       tilesetImage = @_getImageNameOfTileset(data)
       @game.load.image('tiles', "assets/tilemaps/tiles/" + tilesetImage)
       callback && callback.apply(@)
@@ -64,18 +65,23 @@ define(['jquery'], ($) ->
           @game.physics.arcade.checkCollision[border.split('Screen')[0]] = !value
 
     create: ->
+      console.log map
       map = @game.add.tilemap('map')
       tilesetName = @_getNameOfTileset(@mapData)
       map.addTilesetImage(tilesetName, 'tiles')
       layername = @_getLayerName(@mapData)
       # console.log layername
       @layer = map.createLayer(layername)
-      # console.log @layer
+      @layers.push(@layer)
+      console.log @layers
       @layer.resizeWorld()
-      @layer.debug = false
+      @layer.debug = true
+      console.log @layer
       @trigger 'finishLoad'
 
     reload: (direction) ->
+      layer.destroy() for layer in @layers
+      @layers = []
       @preload(direction, null, @create)
 
     update: ->
