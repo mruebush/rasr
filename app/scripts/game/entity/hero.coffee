@@ -69,19 +69,19 @@ define( ->
 
       if @sprite.x < 0
         @sprite.x = @game.width - @startOnScreenPos
-        @trigger('changeMap', 'left')
+        @game.trigger('changeMap', 'left')
 
       if @sprite.x > @game.width
         @sprite.x = @startOnScreenPos
-        @trigger('changeMap', 'right')
+        @game.trigger('changeMap', 'right')
 
       if @sprite.y < 0
         @sprite.y = @game.height - @startOnScreenPos
-        @trigger('changeMap', 'up')
+        @game.trigger('changeMap', 'up')
 
       if @sprite.y > @game.height
         @sprite.y = @startOnScreenPos
-        @trigger('changeMap', 'down')
+        @game.trigger('changeMap', 'down')
 
       if @upKey.isDown
         @sprite.body.velocity.y = -@speed
@@ -126,11 +126,9 @@ define( ->
     renderMissiles: (x, y, angle, num) ->
       
       for i in [0...num]
-        console.log(arrowIndex)
         arrow = @arrows.children[arrowIndex]
         arrow.reset(x, y)
         thisAngle = angle + (i - 2) * 0.2
-        # console.log(thisAngle)
         arrow.rotation = @game.physics.arcade.moveToXY(
           arrow, 
           x + Math.sin(thisAngle), 

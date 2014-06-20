@@ -12,10 +12,13 @@ define(['jquery'], ($) ->
       @game.physics.arcade.checkCollision.right = false
       @game.physics.arcade.checkCollision.down = false
       @game.physics.arcade.checkCollision.left = false
+      @game.on('changeMap', (direction) =>
+        @reload(direction)
+      )
 
-    preload: (direction = 'screen', data, callback) ->
+    preload: (direction, data, callback) ->
       that = @
-      url = "/move/#{direction}/#{@mapId}"
+      url = "#{@game.rootUrl}/move/#{direction}/#{@mapId}"
       if !data
         $.ajax({
           url: url
@@ -37,7 +40,6 @@ define(['jquery'], ($) ->
       @mapId = data._id
 
       @game.mapId = @mapId
-      # console.log "Joining #{@game.mapId}"
       # @game.join
       #   mapId: @mapId
       #   x: 0
@@ -59,10 +61,7 @@ define(['jquery'], ($) ->
       for border, value of @borders
         if !!value != !!@oldBorders[border]
           $(".#{border}").toggleClass('no-bordering-screen')
-
           @game.physics.arcade.checkCollision[border.split('Screen')[0]] = !value
-          # console.log(!exists, @game.physics.arcade.checkCollision[border.split('Screen')[0]])
-          # @trigger 'borderChange', border, !!value
 
     create: ->
       map = @game.add.tilemap('map')

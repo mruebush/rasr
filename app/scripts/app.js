@@ -40,7 +40,7 @@ angular.module('komApp', [
         controller: 'SettingsCtrl',
         authenticate: true
       });
-      
+    
     $locationProvider.html5Mode(true);
       
     // Intercept 401s and redirect you to login
