@@ -119,6 +119,9 @@ define(['events','player','phaser','enemy'], (events, Player, Phaser, Enemy) ->
       x = data.x
       y = data.y
       enemies = data.enemies
+      positions = data.positions
+
+      # console.log data
 
       socket.emit 'join',
         user: game.user
@@ -126,6 +129,7 @@ define(['events','player','phaser','enemy'], (events, Player, Phaser, Enemy) ->
         x: x
         y: y
         enemies: enemies
+        positions: positions
 
       _joinListener game.user
 

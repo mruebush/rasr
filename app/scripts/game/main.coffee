@@ -110,12 +110,14 @@ require [
       enemyPositions[enemyId] = initialMap.enemies[enemyId].positions
 
     game.enemyPositions = enemyPositions
+    # console.log enemyPositions
 
 
     @game.join   
       x: hero.sprite.x
       y: hero.sprite.y
       enemies: enemies
+      positions: enemyPositions
       
 
 
