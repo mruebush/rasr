@@ -25,9 +25,6 @@ angular.module('komApp')
           }
          });
 
-          window.userData = Object.freeze({
-            name: $scope.user.name,
-          });
           $location.path('/');
         })
         .catch( function(err) {

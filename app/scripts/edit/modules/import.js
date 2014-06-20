@@ -29,10 +29,12 @@ define(function() {
 				reader.readAsText(Import.tmp);
 				reader.onload = function(e) { Import.process(e.target.result, type); };
 			} else { Import.process(Import.tmp, type); }
+
 		},
 		"click #load": function(e) {
+			var mapId = location.pathname.split("/")[2];
 			$.ajax({
-				url: '/screen/53a37b8d67a470e4187f4def',
+				url: '/screen/' + mapId,
 				success: function(data) {
 					console.log(data);
 					var cached = {};

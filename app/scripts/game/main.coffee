@@ -30,7 +30,7 @@ require [
   'player'
 ], (Hero, Map, Enemy, events, socket, Phaser, Player) ->
   app = events({})
-  game = null
+  window.game = game = null
   hero = null
   map = null
   enemies = []
@@ -49,7 +49,6 @@ require [
   # user = prompt 'Fullen Sie das user bitte !'
   initPos = {}
   # actions = {}
-
 
   preload = ->
     hero = events(new Hero(game, Phaser, {
@@ -111,7 +110,6 @@ require [
       x: hero.sprite.x
       y: hero.sprite.y
 
-
   update = ->
     if app.isLoaded
       map.update()
@@ -158,7 +156,9 @@ require [
     initPos.x = playerInfo.x
     initPos.y = playerInfo.y
     # actions = socket rootUrl, events
+
     png = playerInfo.png || 'roshan'
+    $('#map-id').attr('href', '/edit/' + mapId);
 
     url = "#{rootUrl}/screen/#{mapId}"
     console.log(url)
@@ -167,7 +167,7 @@ require [
     }).done (mapData) ->
       initialMap = mapData
       # debugger
-      game = new Phaser.Game(800, 600, Phaser.AUTO, "",
+      game = new Phaser.Game(800, 600, Phaser.AUTO, "game-container",
         preload: preload
         create: create
         update: update
