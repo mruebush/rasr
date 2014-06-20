@@ -66,7 +66,7 @@ define(['jquery'], ($) ->
           @game.physics.arcade.checkCollision[border.split('Screen')[0]] = !value
 
     create: ->
-      console.log map
+      # console.log map
       map = @game.add.tilemap('map')
       tilesetName = @_getNameOfTileset(@mapData)
       map.addTilesetImage(tilesetName, 'tiles')
@@ -74,10 +74,10 @@ define(['jquery'], ($) ->
       # console.log layername
       @layer = map.createLayer(layername)
       @layers.push(@layer)
-      console.log @layers
+      # console.log @layers
       @layer.resizeWorld()
       @layer.debug = false
-      console.log @layer
+      # console.log @layer
       @trigger 'finishLoad'
 
     reload: (direction) ->

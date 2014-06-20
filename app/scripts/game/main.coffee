@@ -117,13 +117,19 @@ require [
     console.log "Joining #{@game.mapId} on #{hero.sprite.x},#{hero.sprite.y}"
 
     enemies = []
+
     for enemyId of initialMap.enemies
-      enemies.push enemyId
+      enemies.push 
+        id: enemyId
+        count: initialMap.enemies[enemyId].count
+
+    console.log enemies
 
     @game.join   
       x: hero.sprite.x
       y: hero.sprite.y
       enemies: enemies
+      
 
 
   update = ->

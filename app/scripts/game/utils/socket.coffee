@@ -51,17 +51,29 @@ define(['events','player','phaser','enemy'], (events, Player, Phaser, Enemy) ->
 
       console.log "Found enemies"
       console.log data.enemies
+
       for creature,i in data.enemies
-        enemy = new Enemy i, game, Phaser,
-          rank: 1
-          health: creature.health
-          dmg: 1
-          png: creature.png
-          speed: creature.speed  
+        for num in [0...creature.count]
+          enemy = new Enemy i, game, Phaser,
+            rank: 1
+            health: creature.data.health
+            dmg: 1
+            png: creature.data.png
+            speed: creature.data.speed
+          do enemy.create
+          game.enemies.push enemy
+
+      # for creature,i in data.enemies
+      #   enemy = new Enemy i, game, Phaser,
+      #     rank: 1
+      #     health: creature.health
+      #     dmg: 1
+      #     png: creature.png
+      #     speed: creature.speed  
         
-        # do enemy.preload
-        do enemy.create
-        game.enemies.push enemy
+      #   # do enemy.preload
+      #   do enemy.create
+      #   game.enemies.push enemy
 
 
 
