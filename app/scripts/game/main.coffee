@@ -42,8 +42,8 @@ require [
   downScreen = null
   leftScreen = null
   png = null
-  # rootUrl = ''
-  rootUrl = 'http://localhost:9000'
+  rootUrl = ''
+  # rootUrl = 'http://localhost:9000'
   user = window.userData.name
   console.log(user);
   # user = prompt 'Fullen Sie das user bitte !'
@@ -137,8 +137,8 @@ require [
 
 
   createEnemies = (num) ->
-    # for enemy in enemies
-    #   enemy.damage()
+    for enemy in enemies
+      enemy.sprite.kill()
     enemies = []
     for i in [0...num]
       enemy = new Enemy(i, game, Phaser, {
