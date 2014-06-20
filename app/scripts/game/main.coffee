@@ -42,8 +42,8 @@ require [
   downScreen = null
   leftScreen = null
   png = null
-  # rootUrl = ''
-  rootUrl = 'http://localhost:9000'
+  rootUrl = ''
+  # rootUrl = 'http://localhost:9000'
   user = window.userData.name
   console.log(user);
   # user = prompt 'Fullen Sie das user bitte !'
@@ -96,11 +96,9 @@ require [
 
     map.on 'finishLoad', ->
       hero.sprite.bringToTop()
-      hero.arrows.forEach (arrow) ->
-        arrow.bringToTop()
+      hero.arrows.destroy()
+      hero.createArrows()
       createEnemies(4)
-      # for enemy in enemies
-      #   enemy.sprite.bringToTop()
       app.isLoaded = true
     
     for enemy, index in enemies
@@ -135,8 +133,8 @@ require [
 
 
   createEnemies = (num) ->
-    # for enemy in enemies
-    #   enemy.damage()
+    for enemy in enemies
+      enemy.sprite.kill()
     enemies = []
     for i in [0...num]
       enemy = new Enemy(i, game, Phaser, {
@@ -151,7 +149,7 @@ require [
   # MAKE INITIAL AJAX CALL FOR PLAYER INFO
   console.log "Making request for #{user}"
   $.ajax({
-    url: "#{rootUrl}/player/#{user}"
+    url: "#{rootUrl}/player/me"
   }).done (playerInfo) ->
     console.log(playerInfo, 'playerInfo')
     mapId = playerInfo.mapId
