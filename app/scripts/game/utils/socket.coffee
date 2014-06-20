@@ -11,10 +11,6 @@ define(['events','player','phaser','enemy'], (events, Player, Phaser, Enemy) ->
 
     game.on 'enterMap', () ->
 
-      console.log 'ALL OTHER TIMES'
-      console.log game.mapData
-
-      # game.enemies = game.mapData.enemies || []
       game.enemyData = game.mapData.enemies || []
 
       enemies = []
@@ -23,8 +19,6 @@ define(['events','player','phaser','enemy'], (events, Player, Phaser, Enemy) ->
           enemies.push 
             id: enemyId
             count: game.enemyData[enemyId].count
-
-      console.log enemies
 
       game.join
         mapId: game.mapId
@@ -50,10 +44,6 @@ define(['events','player','phaser','enemy'], (events, Player, Phaser, Enemy) ->
       console.log "Leave #{game.mapId}"
       game.leave game.mapId, game.user
 
-      
-      # console.log "Done de render"
-      # game.map.reload(direction)
-
     game.on 'player joined', (data) ->
       console.log "#{data.user} joined on #{data.x},#{data.y}"
       player = new Player(game, Phaser,
@@ -66,10 +56,7 @@ define(['events','player','phaser','enemy'], (events, Player, Phaser, Enemy) ->
       players[player.user] = player
 
     game.on 'i joined', (data) ->
-      console.log "Event fired in i join"
-      # console.log data
-      # game.enemyData = data.enemies
-      # console.log 'render all other players'
+
       for other in data.others
         console.log "rendering #{other.user}"
         player = new Player(game, Phaser,
@@ -83,7 +70,7 @@ define(['events','player','phaser','enemy'], (events, Player, Phaser, Enemy) ->
 
       for enemy in game.enemies
         do enemy.derender
-        
+
       data.enemies = data.enemies || []
       game.enemies = []
 
@@ -98,11 +85,6 @@ define(['events','player','phaser','enemy'], (events, Player, Phaser, Enemy) ->
             speed: creature.data.speed
           do enemy.create
           game.enemies.push enemy
-
-
-
-
-
 
     game.shoot = (user, mapId, x, y, angle, num) ->
       console.log "#{user} shoots in #{mapId}"
