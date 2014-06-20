@@ -42,11 +42,10 @@ require [
   downScreen = null
   leftScreen = null
   png = null
-  # rootUrl = 'http://g4m3.azurewebsites.net'
+  # rootUrl = ''
   rootUrl = 'http://localhost:9000'
-  # console.log window.userData
   user = window.userData.name
-  # user = 'jquery'
+  console.log(user);
   # user = prompt 'Fullen Sie das user bitte !'
   initPos = {}
   # actions = {}
@@ -66,23 +65,17 @@ require [
       }))
     # window.hero = hero
     map = events(new Map(game, Phaser, mapId))
-    game.physics.arcade.checkCollision.up = false
-    game.physics.arcade.checkCollision.right = false
-    game.physics.arcade.checkCollision.down = false
-    game.physics.arcade.checkCollision.left = false
-    map.on('borderChange', (border, exists) ->
-      game.physics.arcade.checkCollision[border.split('Screen')[0]] = !exists
-    )
     game.user = user
     game.map = map
     socket rootUrl, game, players
     
     # tell hero that he can move over non-blocked borders
     console.log initialMap
-    hero.preload(null, initialMap)
+    hero.preload()
     # hero.set 'mapId', mapId
     # hero.mapId = mapId
     # map.preload()
+
     # hero.actions = actions
     # hero.user = user
     # tell hero that he can move over non-blocked borders
@@ -105,8 +98,9 @@ require [
       hero.sprite.bringToTop()
       hero.arrows.forEach (arrow) ->
         arrow.bringToTop()
-      for enemy in enemies
-        enemy.sprite.bringToTop()
+      createEnemies(4)
+      # for enemy in enemies
+      #   enemy.sprite.bringToTop()
       app.isLoaded = true
     
     for enemy, index in enemies
@@ -159,21 +153,20 @@ require [
   $.ajax({
     url: "#{rootUrl}/player/#{user}"
   }).done (playerInfo) ->
-    # console.log playerInfo
+    console.log(playerInfo, 'playerInfo')
     mapId = playerInfo.mapId
     initPos.x = playerInfo.x
     initPos.y = playerInfo.y
-    # png = playerInfo.png
     # actions = socket rootUrl, events
 
     png = playerInfo.png || 'roshan'
     $('#map-id').attr('href', '/edit/' + mapId);
 
     url = "#{rootUrl}/screen/#{mapId}"
+    console.log(url)
     $.ajax({
       url: url
     }).done (mapData) ->
-      # console.log mapData
       initialMap = mapData
       # debugger
       game = new Phaser.Game(800, 600, Phaser.AUTO, "game-container",
@@ -181,5 +174,6 @@ require [
         create: create
         update: update
       )
+      game.rootUrl = rootUrl
       game = events(game)
 
