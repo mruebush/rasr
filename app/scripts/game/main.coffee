@@ -153,7 +153,7 @@ require [
   # MAKE INITIAL AJAX CALL FOR PLAYER INFO
   console.log "Making request for #{user}"
   $.ajax({
-    url: "#{rootUrl}/player/#{user}"
+    url: "#{rootUrl}/player/me"
   }).done (playerInfo) ->
     console.log(playerInfo, 'playerInfo')
     mapId = playerInfo.mapId
