@@ -97,11 +97,9 @@ require [
 
     map.on 'finishLoad', ->
       hero.sprite.bringToTop()
-      hero.arrows.forEach (arrow) ->
-        arrow.bringToTop()
+      hero.arrows.destroy()
+      hero.createArrows()
       createEnemies(4)
-      # for enemy in enemies
-      #   enemy.sprite.bringToTop()
       app.isLoaded = true
     
     for enemy, index in enemies
