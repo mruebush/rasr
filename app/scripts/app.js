@@ -32,7 +32,8 @@ angular.module('komApp', [
       })
       .state('edit', {
         url: '/edit',
-        templateUrl: 'partials/edit'
+        templateUrl: 'partials/edit',
+        authenticate: true
       })
       .state('settings', {
         url: '/settings',
