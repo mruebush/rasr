@@ -1,9 +1,31 @@
 define(['events','player','phaser','enemy'], (events, Player, Phaser, Enemy) ->
   return (rootUrl, game, players) ->
     socket = io.connect()
+    window.socket = socket
     
     
     mapId = game.mapId
+
+    game.on 'test', () ->
+      console.log 'success'
+
+    game.on 'enterMap', () ->
+      console.log 'ALL OTHER TIMES'
+      console.log game.mapData
+
+      # game.enemies = game.mapData.enemies || []
+
+      # for creature,i in data.enemies
+      #   for num in [0...creature.count]
+      #     console.log "Creating new enemy"
+      #     enemy = new Enemy i, game, Phaser,
+      #       rank: 1
+      #       health: creature.data.health
+      #       dmg: 1
+      #       png: creature.data.png
+      #       speed: creature.data.speed
+      #     do enemy.create
+      #     game.enemies.push enemy
 
     game.on 'shoot', (data) ->
       game.hero.renderMissiles data.x, data.y, data.angle, data.num
@@ -16,10 +38,13 @@ define(['events','player','phaser','enemy'], (events, Player, Phaser, Enemy) ->
       players[user].sprite.kill()
       delete players[user]
 
+
     game.on 'changeMap', (direction) ->
       console.log "Leave #{game.mapId}"
       game.leave game.mapId, game.user
-      game.map.reload(direction)
+      for enemy in game.enemies
+        do enemy.derender
+      # game.map.reload(direction)
 
     game.on 'player joined', (data) ->
       console.log "#{data.user} joined on #{data.x},#{data.y}"
@@ -33,7 +58,10 @@ define(['events','player','phaser','enemy'], (events, Player, Phaser, Enemy) ->
       players[player.user] = player
 
     game.on 'i joined', (data) ->
-      console.log 'render all other players'
+      console.log "Event fired in i join"
+      console.log data
+      game.enemyData = data
+      # console.log 'render all other players'
       for other in data.others
         console.log "rendering #{other.user}"
         player = new Player(game, Phaser,
@@ -45,26 +73,10 @@ define(['events','player','phaser','enemy'], (events, Player, Phaser, Enemy) ->
         do player.create
         players[player.user] = player
 
-      console.log 'render all enemies'
-      game.enemies = []
-      # game.enemies = data.enemies
 
-      console.log "Found enemies"
-      # console.log data.enemies
 
-      data.enemies = data.enemies || []
 
-      for creature,i in data.enemies
-        for num in [0...creature.count]
-          console.log "Creating new enemy"
-          enemy = new Enemy i, game, Phaser,
-            rank: 1
-            health: creature.data.health
-            dmg: 1
-            png: creature.data.png
-            speed: creature.data.speed
-          do enemy.create
-          game.enemies.push enemy
+
 
     game.shoot = (user, mapId, x, y, angle, num) ->
       console.log "#{user} shoots in #{mapId}"
@@ -133,6 +145,7 @@ define(['events','player','phaser','enemy'], (events, Player, Phaser, Enemy) ->
 
     _joinListener = (user) ->
       socket.on game.mapId, (data) ->
+        console.log "join fired"
         if data.user != game.user
           game.trigger('player joined', data)
         else

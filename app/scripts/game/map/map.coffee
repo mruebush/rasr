@@ -1,4 +1,5 @@
 define(['jquery'], ($) ->
+  first = true
   class Map
     constructor: (@game, @Phaser, @mapId) ->
       @layer = null
@@ -21,18 +22,19 @@ define(['jquery'], ($) ->
       that = @
       url = "#{@game.rootUrl}/move/#{direction}/#{@mapId}"
       if !data
-        console.log 'not data'
         $.ajax({
           url: url
           success: (data) =>
             $('#map-id').attr('href', '/edit/' + @mapId);
             that._loadAssets.call(that, data, callback, true)
+            that.game.mapData = data
+            that.game.trigger 'enterMap'
         })
       else
-        console.log 'data'
         @_loadAssets.call(@, data, callback, false)
         
     _loadAssets: (data, callback, join) ->
+      # console.log "Loading assets"
       # if hero
       #   hero.set 'mapId', data._id
       #   console.log "Enter #{hero.mapId}"
@@ -44,22 +46,22 @@ define(['jquery'], ($) ->
       @mapId = data._id
 
       @game.mapId = @mapId
-      if join
-        console.log 'join a new map'
-        # console.log data
-        enemies = []
+      # if join
+      #   console.log 'join a new map'
+      #   # console.log data
+      #   enemies = []
 
-        for enemyId of data.enemies
-          enemies.push 
-            id: enemyId
-            count: data.enemies[enemyId].count
+      #   for enemyId of data.enemies
+      #     enemies.push 
+      #       id: enemyId
+      #       count: data.enemies[enemyId].count
 
-        # console.log enemies
-        @game.join
-          mapId: @mapId
-          x: @game.hero.sprite.x
-          y: @game.hero.sprite.y
-          enemies: enemies
+      #   # console.log enemies
+      #   @game.join
+      #     mapId: @mapId
+      #     x: @game.hero.sprite.x
+      #     y: @game.hero.sprite.y
+      #     enemies: enemies
 
       @mapData = data
       @game.load.tilemap('map', null, data, @Phaser.Tilemap.TILED_JSON)
@@ -80,19 +82,20 @@ define(['jquery'], ($) ->
           @game.physics.arcade.checkCollision[border.split('Screen')[0]] = !value
 
     create: ->
-      # console.log map
+      console.log first
       map = @game.add.tilemap('map')
       tilesetName = @_getNameOfTileset(@mapData)
       map.addTilesetImage(tilesetName, 'tiles')
       layername = @_getLayerName(@mapData)
-      # console.log layername
       @layer = map.createLayer(layername)
       @layers.push(@layer)
-      # console.log @layers
       @layer.resizeWorld()
       @layer.debug = false
-      # console.log @layer
       @trigger 'finishLoad'
+      # if not first then @game.trigger 'enterMap'
+      # if first
+      #   first = false
+      # @game.trigger 'enterMap'
 
     reload: (direction) ->
       layer.destroy() for layer in @layers
