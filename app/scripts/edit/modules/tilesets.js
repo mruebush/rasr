@@ -16,6 +16,7 @@ define(["views/tileset_view", "jquery.mousewheel", "jquery.jscrollpane"], functi
 			image: "/assets/tilemaps/tiles/tmw_desert_spacing.png",
 			tilewidth: 32,
 			tileheight: 32,
+			spacing: 1,
 			margin: 1
 		});
 	};

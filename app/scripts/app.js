@@ -31,7 +31,7 @@ angular.module('komApp', [
         authenticate: true
       })
       .state('edit', {
-        url: '/edit',
+        url: '/edit/:mapId',
         templateUrl: 'partials/edit'
       })
       .state('settings', {

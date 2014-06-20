@@ -34,5 +34,9 @@ require.config({
 
 require(['jquery-ui', 'editor'], function($, Editor) {
   Editor.$ = $;
-  $(document).ready(Editor.initialize);
+  $(document).ready(function() {
+    // var mapId = location.pathname.split("/")[2];
+    Editor.initialize();
+    $("#load").click();
+  });
 });

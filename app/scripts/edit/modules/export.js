@@ -93,6 +93,8 @@ define(['underscore'], function(_) {
 					imageheight: tileset.height,
 					tilewidth: tileset.tilewidth,
 					tileheight: tileset.tileheight,
+					margin: tileset.margin,
+					spacing: tileset.spacing,
 					firstgid: 1
 				});
 			}
@@ -148,7 +150,8 @@ define(['underscore'], function(_) {
 					imagewidth: tileset.width,
 					imageheight: tileset.height,
 					tilewidth: tileset.tilewidth,
-					tileheight: tileset.tileheight
+					tileheight: tileset.tileheight,
+					margin: tileset.margin
 				});
 
 				output.find("tilesets").append(elem);
@@ -172,10 +175,10 @@ define(['underscore'], function(_) {
 			dataType: 'json',
 			type: 'PUT',
 			success: function() {
-				console.log('success');
+				location.href = location.origin + '/play';
 			},
 			error: function(err) {
-				console.log('err', err);
+				location.href = location.origin + '/play';
 			}
 		})
 		// anchor.click();
