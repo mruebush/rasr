@@ -7,3 +7,5 @@ heroku
 /views
 dist
 /app/scripts/game/**/*.js
+
+.DS_Store

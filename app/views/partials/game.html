@@ -1,9 +1,11 @@
-<div ng-include="'partials/navbar'"></div>
 
-<div id="game-container">
-  
+<div class="container">
+  <div ng-include="'partials/navbar'"></div>
+  <div id="game-container">
+    
+  </div>
+  <p>This is the Game view. User is {{ currentUser.name }}</p> 
+  <a id="map-id" href="/edit/">Edit map here</a>
+
+  <script data-main="/scripts/game/main" src="bower_components/requirejs/require.js"></script>
 </div>
-<p>This is the Game view. User is {{ currentUser.name }}</p> 
-<a id="map-id" href="/edit/">Edit map here</a>
-
-<script data-main="/scripts/game/main" src="bower_components/requirejs/require.js"></script>
