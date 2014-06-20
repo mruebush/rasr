@@ -5,18 +5,12 @@ angular.module('komApp')
     $scope.menu = [{
       'title': 'Home',
       'link': '/'
-    }, {
-      'title': 'Settings',
-      'link': '/settings'
     },
     {
       'title': 'Play',
       'link': '/play'
-    },
-    {
-      'title': 'Editor',
-      'link': '/edit'
-    }];
+    }
+    ];
     
     $scope.logout = function() {
       Auth.logout()
