@@ -123,7 +123,7 @@ require [
         id: enemyId
         count: initialMap.enemies[enemyId].count
 
-    console.log enemies
+    # console.log enemies
 
     @game.join   
       x: hero.sprite.x
