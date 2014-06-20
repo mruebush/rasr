@@ -6,8 +6,8 @@ define(['events','player','phaser','enemy'], (events, Player, Phaser, Enemy) ->
     
     mapId = game.mapId
 
-    game.on 'test', () ->
-      console.log 'success'
+    game.on 'move enemies', (data) ->
+      console.log data.param
 
     game.on 'enterMap', () ->
 
@@ -174,11 +174,16 @@ define(['events','player','phaser','enemy'], (events, Player, Phaser, Enemy) ->
       socket.on 'move', (data) ->
         if data.user != game.user
           game.trigger('move', data)
+
+    _enemyListener = () ->
+      socket.on 'move enemies', (data) ->
+        game.trigger 'move enemies', data
   
 
     _leaveListener mapId, game.user
     _moveListener game.user
     _shootListener game.user
+    do _enemyListener
 
     # actions = events(actions)
     # window.actions = actions
