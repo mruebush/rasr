@@ -5,9 +5,12 @@ angular.module('komApp')
     
     // Get currentUser from cookie
     $rootScope.currentUser = $cookieStore.get('user') || null;
-    window.userData = Object.freeze({
-      name: $rootScope.currentUser.name
-    });
+    if ($rootScope.currentUser) {
+      delete window.userData;
+      window.userData = Object.freeze({
+        name: $rootScope.currentUser.name
+      });
+    }
     $cookieStore.remove('user');
 
     return {
