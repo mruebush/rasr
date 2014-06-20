@@ -10,10 +10,10 @@ define( ->
       @y = Math.min(Math.max(@game.world.randomY, @margin), @game.height - @margin)
       @health = @meta.health
       @alive = true
+      @png = @meta.png
 
       @derender = () ->
         do @sprite.kill
-      # @png = @meta.png
 
     damage: ->
       @health--
@@ -22,12 +22,8 @@ define( ->
         @sprite.kill()
       return true
 
-    # derender: ->
-    #   do @spirte.kill
-
-
     preload: ->
-      @game.load.spritesheet "enemy", "images/leviathan.png", 96, 96
+      @game.load.spritesheet "enemy", "images/#{@png}", 96, 96
 
     create: () ->
       @sprite = @game.add.sprite(@x, @y, "enemy")
@@ -38,10 +34,6 @@ define( ->
       @sprite.body.bounce.set(1)
       @sprite.body.width = 100
       @sprite.body.height = 100
-      # @sprite.body.allowCollision = true
-
-      # @sprite.body.renderDebug(@sprite, @sprite)
-
       @sprite.animations.add "down", [0, 3], true
       @sprite.animations.add "left", [4, 7], true
       @sprite.animations.add "right", [8, 11], true

@@ -77,19 +77,9 @@ require [
     game.user = user
     game.map = map
     socket rootUrl, game, players
-    
-    # tell hero that he can move over non-blocked borders
-    console.log initialMap
-    hero.preload()
-    # hero.set 'mapId', mapId
-    # hero.mapId = mapId
-    # map.preload()
 
-    # hero.actions = actions
-    # hero.user = user
-    # tell hero that he can move over non-blocked borders
-    # hero.preload()
-    # hero.set 'mapId', mapId
+    hero.preload()
+
     map.preload(null, initialMap)
 
     app.trigger 'create'
@@ -107,10 +97,8 @@ require [
       hero.sprite.bringToTop()
       hero.arrows.destroy()
       hero.createArrows()
-      # createEnemies(4)
       app.isLoaded = true
 
-    console.log 'FIRST TIME ONLY'
 
     enemies = []
 
@@ -118,8 +106,6 @@ require [
       enemies.push 
         id: enemyId
         count: initialMap.enemies[enemyId].count
-
-    # console.log enemies
 
     @game.join   
       x: hero.sprite.x
@@ -148,9 +134,6 @@ require [
     # console.log('kill enemy', @)
     @damage()
     arrow.kill()
-
-
-
 
   # MAKE INITIAL AJAX CALL FOR PLAYER INFO
   console.log "Making request for #{user}"
