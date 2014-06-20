@@ -87,7 +87,7 @@ define(['jquery'], ($) ->
       @layers.push(@layer)
       console.log @layers
       @layer.resizeWorld()
-      @layer.debug = true
+      @layer.debug = false
       console.log @layer
       @trigger 'finishLoad'
 

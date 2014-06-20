@@ -33,7 +33,7 @@ require [
   window.game = game = null
   hero = null
   map = null
-  enemies = []
+  # game.enemies = []
   players = events({})
   mapId = null
   initialMap = null
@@ -51,6 +51,15 @@ require [
   # actions = {}
 
   preload = ->
+    load = new Enemy 10, game, Phaser,
+      rank: 1
+      health: 10
+      dmg: 1
+      png: 'leviathan.png'
+      speed: 200
+
+    do load.preload
+    
     hero = events(new Hero(game, Phaser, {
       exp: 150
       health: 100
@@ -72,21 +81,10 @@ require [
     # tell hero that he can move over non-blocked borders
     console.log initialMap
     hero.preload()
-    # hero.set 'mapId', mapId
-    # hero.mapId = mapId
-    # map.preload()
-
-    # hero.actions = actions
-    # hero.user = user
-    # tell hero that he can move over non-blocked borders
-    # hero.preload()
-    # hero.set 'mapId', mapId
     map.preload(null, initialMap)
 
     app.trigger 'create'
     app.isLoaded = true
-    createEnemies(4)
-
     window.game = game
     game.hero = hero
 
@@ -98,23 +96,25 @@ require [
       hero.sprite.bringToTop()
       hero.arrows.destroy()
       hero.createArrows()
-      createEnemies(4)
       app.isLoaded = true
     
-    for enemy, index in enemies
-      enemy.create()
-
-    # game.mapId = @mapId
     console.log "Joining #{@game.mapId} on #{hero.sprite.x},#{hero.sprite.y}"
+
+    enemies = []
+    for enemyId of initialMap.enemies
+      enemies.push enemyId
+
     @game.join   
       x: hero.sprite.x
       y: hero.sprite.y
+      enemies: enemies
+
 
   update = ->
     if app.isLoaded
       map.update()
       hero.update()
-      for enemy in enemies
+      for enemy in game.enemies
         if enemy.alive
           game.physics.arcade.collide(hero.sprite, enemy.sprite, hurtHero, null, hero)
           game.physics.arcade.collide(hero.arrows, enemy.sprite, arrowEnemy, null, enemy)
@@ -127,24 +127,9 @@ require [
 
   arrowEnemy = (enemySprite, arrow) ->
     # kill enemy
-    # console.log('kill enemy', @)
     @damage()
     arrow.kill()
 
-
-  createEnemies = (num) ->
-    for enemy in enemies
-      enemy.sprite.kill()
-    enemies = []
-    for i in [0...num]
-      enemy = new Enemy(i, game, Phaser, {
-        rank: 1
-        health: 10
-        dmg: 1
-      })
-      enemy.preload()
-      enemy.create()
-      enemies.push enemy
 
   # MAKE INITIAL AJAX CALL FOR PLAYER INFO
   console.log "Making request for #{user}"
@@ -153,12 +138,12 @@ require [
   }).done (playerInfo) ->
     console.log(playerInfo, 'playerInfo')
     mapId = playerInfo.mapId
+
     initPos.x = playerInfo.x
     initPos.y = playerInfo.y
 
     png = playerInfo.png || 'roshan'
     $('#map-id').attr('href', '/edit/' + mapId);
-
     url = "#{rootUrl}/screen/#{mapId}"
     console.log(url)
     $.ajax({
@@ -173,5 +158,6 @@ require [
         update: update
       )
       game.rootUrl = rootUrl
+      game.enemies = []
       game = events(game)
 

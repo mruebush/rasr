@@ -4,12 +4,13 @@ define( ->
     constructor: (@index, @game, @phaser, @meta) ->
       @sprite = null
       @direction = null
-      @speed = 200
+      @speed = @meta.speed
       @margin = 50
       @x = Math.min(Math.max(@game.world.randomX, @margin), @game.width - @margin)
       @y = Math.min(Math.max(@game.world.randomY, @margin), @game.height - @margin)
-      @health = 10
+      @health = @meta.health
       @alive = true
+      # @png = @meta.png
 
     damage: ->
       @health--
@@ -17,6 +18,30 @@ define( ->
         @alive = false
         @sprite.kill()
       return true
+
+    # createEnemy = (enemies) ->
+
+    #   for creature,i in enemies
+    #     enemy = new Enemy i, game, Phaser
+    #       rank: 1
+    #       health: creature.health
+    #       dmg: 1
+    #       png: creature.png
+    #       speed: creature.speed  
+        
+    #     do enemy.preload
+    #     do enemy.create
+
+
+
+      # enemy = new Enemy(i, game, Phaser, {
+      #   rank: 1
+      #   health: 10
+      #   dmg: 1
+      # })
+      # enemy.preload()
+      # enemy.create()
+      # enemies.push enemy
 
     preload: ->
       @game.load.spritesheet "enemy", "images/leviathan.png", 96, 96
