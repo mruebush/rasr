@@ -25,6 +25,17 @@ define(['jquery'], ($) ->
           url: url
           success: (data) =>
             $('#map-id').attr('href', '/edit/' + @mapId);
+            $('.creatables > a').remove();
+
+            if(!data.upScreen)
+              $('.creatables').append("<a href='/create/up/#{data.upScreen}'>up</a>")
+            if(!data.rightScreen)
+              $('.creatables').append("<a href='/create/right/#{data.rightScreen}'>right</a>")
+            if(!data.downScreen)
+              $('.creatables').append("<a href='/create/down/#{data.downScreen}'>down</a>")
+            if(!data.leftScreen)
+              $('.creatables').append("<a href='/create/left/#{data.leftScreen}'>left</a>")
+       
             that._loadAssets.call(that, data, callback)
         })
       else

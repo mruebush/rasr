@@ -155,7 +155,6 @@ require [
     mapId = playerInfo.mapId
     initPos.x = playerInfo.x
     initPos.y = playerInfo.y
-    # actions = socket rootUrl, events
 
     png = playerInfo.png || 'roshan'
     $('#map-id').attr('href', '/edit/' + mapId);
@@ -166,7 +165,8 @@ require [
       url: url
     }).done (mapData) ->
       initialMap = mapData
-      # debugger
+    
+      $('.creatables')
       game = new Phaser.Game(800, 600, Phaser.AUTO, "game-container",
         preload: preload
         create: create
