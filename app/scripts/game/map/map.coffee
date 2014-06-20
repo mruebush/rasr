@@ -108,7 +108,6 @@ define(['jquery'], ($) ->
       return data.layers[0].name
 
     _makeMap: (direction, mapId) ->
-      debugger;
       $.ajax({
         url: "/make/#{direction}/#{mapId}"
         type: "GET",
