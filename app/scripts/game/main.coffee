@@ -33,7 +33,7 @@ require [
   window.game = game = null
   hero = null
   map = null
-  enemies = []
+  # game.enemies = []
   players = events({})
   mapId = null
   initialMap = null
@@ -101,12 +101,13 @@ require [
       # createEnemies(4)
       app.isLoaded = true
     
-    for enemy in enemies
-      enemy.create()
+    # for enemy in enemies
+    #   enemy.create()
 
     # game.mapId = @mapId
     console.log "Joining #{@game.mapId} on #{hero.sprite.x},#{hero.sprite.y}"
 
+    enemies = []
     for enemyId of initialMap.enemies
       enemies.push enemyId
 
@@ -120,7 +121,7 @@ require [
     if app.isLoaded
       map.update()
       hero.update()
-      for enemy in enemies
+      for enemy in game.enemies
         if enemy.alive
           game.physics.arcade.collide(hero.sprite, enemy.sprite, hurtHero, null, hero)
           game.physics.arcade.collide(hero.arrows, enemy.sprite, arrowEnemy, null, enemy)
@@ -138,19 +139,7 @@ require [
     arrow.kill()
 
 
-  # createEnemies = (num) ->
-  #   for enemy in enemies
-  #     enemy.sprite.kill()
-  #   enemies = []
-  #   for i in [0...num]
-  #     enemy = new Enemy(i, game, Phaser, {
-  #       rank: 1
-  #       health: 10
-  #       dmg: 1
-  #     })
-  #     enemy.preload()
-  #     enemy.create()
-  #     enemies.push enemy
+
 
   # MAKE INITIAL AJAX CALL FOR PLAYER INFO
   console.log "Making request for #{user}"
@@ -179,5 +168,6 @@ require [
         update: update
       )
       game.rootUrl = rootUrl
+      game.enemies = []
       game = events(game)
 

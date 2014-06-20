@@ -1,4 +1,4 @@
-define(['events','player','phaser'], (events, Player, Phaser) ->
+define(['events','player','phaser','enemy'], (events, Player, Phaser, Enemy) ->
   return (rootUrl, game, players) ->
     socket = io.connect()
     
@@ -46,7 +46,20 @@ define(['events','player','phaser'], (events, Player, Phaser) ->
         players[player.user] = player
 
       console.log 'render all enemies'
-      console.log data.enemies
+      game.enemies = data.enemies
+
+      for creature,i in game.enemies
+        enemy = new Enemy i, game, Phaser,
+          rank: 1
+          health: creature.health
+          dmg: 1
+          png: creature.png
+          speed: creature.speed  
+        
+        do enemy.preload
+        do enemy.create
+
+
 
     game.shoot = (user, mapId, x, y, angle, num) ->
       console.log "#{user} shoots in #{mapId}"
