@@ -25,27 +25,38 @@ define(['jquery'], ($) ->
           url: url
           success: (data) =>
             $('#map-id').attr('href', '/edit/' + @mapId);
+            $('.creatables > button').remove();
+
+            if(!data.upScreen)
+              $up = $("<button class='btn btn-primary'>Up</button>")
+              $up.click =>
+                @_makeMap('up', data._id)
+              $('.creatables').append(up)
+            if(!data.rightScreen)
+              $right = $("<button class='btn btn-primary'>right</button>")
+              $right.click =>
+                @_makeMap('right', data._id)
+              $('.creatables').append($right)
+            if(!data.downScreen)
+              $down = $("<button class='btn btn-primary'>down</button>")
+              $down.click =>
+                @_makeMap('down', data._id)
+              $('.creatables').append($down)
+            if(!data.leftScreen)
+              $left = $("<button class='btn btn-primary'>left</button>")
+              $left.click =>
+                @_makeMap('left', data._id)
+              $('.creatables').append($left)
+       
             that._loadAssets.call(that, data, callback)
         })
       else
         @_loadAssets.call(@, data, callback)
-        
+
     _loadAssets: (data, callback) ->
-      # if hero
-      #   hero.set 'mapId', data._id
-      #   console.log "Enter #{hero.mapId}"
-      #   console.log hero.sprite.x
-      #   console.log hero.sprite.y
-      #   hero.actions.join hero.mapId, hero.user,
-      #     x: hero.sprite.x
-      #     y: hero.sprite.y
       @mapId = data._id
 
       @game.mapId = @mapId
-      # @game.join
-      #   mapId: @mapId
-      #   x: 0
-      #   y: 0
 
       @mapData = data
       @game.load.tilemap('map', null, data, @Phaser.Tilemap.TILED_JSON)
@@ -95,6 +106,17 @@ define(['jquery'], ($) ->
 
     _getLayerName: (data) ->
       return data.layers[0].name
+
+    _makeMap: (direction, mapId) ->
+      debugger;
+      $.ajax({
+        url: "/make/#{direction}/#{mapId}"
+        type: "GET",
+        success: ->
+          console.log('hah!');
+        error: ->
+          console.log('lol');
+      });
 
 
   return Map

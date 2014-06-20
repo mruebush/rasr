@@ -82,21 +82,10 @@ require [
     # tell hero that he can move over non-blocked borders
     console.log initialMap
     hero.preload()
-    # hero.set 'mapId', mapId
-    # hero.mapId = mapId
-    # map.preload()
-
-    # hero.actions = actions
-    # hero.user = user
-    # tell hero that he can move over non-blocked borders
-    # hero.preload()
-    # hero.set 'mapId', mapId
     map.preload(null, initialMap)
 
     app.trigger 'create'
     app.isLoaded = true
-    # createEnemies(4)
-
     window.game = game
     game.hero = hero
 
@@ -108,13 +97,8 @@ require [
       hero.sprite.bringToTop()
       hero.arrows.destroy()
       hero.createArrows()
-      # createEnemies(4)
       app.isLoaded = true
     
-    # for enemy in enemies
-    #   enemy.create()
-
-    # game.mapId = @mapId
     console.log "Joining #{@game.mapId} on #{hero.sprite.x},#{hero.sprite.y}"
 
     enemies = []
@@ -144,7 +128,6 @@ require [
 
   arrowEnemy = (enemySprite, arrow) ->
     # kill enemy
-    # console.log('kill enemy', @)
     @damage()
     arrow.kill()
 
@@ -159,7 +142,6 @@ require [
 
     initPos.x = playerInfo.x
     initPos.y = playerInfo.y
-    
 
     png = playerInfo.png || 'roshan'
     $('#map-id').attr('href', '/edit/' + mapId);
@@ -169,7 +151,8 @@ require [
       url: url
     }).done (mapData) ->
       initialMap = mapData
-      # debugger
+    
+      $('.creatables')
       game = new Phaser.Game(800, 600, Phaser.AUTO, "game-container",
         preload: preload
         create: create
