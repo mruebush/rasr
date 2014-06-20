@@ -45,6 +45,9 @@ define(['events','player','phaser'], (events, Player, Phaser) ->
         do player.create
         players[player.user] = player
 
+      console.log 'render all enemies'
+      console.log data.enemies
+
     game.shoot = (user, mapId, x, y, angle, num) ->
       console.log "#{user} shoots in #{mapId}"
       socket.emit 'shoot',
