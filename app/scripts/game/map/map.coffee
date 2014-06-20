@@ -15,7 +15,7 @@ define(['jquery'], ($) ->
 
     preload: (direction = 'screen', data, callback) ->
       that = @
-      url = "/#{direction}/#{@mapId}"
+      url = "/move/#{direction}/#{@mapId}"
       if !data
         $.ajax({
           url: url
