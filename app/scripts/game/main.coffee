@@ -77,6 +77,7 @@ require [
     game.user = user
     game.map = map
     socket rootUrl, game, players
+    game.load.spritesheet "enemy", "images/leviathan.png", 96, 96
     
     # tell hero that he can move over non-blocked borders
     console.log initialMap
