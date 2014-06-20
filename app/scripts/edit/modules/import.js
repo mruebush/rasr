@@ -32,7 +32,7 @@ define(function() {
 		},
 		"click #load": function(e) {
 			$.ajax({
-				url: '/screen/53a2633de721f3c82fcb0c74',
+				url: '/screen/53a3123e14594cb3349b51df',
 				success: function(data) {
 					console.log(data);
 					var cached = {};

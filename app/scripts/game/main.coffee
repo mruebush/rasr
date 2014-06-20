@@ -30,7 +30,7 @@ require [
   'player'
 ], (Hero, Map, Enemy, events, socket, Phaser, Player) ->
   app = events({})
-  game = null
+  window.game = game = null
   hero = null
   map = null
   enemies = []
@@ -45,13 +45,11 @@ require [
   # rootUrl = 'http://g4m3.azurewebsites.net'
   rootUrl = 'http://localhost:9000'
   # console.log window.userData
-  debugger;
   user = window.userData.name
   # user = 'jquery'
   # user = prompt 'Fullen Sie das user bitte !'
   initPos = {}
   # actions = {}
-
 
   preload = ->
     hero = events(new Hero(game, Phaser, {
@@ -120,7 +118,6 @@ require [
       x: hero.sprite.x
       y: hero.sprite.y
 
-
   update = ->
     if app.isLoaded
       map.update()
@@ -168,7 +165,9 @@ require [
     initPos.y = playerInfo.y
     # png = playerInfo.png
     # actions = socket rootUrl, events
+
     png = playerInfo.png || 'roshan'
+    $('#map-id').attr('href', '/edit/' + mapId);
 
     url = "#{rootUrl}/screen/#{mapId}"
     $.ajax({
@@ -177,7 +176,7 @@ require [
       # console.log mapData
       initialMap = mapData
       # debugger
-      game = new Phaser.Game(800, 600, Phaser.AUTO, "",
+      game = new Phaser.Game(800, 600, Phaser.AUTO, "game-container",
         preload: preload
         create: create
         update: update
