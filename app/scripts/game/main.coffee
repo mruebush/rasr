@@ -51,6 +51,15 @@ require [
   # actions = {}
 
   preload = ->
+    load = new Enemy 10, game, Phaser,
+      rank: 1
+      health: 10
+      dmg: 1
+      png: 'leviathan.png'
+      speed: 200
+
+    do load.preload
+    
     hero = events(new Hero(game, Phaser, {
       exp: 150
       health: 100

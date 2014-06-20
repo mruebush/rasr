@@ -10,7 +10,7 @@ define( ->
       @y = Math.min(Math.max(@game.world.randomY, @margin), @game.height - @margin)
       @health = @meta.health
       @alive = true
-      @png = @meta.png
+      # @png = @meta.png
 
     damage: ->
       @health--
@@ -19,19 +19,19 @@ define( ->
         @sprite.kill()
       return true
 
-    createEnemy = (enemies) ->
+    # createEnemy = (enemies) ->
 
-      for creature,i in enemies
-        enemy = new Enemy i, game, Phaser
-          rank: 1
-          health: creature.health
-          dmg: 1
-          png: creature.png
-          speed: creature.speed  
+    #   for creature,i in enemies
+    #     enemy = new Enemy i, game, Phaser
+    #       rank: 1
+    #       health: creature.health
+    #       dmg: 1
+    #       png: creature.png
+    #       speed: creature.speed  
         
-        do enemy.preload
-        do enemy.create
-        
+    #     do enemy.preload
+    #     do enemy.create
+
 
 
       # enemy = new Enemy(i, game, Phaser, {
@@ -44,7 +44,7 @@ define( ->
       # enemies.push enemy
 
     preload: ->
-      @game.load.spritesheet "enemy", "images/#{@meta.png}", 96, 96
+      @game.load.spritesheet "enemy", "images/leviathan.png", 96, 96
 
     create: () ->
       @sprite = @game.add.sprite(@x, @y, "enemy")
