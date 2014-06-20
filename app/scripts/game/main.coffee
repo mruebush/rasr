@@ -118,7 +118,6 @@ require [
       #     id: enemyId
       #     count: data.enemies[enemyId].count
 
-      # # console.log enemies
       # @game.join
       #   mapId: @mapId
       #   x: @game.hero.sprite.x

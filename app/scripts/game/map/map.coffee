@@ -1,5 +1,4 @@
 define(['jquery'], ($) ->
-  first = true
   class Map
     constructor: (@game, @Phaser, @mapId) ->
       @layer = null
@@ -82,7 +81,6 @@ define(['jquery'], ($) ->
           @game.physics.arcade.checkCollision[border.split('Screen')[0]] = !value
 
     create: ->
-      console.log first
       map = @game.add.tilemap('map')
       tilesetName = @_getNameOfTileset(@mapData)
       map.addTilesetImage(tilesetName, 'tiles')
@@ -92,10 +90,7 @@ define(['jquery'], ($) ->
       @layer.resizeWorld()
       @layer.debug = false
       @trigger 'finishLoad'
-      # if not first then @game.trigger 'enterMap'
-      # if first
-      #   first = false
-      # @game.trigger 'enterMap'
+
 
     reload: (direction) ->
       layer.destroy() for layer in @layers

@@ -14,18 +14,24 @@ define(['events','player','phaser','enemy'], (events, Player, Phaser, Enemy) ->
       console.log game.mapData
 
       # game.enemies = game.mapData.enemies || []
+      game.enemyData = game.mapData.enemies || []
 
-      # for creature,i in data.enemies
-      #   for num in [0...creature.count]
-      #     console.log "Creating new enemy"
-      #     enemy = new Enemy i, game, Phaser,
-      #       rank: 1
-      #       health: creature.data.health
-      #       dmg: 1
-      #       png: creature.data.png
-      #       speed: creature.data.speed
-      #     do enemy.create
-      #     game.enemies.push enemy
+      enemies = []
+
+      for enemyId of game.enemyData
+          enemies.push 
+            id: enemyId
+            count: game.enemyData[enemyId].count
+
+      console.log enemies
+
+      game.join
+        mapId: game.mapId
+        x: game.hero.sprite.x
+        y: game.hero.sprite.y
+        enemies: enemies
+
+
 
     game.on 'shoot', (data) ->
       game.hero.renderMissiles data.x, data.y, data.angle, data.num
@@ -59,8 +65,8 @@ define(['events','player','phaser','enemy'], (events, Player, Phaser, Enemy) ->
 
     game.on 'i joined', (data) ->
       console.log "Event fired in i join"
-      console.log data
-      game.enemyData = data
+      # console.log data
+      # game.enemyData = data.enemies
       # console.log 'render all other players'
       for other in data.others
         console.log "rendering #{other.user}"
@@ -72,6 +78,20 @@ define(['events','player','phaser','enemy'], (events, Player, Phaser, Enemy) ->
         do player.preload
         do player.create
         players[player.user] = player
+
+      data.enemies = data.enemies || []
+
+      for creature,i in data.enemies
+        for num in [0...creature.count]
+          console.log "Creating new enemy"
+          enemy = new Enemy i, game, Phaser,
+            rank: 1
+            health: creature.data.health
+            dmg: 1
+            png: creature.data.png
+            speed: creature.data.speed
+          do enemy.create
+          game.enemies.push enemy
 
 
 
