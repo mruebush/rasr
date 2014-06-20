@@ -10,6 +10,7 @@ define(['events','player','phaser','enemy'], (events, Player, Phaser, Enemy) ->
       console.log 'success'
 
     game.on 'enterMap', () ->
+
       console.log 'ALL OTHER TIMES'
       console.log game.mapData
 
@@ -48,8 +49,9 @@ define(['events','player','phaser','enemy'], (events, Player, Phaser, Enemy) ->
     game.on 'changeMap', (direction) ->
       console.log "Leave #{game.mapId}"
       game.leave game.mapId, game.user
-      for enemy in game.enemies
-        do enemy.derender
+
+      
+      # console.log "Done de render"
       # game.map.reload(direction)
 
     game.on 'player joined', (data) ->
@@ -79,7 +81,11 @@ define(['events','player','phaser','enemy'], (events, Player, Phaser, Enemy) ->
         do player.create
         players[player.user] = player
 
+      for enemy in game.enemies
+        do enemy.derender
+        
       data.enemies = data.enemies || []
+      game.enemies = []
 
       for creature,i in data.enemies
         for num in [0...creature.count]
@@ -165,7 +171,6 @@ define(['events','player','phaser','enemy'], (events, Player, Phaser, Enemy) ->
 
     _joinListener = (user) ->
       socket.on game.mapId, (data) ->
-        console.log "join fired"
         if data.user != game.user
           game.trigger('player joined', data)
         else

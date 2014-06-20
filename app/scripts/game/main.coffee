@@ -109,26 +109,8 @@ require [
       hero.createArrows()
       # createEnemies(4)
       app.isLoaded = true
+
     console.log 'FIRST TIME ONLY'
-
-      # enemies = []
-
-      # for enemyId of data.enemies
-      #   enemies.push 
-      #     id: enemyId
-      #     count: data.enemies[enemyId].count
-
-      # @game.join
-      #   mapId: @mapId
-      #   x: @game.hero.sprite.x
-      #   y: @game.hero.sprite.y
-      #   enemies: enemies
-    
-    # for enemy in enemies
-    #   enemy.create()
-
-    # game.mapId = @mapId
-    console.log "Joining #{@game.mapId} on #{hero.sprite.x},#{hero.sprite.y}"
 
     enemies = []
 
