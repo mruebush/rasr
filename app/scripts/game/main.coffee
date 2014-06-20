@@ -85,7 +85,7 @@ require [
 
     app.trigger 'create'
     app.isLoaded = true
-    createEnemies(4)
+    # createEnemies(4)
 
     window.game = game
     game.hero = hero
@@ -98,17 +98,23 @@ require [
       hero.sprite.bringToTop()
       hero.arrows.destroy()
       hero.createArrows()
-      createEnemies(4)
+      # createEnemies(4)
       app.isLoaded = true
     
-    for enemy, index in enemies
+    for enemy in enemies
       enemy.create()
 
     # game.mapId = @mapId
     console.log "Joining #{@game.mapId} on #{hero.sprite.x},#{hero.sprite.y}"
+
+    for enemyId of initialMap.enemies
+      enemies.push enemyId
+
     @game.join   
       x: hero.sprite.x
       y: hero.sprite.y
+      enemies: enemies
+
 
   update = ->
     if app.isLoaded
@@ -132,19 +138,19 @@ require [
     arrow.kill()
 
 
-  createEnemies = (num) ->
-    for enemy in enemies
-      enemy.sprite.kill()
-    enemies = []
-    for i in [0...num]
-      enemy = new Enemy(i, game, Phaser, {
-        rank: 1
-        health: 10
-        dmg: 1
-      })
-      enemy.preload()
-      enemy.create()
-      enemies.push enemy
+  # createEnemies = (num) ->
+  #   for enemy in enemies
+  #     enemy.sprite.kill()
+  #   enemies = []
+  #   for i in [0...num]
+  #     enemy = new Enemy(i, game, Phaser, {
+  #       rank: 1
+  #       health: 10
+  #       dmg: 1
+  #     })
+  #     enemy.preload()
+  #     enemy.create()
+  #     enemies.push enemy
 
   # MAKE INITIAL AJAX CALL FOR PLAYER INFO
   console.log "Making request for #{user}"
@@ -153,13 +159,13 @@ require [
   }).done (playerInfo) ->
     console.log(playerInfo, 'playerInfo')
     mapId = playerInfo.mapId
+
     initPos.x = playerInfo.x
     initPos.y = playerInfo.y
-    # actions = socket rootUrl, events
+    
 
     png = playerInfo.png || 'roshan'
     $('#map-id').attr('href', '/edit/' + mapId);
-
     url = "#{rootUrl}/screen/#{mapId}"
     console.log(url)
     $.ajax({

@@ -66,12 +66,14 @@ define(['events','player','phaser'], (events, Player, Phaser) ->
 
       x = data.x
       y = data.y
+      enemies = data.enemies
 
       socket.emit 'join',
         user: game.user
         mapId: game.mapId
         x: x
         y: y
+        enemies: enemies
 
       _joinListener game.user
 
