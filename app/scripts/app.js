@@ -62,6 +62,16 @@ angular.module('komApp', [
 
     // Redirect to login if route requires auth and you're not logged in
     $rootScope.$on('$stateChangeStart', function (event, next) {
+      // if($location.path() === '/play') {
+      //   if(window.game) {
+      //     window.game.paused = false;
+      //   }
+      // } else {
+      //   if(window.game) {
+      //     window.game.paused = true;
+      //   }
+      // }
+
       if (next.authenticate && !Auth.isLoggedIn()) {
         $location.path('/login');
       }

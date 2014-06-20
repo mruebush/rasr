@@ -23,6 +23,7 @@ define(['jquery'], ($) ->
         $.ajax({
           url: url
           success: (data) =>
+            $('#map-id').attr('href', '/edit/' + @mapId);
             that._loadAssets.call(that, data, callback)
         })
       else
