@@ -14,11 +14,15 @@ define(['events','player','phaser','enemy'], (events, Player, Phaser, Enemy) ->
       game.enemyData = game.mapData.enemies || []
 
       enemies = []
+      enemyPositions = {}
 
       for enemyId of game.enemyData
           enemies.push 
             id: enemyId
             count: game.enemyData[enemyId].count
+          enemyPositions[enemyId] = game.enemyData[enemyId].positions
+
+      game.enemyPositions = enemyPositions
 
       game.join
         mapId: game.mapId
@@ -74,9 +78,16 @@ define(['events','player','phaser','enemy'], (events, Player, Phaser, Enemy) ->
       data.enemies = data.enemies || []
       game.enemies = []
 
+      console.log data
+
       for creature,i in data.enemies
+        # console.log creature
         for num in [0...creature.count]
           console.log "Creating new enemy"
+          # console.log creature
+          x = game.enemyPositions[creature.data._id][i][0]
+          y = game.enemyPositions[creature.data._id][i][1]
+          console.log "#{x},#{y}"
           enemy = new Enemy i, game, Phaser,
             rank: 1
             health: creature.data.health

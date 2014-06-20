@@ -6,8 +6,12 @@ define( ->
       @direction = null
       @speed = @meta.speed
       @margin = 50
-      @x = Math.min(Math.max(@game.world.randomX, @margin), @game.width - @margin)
-      @y = Math.min(Math.max(@game.world.randomY, @margin), @game.height - @margin)
+
+      @x = @meta.x
+      @y = @meta.y
+
+      # @x = Math.min(Math.max(@game.world.randomX, @margin), @game.width - @margin)
+      # @y = Math.min(Math.max(@game.world.randomY, @margin), @game.height - @margin)
       @health = @meta.health
       @alive = true
       @png = @meta.png

@@ -101,11 +101,16 @@ require [
 
 
     enemies = []
+    enemyPositions = {}
 
     for enemyId of initialMap.enemies
       enemies.push 
         id: enemyId
         count: initialMap.enemies[enemyId].count
+      enemyPositions[enemyId] = initialMap.enemies[enemyId].positions
+
+    game.enemyPositions = enemyPositions
+
 
     @game.join   
       x: hero.sprite.x
@@ -155,6 +160,7 @@ require [
       url: url
     }).done (mapData) ->
       initialMap = mapData
+      console.log mapData
       # debugger
       game = new Phaser.Game(800, 600, Phaser.AUTO, "game-container",
         preload: preload
