@@ -5,6 +5,16 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
 
     mapId = game.mapId
 
+    game.on 'derender enemy', (data) ->
+      console.log "time to derender", data
+
+      console.log game.enemies
+      for creature in game.enemies
+        if creature.serverId is data.enemy
+          creature.alive = false
+          console.log creature
+          do creature.sprite.kill
+
     game.on 'move enemies', (data) ->
       for enemy in game.enemies
         enemy.setDirection data.num
@@ -81,7 +91,6 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
           console.log "Creating new enemy, #{num}"
           x = +game.enemyPositions[creature.data._id][i][0]
           y = +game.enemyPositions[creature.data._id][i][1]
-          console.log(x, y, creature.data)
           enemy = new Enemy i, game, Phaser,
             rank: 1
             health: creature.data.health
@@ -93,6 +102,18 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
             id: num
           do enemy.create
           game.enemies.push enemy
+
+    game.killEnemy = (enemy) ->
+      console.log "enemy dies", enemy
+      socket.emit 'enemyDies', 
+        enemy: enemy.serverId
+        mapId: game.mapId
+        # user: game.user
+
+    _derenderEnemyListener = () ->
+      socket.on 'derenderEnemy', (data) ->
+        console.log 'time to derender', data.enemy
+        game.trigger 'derender enemy', data
 
     game.shoot = (user, mapId, x, y, angle, num) ->
       socket.emit 'shoot',
@@ -187,6 +208,7 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
     _moveListener game.user
     _shootListener game.user
     do _enemyListener
+    do _derenderEnemyListener
 
     # actions = events(actions)
     # window.actions = actions
