@@ -16,6 +16,7 @@ define(["views/tileset_view", "jquery.mousewheel", "jquery.jscrollpane"], functi
       var tileset = data.tilesets[key];
       Editor.Tilesets.add({
         image: "/assets/tilemaps/tiles/" + tileset.image,
+        name: tileset.name,
         tilewidth: tileset.tilewidth,
         tileheight: tileset.tileheight,
         margin: tileset.margin,
@@ -23,7 +24,6 @@ define(["views/tileset_view", "jquery.mousewheel", "jquery.jscrollpane"], functi
       });
 
     }
-
 
 	};
 

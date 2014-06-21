@@ -28,12 +28,12 @@ angular.module('komApp', [
         url: '/play',
         templateUrl: 'partials/game',
         controller: 'GameCtrl',
-        authenticate: true
+        authenticate: false
       })
       .state('edit', {
         url: '/edit/:mapId',
         templateUrl: 'partials/edit',
-        authenticate: true
+        authenticate: false
       })
       .state('settings', {
         url: '/settings',
