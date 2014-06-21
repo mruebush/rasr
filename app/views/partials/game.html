@@ -10,29 +10,22 @@
     
   </div>
 
-  <!-- <script data-main="/scripts/game/main" src="bower_components/requirejs/require.js"></script> -->
+  <script data-main="/scripts/game/main" src="bower_components/requirejs/require.js"></script>
 
   <div class="chatbox">
     <div class="messages">
-      <div class="message" ng-repeat="chat in chats">{{ chat.user }}: {{ chat.message}}</div>
     </div>
     <div class="footer">
       <div class="form-group">
-        <form ng-submit="sendChat()">
+        <form id="sendMessage">
           <div class="input-group">
             <input type="text" class="form-control chatToSend" ng-model="chatToSend" placeholder"Chat with your fella' playa's">
           <span class="input-group-btn">
-            <button class="btn btn-primary sendMessage" type="button">send</button>
+            <button class="btn btn-primary" type="submit">send</button>
           </span>
           </div>
         </form>
-    </div>
-      <!-- <form ng-submit="sendChat()">
-        <div class="col-sm-10">
-          <input type="text" class="chatToSend form-control col-sm-10" ng-model="chatToSend" placeholder="Chat with your fella' playa's">
-        </div>
-        <button type="submit" class="btn btn-primary col-sm-2">Send</button>
-      </form> -->
+      </div>
     </div>
   </div>
 
