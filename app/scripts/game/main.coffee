@@ -78,14 +78,15 @@ require [
     game.map = map
     socket rootUrl, game, players
 
+    game.load.spritesheet "enemy", "images/leviathan.png", 96, 96
+    
+    # tell hero that he can move over non-blocked borders
+    console.log initialMap
     hero.preload()
-
     map.preload(null, initialMap)
 
     app.trigger 'create'
     app.isLoaded = true
-    # createEnemies(4)
-
     window.game = game
     game.hero = hero
 
@@ -98,7 +99,6 @@ require [
       hero.arrows.destroy()
       hero.createArrows()
       app.isLoaded = true
-
 
     enemies = []
     enemyPositions = {}
@@ -138,7 +138,6 @@ require [
 
   arrowEnemy = (enemySprite, arrow) ->
     # kill enemy
-    # console.log('kill enemy', @)
     @damage()
     arrow.kill()
 
@@ -152,7 +151,6 @@ require [
 
     initPos.x = playerInfo.x
     initPos.y = playerInfo.y
-    
 
     png = playerInfo.png || 'roshan'
     $('#map-id').attr('href', '/edit/' + mapId);
@@ -162,8 +160,9 @@ require [
       url: url
     }).done (mapData) ->
       initialMap = mapData
-      console.log mapData
-      # debugger
+    
+      $('.creatables')
+
       game = new Phaser.Game(800, 600, Phaser.AUTO, "game-container",
         preload: preload
         create: create
