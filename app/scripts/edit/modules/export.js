@@ -33,11 +33,12 @@ define(['underscore'], function(_) {
 		    tileset = Editor.activeTileset,
 		    anchor = document.createElement("a"),
 
-		    w = Editor.$("#canvas").width() / tileset.tilewidth,
-		    h = Editor.$("#canvas").height() / tileset.tileheight,
+		    w = 20,
+		    h = 12,
 		    tilesYCount = Math.round(tileset.height / tileset.tileheight),
 		    tilesXCount = Math.round(tileset.width / tileset.tilewidth),
 		    output, layer, coords, y, x, query, elem, data;
+		    debugger;
 
 		anchor.download = "map." + type.toLowerCase();
 
@@ -47,7 +48,6 @@ define(['underscore'], function(_) {
 			output.layers = [];
 
 			Editor.$(".layer").each(function() {
-
 				layer = {
 					name: Editor.$(this).attr("data-name"),
 					tileset: Editor.$(this).attr("data-tileset"),
@@ -61,6 +61,7 @@ define(['underscore'], function(_) {
 					opacity: 1
 
 				};
+				debugger;
 
 				for (y = 0; y < h; y++) {
 					for (x = 0; x < w; x++) {
@@ -86,10 +87,12 @@ define(['underscore'], function(_) {
 
 			for (tileset in Editor.Tilesets.collection) {
 				tileset = Editor.Tilesets.collection[tileset];
+				var image = tileset.image.split("/");
+				tileset.image = image[image.length -1];
 
 				output.tilesets.push({
 					name: tileset.name,
-					image: include_base64 ? tileset.base64 : tileset.name,
+					image: tileset.image,
 					imagewidth: tileset.width,
 					imageheight: tileset.height,
 					tilewidth: tileset.tilewidth,
@@ -120,13 +123,12 @@ define(['underscore'], function(_) {
 			dataType: 'json',
 			type: 'PUT',
 			success: function() {
-				location.href = location.origin + '/play';
+				// location.href = location.origin + '/play';
 			},
 			error: function(err) {
-				location.href = location.origin + '/play';
+				// location.href = location.origin + '/play';
 			}
 		})
-		// anchor.click();
 	};
 
 	return Export;

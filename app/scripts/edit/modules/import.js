@@ -33,6 +33,10 @@ define(function() {
 		}
 	};
 
+	var getDefaultTileset = function(data) {
+		return data.tilesets[0].name;
+	};
+
 	/* ===================== */
 	/* ====== PROCESS ====== */
 	/* ===================== */
@@ -80,13 +84,13 @@ define(function() {
 
 		data.tilesets.forEach(function(tileset) {
 
-			var id = tileset.image.replace(/[^a-zA-Z]/g, '_');
+			var id = tileset.name.replace(/[^a-zA-Z]/g, '_');
 			var hasSrc = tileset.image.indexOf("data:image") === 0;
 
 			if (!hasSrc && !Editor.$("#tileset_" + id).length) {
 
 				alert(
-					"Error: the source for the tileset \"" + tileset.name + "\" " + 
+					"Error: the source for the tileset \"" + tileset.image + "\" " + 
 					"is not currently present and is not included in your map file either. " +
 					"Importing will be aborted."
 				);
@@ -102,18 +106,20 @@ define(function() {
 		});
 
 		if (error) { return; }
-		Editor.Tilesets.set(data.tilesets[0].image);
+		Editor.Tilesets.set(data.tilesets[0].name);
 
 		data.layers.forEach(function(layer) {
 
 			Editor.Layers.add(layer.name);
 			if (!layer.tileset) { 
-				layer.tileset = 'tmw_desert_spacing.png'; 
+				layer.tileset = getDefaultTileset(data);
+				// data.layers
 			}
 
 			var tilesetId;
 
 			data.tilesets.forEach(function(v, i) {
+				// debugger;
 				if (v.name == layer.tileset) {
 					tilesetId = i;
 					return false;
@@ -124,8 +130,8 @@ define(function() {
 
 			if(!data.canvas) {
 				data.canvas = {
-					"width": 800,
-					"height": 600
+					"width": 1280,
+					"height": 768
 				};
 			}
 
@@ -144,7 +150,11 @@ define(function() {
 			layer.data.forEach(function(coords, i) {
 
 				if (coords == -1) { return true; }
-				coords = (coords % tilesXCount - 1) + "." + Math.floor(coords / tilesXCount)  
+				var temp = coords;
+				coords = (Math.max(0, coords % tilesXCount - 1)) + "." + Math.floor(coords / tilesXCount)  
+				if(coords === '-1.0') {
+					debugger;
+				}
 
 				coords = coords.toString();
 				if (coords.length == 1) { coords += ".0"; }
@@ -167,7 +177,7 @@ define(function() {
 			});
 		});
 
-		Editor.$("#dialog").dialog("close");
+		// Editor.$("#dialog").dialog("close");
 
 		delete Import.tmp;
 	};
