@@ -6,7 +6,6 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
     mapId = game.mapId
 
     game.on 'move enemies', (data) ->
-
       for enemy in game.enemies
         enemy.setDirection data.num
         setTimeout ->
@@ -76,23 +75,20 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
       data.enemies = data.enemies || []
       game.enemies = []
 
-
       for creature,i in data.enemies
         for num in [0...creature.count]
           console.log "Creating new enemy, #{num}"
-          # console.log creature
-          x = game.enemyPositions[creature.data._id][i][0]
-          y = game.enemyPositions[creature.data._id][i][1]
-          console.log "#{x},#{y}"
-          console.log creature.data.health
-          console.log creature.data.png
-          console.log creature.data.speed
+          x = +game.enemyPositions[creature.data._id][i][0]
+          y = +game.enemyPositions[creature.data._id][i][1]
+          console.log(x, y, creature.data)
           enemy = new Enemy i, game, Phaser,
             rank: 1
             health: creature.data.health
             dmg: 1
             png: creature.data.png
             speed: creature.data.speed
+            x: x
+            y: y
             id: num
           do enemy.create
           game.enemies.push enemy

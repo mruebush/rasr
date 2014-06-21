@@ -111,6 +111,13 @@ body {
   border: 2px solid #e5e5e5;
   border-radius: 5px;
   padding: 8px;
+  margin-top: 10px;
+  background-color: #F8F7FF;
+}
+
+.chatbox > .header {
+  margin-bottom: 8px;
+  font-size: 1.5em;
 }
 
 .messages {
@@ -129,10 +136,10 @@ body {
 
 /*andrews border stuff*/
 canvas {
-
+  text-align: center;
 }
 
-.border {
+/*.border {
   position: fixed;
 }
 
@@ -165,7 +172,37 @@ canvas {
   top: 0;
   left: 0;
 }
-
+*/
 .no-bordering-screen {
   background-color: black;
+}
+
+.hidden {
+  display: none;
+}
+
+.up, .down {
+  text-align: center;
+  margin: 8px auto;
+}
+
+.left, .right {
+  text-align: center;
+  margin: 50px 0;
+}
+
+.left {
+  transform:rotate(-90deg);
+  -ms-transform:rotate(-90deg); /* IE 9 */
+  -webkit-transform:rotate(-90deg); /* Opera, Chrome, and Safari */
+}
+
+.right {
+  transform:rotate(90deg);
+  -ms-transform:rotate(90deg); /* IE 9 */
+  -webkit-transform:rotate(90deg); /* Opera, Chrome, and Safari */
+}
+
+.game-canvas {
+
 }

@@ -17,13 +17,35 @@ define([], ->
         @game.changingScreen = true;
         @reload(direction)
       )
+      @$up = @$(".up")
+      @$up.click =>
+        @_makeMap('up', @mapId)
+      @$down = @$(".down")
+      @$down.click =>
+        @_makeMap('down', @mapId)
+      @$right = @$(".right")
+      @$right.click =>
+        @_makeMap('right', @mapId)
+      @$left = @$(".left")
+      @$left.click =>
+        @_makeMap('left', @mapId)
 
     preload: (direction, data, callback) ->
       that = @
-      @_loadAssets.call(@, data, callback)
+      url = "#{@game.rootUrl}/move/#{direction}/#{@mapId}"
+      if !data
+        @$.ajax({
+          url: url
+          success: (data) =>
+            @$('#map-id').attr('href', '/edit/' + @mapId);
+            that._loadAssets.call(that, data, callback)
+            @game.mapData = data
+            @game.trigger 'enterMap'
+        })
+      else
+        @_loadAssets.call(@, data, callback)
 
     _loadAssets: (data, loader = @game.load) ->
-
       @mapId = data._id
       @game.mapId = @mapId
       @mapData = data
@@ -41,8 +63,9 @@ define([], ->
 
       for border, value of @borders
         if !!value != !!@oldBorders[border]
-          @$(".#{border}").toggleClass('no-bordering-screen')
-          @game.physics.arcade.checkCollision[border.split('Screen')[0]] = !value
+          borderDirection = border.split('Screen')[0]
+          @$(".#{borderDirection}").toggleClass('hidden')
+          @game.physics.arcade.checkCollision[borderDirection] = !value
 
       loader.start();
       loader.onLoadComplete.add =>
