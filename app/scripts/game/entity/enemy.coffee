@@ -28,8 +28,9 @@ define( ->
     damage: ->
       @health--
       if @health <= 0
-        @alive = false
-        @sprite.kill()
+        @game.killEnemy @ 
+        # @alive = false
+        # @sprite.kill()
 
       return true
 
