@@ -33,6 +33,7 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
         x: game.hero.sprite.x
         y: game.hero.sprite.y
         enemies: enemies
+        positions: enemyPositions
 
     game.on 'shoot', (data) ->
       game.hero.renderMissiles data.x, data.y, data.angle, data.num

@@ -39,8 +39,9 @@ define([], ->
           success: (data) =>
             @$('#map-id').attr('href', '/edit/' + @mapId);
             that._loadAssets.call(that, data, callback)
-            @game.mapData = data
-            @game.trigger 'enterMap'
+            console.log "Trigerring enterMap"
+            # @game.mapData = data
+            # @game.trigger 'enterMap'
         })
       else
         @_loadAssets.call(@, data, callback)
@@ -89,9 +90,10 @@ define([], ->
       $.ajax({
         url: url
         success: (data) =>
-          that._createCtrls(data)
-                
+          that._createCtrls(data)      
           that._loadAssets.call(that, data, loader)
+          that.game.mapData = data
+          that.game.trigger "enterMap"
       })
 
     reload: (direction) ->
