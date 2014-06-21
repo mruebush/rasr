@@ -50,6 +50,7 @@ require [
   console.log(user);
   # user = prompt 'Fullen Sie das user bitte !'
   initPos = {}
+  explosion = null
   # actions = {}
 
   preload = ->
@@ -73,14 +74,14 @@ require [
       x: initPos.x
       y: initPos.y
       png: png
-
-      }, $))
+    }, $))
     # window.hero = hero
     map = events(new Map(game, Phaser, mapId, $))
     game.user = user
     game.map = map
     socket rootUrl, game, players, $, Phaser
     game.load.spritesheet "enemy", "images/leviathan.png", 96, 96
+    game.load.spritesheet('kaboom', 'images/explosion.png', 64, 64, 23);
     
     console.log initialMap
     hero.preload()
@@ -96,10 +97,12 @@ require [
   create = ->
     map.create()
     hero.create()
-    @game.hero = hero;
+    @game.hero = hero
+    createExplosions()
     map.on 'finishLoad', =>
       hero.arrows.destroy()
       hero.createArrows()
+      createExplosions()
       app.isLoaded = true
       @game.layerRendering = @game.add.group()
       @game.layerRendering.add(map.layers[0])
@@ -131,16 +134,13 @@ require [
     game.enemyPositions = enemyPositions
     # console.log enemyPositions
 
-
     @game.camera.follow(hero.sprite);
 
-    @game.join   
+    @game.join
       x: hero.sprite.x
       y: hero.sprite.y
       enemies: enemies
       positions: enemyPositions
-      
-
 
   update = ->
     if app.isLoaded
@@ -149,28 +149,32 @@ require [
       for enemy in game.enemies
         if enemy.alive
           game.physics.arcade.collide(hero.sprite, enemy.sprite, hurtHero, null, hero)
-          game.physics.arcade.collide(hero.arrows, enemy.sprite, arrowEnemy, null, enemy)
+          game.physics.arcade.collide(hero.arrows, hero.sprite, arrowHurt, null, hero)
+          game.physics.arcade.collide(hero.arrows, enemy.sprite, arrowHurt, null, enemy)
+
           enemy.update()
       for player of players
         if player.update then do player.update
-      # map.on 'finishLoad', ->
-      #   if @game.changingScreen
-      #     @game.layerRendering = @game.add.group()
-      #     @game.layerRendering.add(map.layers[0])
-      #     @game.layerRendering.add(map.layers[1])
-      #     @game.layerRendering.add(map.layers[2])
-      #     @game.layerRendering.add(hero.sprite)
-      #     @game.layerRendering.add(hero.arrows)
-      #     @game.layerRendering.add(map.layers[3])
-      #     @game.changingScreen = false
 
   hurtHero = (enemySprite, heroSprite) ->
     @damage()
 
-  arrowEnemy = (enemySprite, arrow) ->
-    # kill enemy
+  arrowHurt = (sprite, arrow) ->
+    explosion.call(@)
     @damage()
     arrow.kill()
+
+  createExplosions = ->
+    explosions = game.add.group()
+    explosions.createMultiple(10, 'kaboom', 0, false)
+    explosions.setAll('anchor.x', 0.5)
+    explosions.setAll('anchor.y', 0.5)
+
+  explosion = ->
+    explosionAnimation = expl.getFirstExists(false)
+    explosionAnimation.reset(@x, @y)
+    explosionAnimation.play('kaboom', 30, false, true)
+
 
   # MAKE INITIAL AJAX CALL FOR PLAYER INFO
   console.log "Making request for #{user}"
