@@ -7,14 +7,14 @@
     <a id="map-id" href="/edit/">Edit map here</a>
     <div>
       <button class='btn btn-primary btn-block up createables hidden'>Create new screen above</button>
-      <div class="row">
-        <div class="col col-sm-1">
+      <div class="labels-game">
+        <div class="left-label">
           <button class='btn btn-primary left createables hidden'>Create new screen to the left</button>
         </div>
-        <div class="col col-sm-10" id="game-canvas">
+        <div id="game-canvas">
           <script data-main="/scripts/game/main" src="bower_components/requirejs/require.js"></script>
         </div>
-        <div class="col col-sm-1">
+        <div class="right-label">
           <button class='btn btn-primary right createables hidden'>Create new screen to the right</button>
         </div>
       </div>
