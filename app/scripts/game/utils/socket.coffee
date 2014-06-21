@@ -1,9 +1,39 @@
-define(['events','player','phaser','enemy'], (events, Player, Phaser, Enemy) ->
-  return (rootUrl, game, players) ->
+define(['events','player','enemy','messages'], (events, Player, Enemy, messages) ->
+  return (rootUrl, game, players, $, Phaser) ->
     socket = io.connect()
-    
-    
+    window.socket = socket
+
     mapId = game.mapId
+
+    game.on 'move enemies', (data) ->
+
+      for enemy in game.enemies
+        enemy.setDirection data.num
+        setTimeout ->
+          do enemy.clearDirection
+        ,500
+
+
+    game.on 'enterMap', () ->
+
+      game.enemyData = game.mapData.enemies || []
+
+      enemies = []
+      enemyPositions = {}
+
+      for enemyId of game.enemyData
+          enemies.push 
+            id: enemyId
+            count: game.enemyData[enemyId].count
+          enemyPositions[enemyId] = game.enemyData[enemyId].positions
+
+      game.enemyPositions = enemyPositions
+
+      game.join
+        mapId: game.mapId
+        x: game.hero.sprite.x
+        y: game.hero.sprite.y
+        enemies: enemies
 
     game.on 'shoot', (data) ->
       game.hero.renderMissiles data.x, data.y, data.angle, data.num
@@ -15,9 +45,9 @@ define(['events','player','phaser','enemy'], (events, Player, Phaser, Enemy) ->
       players[user].sprite.kill()
       delete players[user]
 
+
     game.on 'changeMap', (direction) ->
       game.leave game.mapId, game.user
-      game.map.reload(direction)
 
     game.on 'player joined', (data) ->
       player = new Player(game, Phaser,
@@ -40,22 +70,25 @@ define(['events','player','phaser','enemy'], (events, Player, Phaser, Enemy) ->
         do player.create
         players[player.user] = player
 
+      for enemy in game.enemies
+        do enemy.derender
+
+      data.enemies = data.enemies || []
       game.enemies = []
-      # game.enemies = data.enemies
+
 
       for creature,i in data.enemies
-        enemy = new Enemy i, game, Phaser,
-          rank: 1
-          health: creature.health
-          dmg: 1
-          png: creature.png
-          speed: creature.speed  
-        
-        # do enemy.preload
-        do enemy.create
-        game.enemies.push enemy
-
-
+        for num in [0...creature.count]
+          x = game.enemyPositions[creature.data._id][i][0]
+          y = game.enemyPositions[creature.data._id][i][1]
+          enemy = new Enemy i, game, Phaser,
+            rank: 1
+            health: creature.data.health
+            dmg: 1
+            png: creature.data.png
+            speed: creature.data.speed
+          do enemy.create
+          game.enemies.push enemy
 
     game.shoot = (user, mapId, x, y, angle, num) ->
       socket.emit 'shoot',
@@ -78,6 +111,8 @@ define(['events','player','phaser','enemy'], (events, Player, Phaser, Enemy) ->
       x = data.x
       y = data.y
       enemies = data.enemies
+      positions = data.positions
+
 
       socket.emit 'join',
         user: game.user
@@ -85,6 +120,7 @@ define(['events','player','phaser','enemy'], (events, Player, Phaser, Enemy) ->
         x: x
         y: y
         enemies: enemies
+        positions: positions
 
       _joinListener game.user
 
@@ -99,7 +135,7 @@ define(['events','player','phaser','enemy'], (events, Player, Phaser, Enemy) ->
       socket.emit 'message',
         user: game.user
         message: message
-        room: game.mapId
+        # room: game.mapId
 
     game.move = (data) ->
       socket.emit 'move',
@@ -133,11 +169,20 @@ define(['events','player','phaser','enemy'], (events, Player, Phaser, Enemy) ->
       socket.on 'move', (data) ->
         if data.user != game.user
           game.trigger('move', data)
-  
+
+
+
+    # Initialize message module
+    messages(game, socket, $)
+
+    _enemyListener = () ->
+      socket.on 'move enemies', (data) ->
+        game.trigger 'move enemies', data
 
     _leaveListener mapId, game.user
     _moveListener game.user
     _shootListener game.user
+    do _enemyListener
 
     # actions = events(actions)
     # window.actions = actions

@@ -68,18 +68,18 @@ define( ->
       @sprite.body.velocity.y = 0
 
       if @sprite.x < 0
-        @sprite.x = @game.width - @startOnScreenPos
+        @sprite.x = (@game.realWidth) - @startOnScreenPos
         @game.trigger('changeMap', 'left')
 
-      if @sprite.x > @game.width
+      if @sprite.x > @game.realWidth
         @sprite.x = @startOnScreenPos
         @game.trigger('changeMap', 'right')
 
       if @sprite.y < 0
-        @sprite.y = @game.height - @startOnScreenPos
+        @sprite.y = @game.realHeight - @startOnScreenPos
         @game.trigger('changeMap', 'up')
 
-      if @sprite.y > @game.height
+      if @sprite.y > @game.realHeight
         @sprite.y = @startOnScreenPos
         @game.trigger('changeMap', 'down')
 
@@ -124,7 +124,6 @@ define( ->
       return
 
     renderMissiles: (x, y, angle, num) ->
-      
       for i in [0...num]
         arrow = @arrows.children[arrowIndex]
         arrow.reset(x, y)

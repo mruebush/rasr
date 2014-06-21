@@ -1,7 +1,6 @@
-define(['jquery'], ($) ->
+define([], ->
   class Map
-    constructor: (@game, @Phaser, @mapId) ->
-      @layer = null
+    constructor: (@game, @Phaser, @mapId, @$) ->
       @layers = []
       @oldBorders = null
       @tiles = []
@@ -15,6 +14,7 @@ define(['jquery'], ($) ->
       @game.physics.arcade.checkCollision.down = false
       @game.physics.arcade.checkCollision.left = false
       @game.on('changeMap', (direction) =>
+        @game.changingScreen = true;
         @reload(direction)
       )
 
@@ -23,10 +23,9 @@ define(['jquery'], ($) ->
       @_loadAssets.call(@, data, callback)
 
     _loadAssets: (data, loader = @game.load) ->
+
       @mapId = data._id
-
       @game.mapId = @mapId
-
       @mapData = data
       loader.tilemap('map', null, data, @Phaser.Tilemap.TILED_JSON)
 
@@ -42,7 +41,7 @@ define(['jquery'], ($) ->
 
       for border, value of @borders
         if !!value != !!@oldBorders[border]
-          $(".#{border}").toggleClass('no-bordering-screen')
+          @$(".#{border}").toggleClass('no-bordering-screen')
           @game.physics.arcade.checkCollision[border.split('Screen')[0]] = !value
 
       loader.start();
@@ -51,7 +50,6 @@ define(['jquery'], ($) ->
 
     create: ->
       map = @game.add.tilemap('map')
-
       for tileset in @mapData.tilesets
           map.addTilesetImage(tileset.name)
 
@@ -106,9 +104,8 @@ define(['jquery'], ($) ->
           @_makeMap('left', data._id)
         $('.creatables').append($left)
  
-
     _makeMap: (direction, mapId) ->
-      $.ajax({
+      @$.ajax({
         url: "/make/#{direction}/#{mapId}"
         type: "GET",
         success: ->
