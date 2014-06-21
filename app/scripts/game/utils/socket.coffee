@@ -102,6 +102,7 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
             dmg: 1
             png: creature.data.png
             speed: creature.data.speed
+            id: i
           do enemy.create
           game.enemies.push enemy
 
