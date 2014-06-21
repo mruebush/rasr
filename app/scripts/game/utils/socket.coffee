@@ -1,5 +1,5 @@
-define(['events','player','phaser','enemy','messages'], (events, Player, Phaser, Enemy, messages) ->
-  return (rootUrl, game, players, $) ->
+define(['events','player','enemy','messages'], (events, Player, Enemy, messages) ->
+  return (rootUrl, game, players, $, Phaser) ->
     socket = io.connect()
 
     mapId = game.mapId

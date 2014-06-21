@@ -73,12 +73,12 @@ require [
       x: initPos.x
       y: initPos.y
       png: png
-      }))
+      }, $))
     # window.hero = hero
     map = events(new Map(game, Phaser, mapId, $))
     game.user = user
     game.map = map
-    socket rootUrl, game, players, $
+    socket rootUrl, game, players, $, Phaser
     game.load.spritesheet "enemy", "images/leviathan.png", 96, 96
     
     # tell hero that he can move over non-blocked borders
