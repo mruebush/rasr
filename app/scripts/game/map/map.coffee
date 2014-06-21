@@ -31,7 +31,7 @@ define([], ->
               @$up = @$("<button class='btn btn-primary'>Up</button>")
               @$up.click =>
                 @_makeMap('up', data._id)
-              @$('.creatables').append(up)
+              @$('.creatables').append(@$up)
             if(!data.rightScreen)
               @$right = @$("<button class='btn btn-primary'>right</button>")
               @$right.click =>
