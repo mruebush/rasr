@@ -24,6 +24,7 @@ require.config({
     'jquery.jscrollpane': 'plugins/jquery.jscrollpane',
     'jquery.draggable': 'plugins/jquery.draggable',
     'jquery-ui': 'libs/jquery-ui',
+    'events': '../game/utils/events',
 
     'editor': 'modules/editor',
     'underscore': 'libs/underscore',
@@ -36,7 +37,45 @@ require(['jquery-ui', 'editor'], function($, Editor) {
   Editor.$ = $;
   $(document).ready(function() {
     // var mapId = location.pathname.split("/")[2];
-    Editor.initialize();
-    $("#load").click();
+    // $("#load").click();
+    var mapId = location.pathname.split("/")[2];
+      $.ajax({
+        url: '/screen/' + mapId,
+        success: function(data) {
+          Editor.initialize(data);
+          load(data);
+
+          setTimeout(function() {
+            Editor.Import.process(JSON.stringify(data), 'json'); 
+          }, 2000);
+
+        }
+      });
   });
+
+  var load = function(data) {
+    var cached = {};
+    if(data.upScreen) {
+      cached.upScreen = data.upScreen;
+    }
+    if(data.rightScreen) {
+      cached.rightScreen = data.rightScreen;
+    }
+    if(data.downScreen) {
+      cached.downScreen = data.downScreen;
+    }
+    if(data.leftScreen) {
+      cached.leftScreen = data.leftScreen;
+    }
+    cached._id = data._id;
+    cached.orientation = data.orientation;
+    cached.tileheight = data.tileheight;
+    cached.tilewidth = data.tilewidth;
+    cached.version = data.version;
+    cached.width = data.width;
+    cached.height = data.height;
+
+    Editor.cached = cached;
+  };
+
 });

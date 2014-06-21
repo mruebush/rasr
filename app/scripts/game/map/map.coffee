@@ -4,6 +4,7 @@ define(['jquery'], ($) ->
       @layer = null
       @layers = []
       @oldBorders = null
+      @tiles = []
       @borders = 
         upScreen: true
         rightScreen: true
@@ -19,50 +20,18 @@ define(['jquery'], ($) ->
 
     preload: (direction, data, callback) ->
       that = @
-      url = "#{@game.rootUrl}/move/#{direction}/#{@mapId}"
-      if !data
-        $.ajax({
-          url: url
-          success: (data) =>
-            $('#map-id').attr('href', '/edit/' + @mapId);
-            $('.creatables > button').remove();
+      @_loadAssets.call(@, data, callback)
 
-            if(!data.upScreen)
-              $up = $("<button class='btn btn-primary'>Up</button>")
-              $up.click =>
-                @_makeMap('up', data._id)
-              $('.creatables').append(up)
-            if(!data.rightScreen)
-              $right = $("<button class='btn btn-primary'>right</button>")
-              $right.click =>
-                @_makeMap('right', data._id)
-              $('.creatables').append($right)
-            if(!data.downScreen)
-              $down = $("<button class='btn btn-primary'>down</button>")
-              $down.click =>
-                @_makeMap('down', data._id)
-              $('.creatables').append($down)
-            if(!data.leftScreen)
-              $left = $("<button class='btn btn-primary'>left</button>")
-              $left.click =>
-                @_makeMap('left', data._id)
-              $('.creatables').append($left)
-       
-            that._loadAssets.call(that, data, callback)
-        })
-      else
-        @_loadAssets.call(@, data, callback)
-
-    _loadAssets: (data, callback) ->
+    _loadAssets: (data, loader = @game.load) ->
       @mapId = data._id
 
       @game.mapId = @mapId
 
       @mapData = data
-      @game.load.tilemap('map', null, data, @Phaser.Tilemap.TILED_JSON)
-      tilesetImage = @_getImageNameOfTileset(data)
-      @game.load.image('tiles', "assets/tilemaps/tiles/" + tilesetImage)
-      callback && callback.apply(@)
+      loader.tilemap('map', null, data, @Phaser.Tilemap.TILED_JSON)
+
+      for tileset in data.tilesets
+        @tiles[tileset.name] = loader.image(tileset.name, "assets/tilemaps/tiles/" + tileset.image, 32, 32)
 
       @oldBorders = @borders
       @borders = 
@@ -76,47 +45,75 @@ define(['jquery'], ($) ->
           $(".#{border}").toggleClass('no-bordering-screen')
           @game.physics.arcade.checkCollision[border.split('Screen')[0]] = !value
 
+      loader.start();
+      loader.onLoadComplete.add =>
+        do @create
+
     create: ->
-      console.log map
       map = @game.add.tilemap('map')
-      tilesetName = @_getNameOfTileset(@mapData)
-      map.addTilesetImage(tilesetName, 'tiles')
-      layername = @_getLayerName(@mapData)
-      # console.log layername
-      @layer = map.createLayer(layername)
-      @layers.push(@layer)
-      console.log @layers
-      @layer.resizeWorld()
-      @layer.debug = false
-      console.log @layer
+
+      for tileset in @mapData.tilesets
+          map.addTilesetImage(tileset.name)
+
+      for layer in @mapData.layers
+        layer = map.createLayer(layer.name)
+        @layers.push(layer)
+        layer.resizeWorld()
+
       @trigger 'finishLoad'
+
+    reloadMap: (loader, direction) ->
+      that = @
+      url = "#{@game.rootUrl}/move/#{direction}/#{@mapId}"
+      $.ajax({
+        url: url
+        success: (data) =>
+          that._createCtrls(data)
+                
+          that._loadAssets.call(that, data, loader)
+      })
 
     reload: (direction) ->
       layer.destroy() for layer in @layers
       @layers = []
-      @preload(direction, null, @create)
+      loader = new @Phaser.Loader(@game)
+      @reloadMap(loader, direction)
 
     update: ->
 
-    _getImageNameOfTileset: (data) ->
-      return data.tilesets[0].image
+    _createCtrls: (data) ->
+      $('#map-id').attr('href', '/edit/' + @mapId);
+      $('.creatables > button').remove();
 
-    _getNameOfTileset: (data) ->
-      return data.tilesets[0].name
-
-    _getLayerName: (data) ->
-      return data.layers[0].name
+      if(!data.upScreen)
+        $up = $("<button class='btn btn-primary'>Up</button>")
+        $up.click =>
+          @_makeMap('up', data._id)
+        $('.creatables').append(up)
+      if(!data.rightScreen)
+        $right = $("<button class='btn btn-primary'>right</button>")
+        $right.click =>
+          @_makeMap('right', data._id)
+        $('.creatables').append($right)
+      if(!data.downScreen)
+        $down = $("<button class='btn btn-primary'>down</button>")
+        $down.click =>
+          @_makeMap('down', data._id)
+        $('.creatables').append($down)
+      if(!data.leftScreen)
+        $left = $("<button class='btn btn-primary'>left</button>")
+        $left.click =>
+          @_makeMap('left', data._id)
+        $('.creatables').append($left)
+ 
 
     _makeMap: (direction, mapId) ->
       $.ajax({
         url: "/make/#{direction}/#{mapId}"
         type: "GET",
         success: ->
-          console.log('hah!');
         error: ->
-          console.log('lol');
       });
-
 
   return Map
 )

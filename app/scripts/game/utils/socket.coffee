@@ -12,17 +12,14 @@ define(['events','player','phaser','enemy'], (events, Player, Phaser, Enemy) ->
       players[data.user].move data 
 
     game.on 'player leave', (user) ->
-      console.log "#{user} left the screen"
       players[user].sprite.kill()
       delete players[user]
 
     game.on 'changeMap', (direction) ->
-      console.log "Leave #{game.mapId}"
       game.leave game.mapId, game.user
       game.map.reload(direction)
 
     game.on 'player joined', (data) ->
-      console.log "#{data.user} joined on #{data.x},#{data.y}"
       player = new Player(game, Phaser,
         x: data.x
         y: data.y
@@ -33,9 +30,7 @@ define(['events','player','phaser','enemy'], (events, Player, Phaser, Enemy) ->
       players[player.user] = player
 
     game.on 'i joined', (data) ->
-      console.log 'render all other players'
       for other in data.others
-        console.log "rendering #{other.user}"
         player = new Player(game, Phaser,
           x: other.x
           y: other.y
@@ -45,12 +40,9 @@ define(['events','player','phaser','enemy'], (events, Player, Phaser, Enemy) ->
         do player.create
         players[player.user] = player
 
-      console.log 'render all enemies'
       game.enemies = []
       # game.enemies = data.enemies
 
-      console.log "Found enemies"
-      console.log data.enemies
       for creature,i in data.enemies
         enemy = new Enemy i, game, Phaser,
           rank: 1
@@ -66,7 +58,6 @@ define(['events','player','phaser','enemy'], (events, Player, Phaser, Enemy) ->
 
 
     game.shoot = (user, mapId, x, y, angle, num) ->
-      console.log "#{user} shoots in #{mapId}"
       socket.emit 'shoot',
         user: user
         mapId: mapId

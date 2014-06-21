@@ -45,7 +45,6 @@ require [
   rootUrl = ''
   # rootUrl = 'http://localhost:9000'
   user = window.userData.name
-  console.log(user);
   # user = prompt 'Fullen Sie das user bitte !'
   initPos = {}
   # actions = {}
@@ -80,7 +79,6 @@ require [
     game.load.spritesheet "enemy", "images/leviathan.png", 96, 96
     
     # tell hero that he can move over non-blocked borders
-    console.log initialMap
     hero.preload()
     map.preload(null, initialMap)
 
@@ -99,7 +97,6 @@ require [
       hero.createArrows()
       app.isLoaded = true
     
-    console.log "Joining #{@game.mapId} on #{hero.sprite.x},#{hero.sprite.y}"
 
     enemies = []
     for enemyId of initialMap.enemies
@@ -133,11 +130,9 @@ require [
 
 
   # MAKE INITIAL AJAX CALL FOR PLAYER INFO
-  console.log "Making request for #{user}"
   $.ajax({
     url: "#{rootUrl}/player/me"
   }).done (playerInfo) ->
-    console.log(playerInfo, 'playerInfo')
     mapId = playerInfo.mapId
 
     initPos.x = playerInfo.x
@@ -146,7 +141,6 @@ require [
     png = playerInfo.png || 'roshan'
     $('#map-id').attr('href', '/edit/' + mapId);
     url = "#{rootUrl}/screen/#{mapId}"
-    console.log(url)
     $.ajax({
       url: url
     }).done (mapData) ->
