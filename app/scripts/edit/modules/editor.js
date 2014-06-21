@@ -6,11 +6,14 @@ define([
 	"modules/canvas",
 	"modules/tilesets",
 	"modules/layers",
+	"modules/export",
 	"modules/import",
-	"modules/export"
+	"events",
 ], function() {
 
-	var Editor = {};
+	var events = require('events');
+
+	var Editor = events({});
 	var args = arguments;
 	var argNames = ["_", "Utils", "Menubar", "Tools", "Canvas", "Tilesets", "Layers", "Export", "Import"];
 
@@ -23,7 +26,7 @@ define([
 	/* ====== INITIALIZE ====== */
 	/* ======================== */
 
-	Editor.initialize = function() {
+	Editor.initialize = function(data) {
 
 		// Initialize sub modules
 		argNames.forEach(function(v, i) {
@@ -31,7 +34,7 @@ define([
 			Editor[v] = args[i];
 
 			if (typeof Editor[v].initialize == "function")
-			{ Editor[v].initialize(); }
+			{ Editor[v].initialize(data); }
 		});
 
 		// Register module events
