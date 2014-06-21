@@ -1,7 +1,6 @@
 define(['jquery'], ($) ->
   class Map
     constructor: (@game, @Phaser, @mapId) ->
-      @layer = null
       @layers = []
       @oldBorders = null
       @borders = 
@@ -14,6 +13,7 @@ define(['jquery'], ($) ->
       @game.physics.arcade.checkCollision.down = false
       @game.physics.arcade.checkCollision.left = false
       @game.on('changeMap', (direction) =>
+        @game.changingScreen = true;
         @reload(direction)
       )
 
@@ -57,9 +57,7 @@ define(['jquery'], ($) ->
 
     _loadAssets: (data, callback) ->
       @mapId = data._id
-
       @game.mapId = @mapId
-
       @mapData = data
       @game.load.tilemap('map', null, data, @Phaser.Tilemap.TILED_JSON)
       tilesetImage = @_getImageNameOfTileset(data)
@@ -82,11 +80,12 @@ define(['jquery'], ($) ->
       map = @game.add.tilemap('map')
       tilesetName = @_getNameOfTileset(@mapData)
       map.addTilesetImage(tilesetName, 'tiles')
-      layername = @_getLayerName(@mapData)
-      @layer = map.createLayer(layername)
-      @layers.push(@layer)
-      @layer.resizeWorld()
-      @layer.debug = false
+      layers = @_getLayers(@mapData)
+      for layer in layers
+        @layers.push(map.createLayer(layer.name))
+        @layers[@layers.length - 1].resizeWorld()
+
+
       @trigger 'finishLoad'
 
 
@@ -103,8 +102,8 @@ define(['jquery'], ($) ->
     _getNameOfTileset: (data) ->
       return data.tilesets[0].name
 
-    _getLayerName: (data) ->
-      return data.layers[0].name
+    _getLayers: (data) ->
+      return data.layers;
 
     _makeMap: (direction, mapId) ->
       $.ajax({
