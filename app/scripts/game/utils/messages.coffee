@@ -16,10 +16,11 @@ define([], ->
       "<div class='message'>#{message.user}: #{message.message}</div>"
 
     appendMessages = (message) ->
-      $('.messages').prepend(template(message))
-      $allMessages = $('.messages').children()
-      if ($allMessages.length > 100) 
-        $allMessages[$allMessages.length - 1].remove()
+      $messages = $('.messages')
+      $messages.append($(template(message)))
+      $messages[0].scrollTop = $messages[0].scrollHeight - 100
+      $allMessages = $messages.children()
+      $allMessages[0].remove() if $allMessages.length > 100
 
     messageListener = ->
       socket.on('message', (data) ->
