@@ -5,7 +5,6 @@ var express = require('express'),
     fs = require('fs'),
     mongoose = require('mongoose');
 
-
 /**
  * Main application file
  */
@@ -15,7 +14,7 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
 var config = require('./lib/config/config');
 
-var troll = 'mongodb://MongoLab-tc:lU1rRUfd7CNAuXw3Da5D.GssiVw9OR8HaqvXi4WP3.c-@ds048537.mongolab.com:48537/MongoLab-tc'
+// var troll = 'mongodb://MongoLab-tc:lU1rRUfd7CNAuXw3Da5D.GssiVw9OR8HaqvXi4WP3.c-@ds048537.mongolab.com:48537/MongoLab-tc'
 // mongoose.connect(troll, config.mongo.options);
 mongoose.connect(config.mongo.uri, config.mongo.options);
 // var db = require('./lib/models')(app);
@@ -41,6 +40,7 @@ var app = express();
 var server = require('http').createServer(app);
 require('./lib/config/express')(app);
 require('./lib/routes')(app);
+
 
 // Start server
 // app.listen(config.port, config.ip, function () {
