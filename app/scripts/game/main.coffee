@@ -76,6 +76,8 @@ require [
     game.user = user
     game.map = map
     socket rootUrl, game, players
+
+    game.load.spritesheet "enemy", "images/leviathan.png", 96, 96
     
     console.log initialMap
     hero.preload()
@@ -115,8 +117,17 @@ require [
     console.log "Joining #{@game.mapId} on #{hero.sprite.x},#{hero.sprite.y}"
 
     enemies = []
+    enemyPositions = {}
+
     for enemyId of initialMap.enemies
-      enemies.push enemyId
+      enemies.push 
+        id: enemyId
+        count: initialMap.enemies[enemyId].count
+      enemyPositions[enemyId] = initialMap.enemies[enemyId].positions
+
+    game.enemyPositions = enemyPositions
+    # console.log enemyPositions
+
 
     @game.camera.follow(hero.sprite);
 
@@ -124,6 +135,8 @@ require [
       x: hero.sprite.x
       y: hero.sprite.y
       enemies: enemies
+      positions: enemyPositions
+      
 
 
   update = ->
@@ -153,12 +166,8 @@ require [
 
   arrowEnemy = (enemySprite, arrow) ->
     # kill enemy
-    # console.log('kill enemy', @)
     @damage()
     arrow.kill()
-
-
-
 
   # MAKE INITIAL AJAX CALL FOR PLAYER INFO
   console.log "Making request for #{user}"
@@ -170,7 +179,6 @@ require [
 
     initPos.x = playerInfo.x
     initPos.y = playerInfo.y
-    
 
     png = playerInfo.png || 'roshan'
     $('#map-id').attr('href', '/edit/' + mapId);
@@ -180,7 +188,9 @@ require [
       url: url
     }).done (mapData) ->
       initialMap = mapData
-      # debugger
+    
+      $('.creatables')
+
       game = new Phaser.Game(800, 600, Phaser.AUTO, "game-container",
         preload: preload
         create: create

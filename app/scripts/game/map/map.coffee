@@ -25,11 +25,34 @@ define(['jquery'], ($) ->
           url: url
           success: (data) =>
             $('#map-id').attr('href', '/edit/' + @mapId);
+            $('.creatables > button').remove();
+
+            if(!data.upScreen)
+              $up = $("<button class='btn btn-primary'>Up</button>")
+              $up.click =>
+                @_makeMap('up', data._id)
+              $('.creatables').append(up)
+            if(!data.rightScreen)
+              $right = $("<button class='btn btn-primary'>right</button>")
+              $right.click =>
+                @_makeMap('right', data._id)
+              $('.creatables').append($right)
+            if(!data.downScreen)
+              $down = $("<button class='btn btn-primary'>down</button>")
+              $down.click =>
+                @_makeMap('down', data._id)
+              $('.creatables').append($down)
+            if(!data.leftScreen)
+              $left = $("<button class='btn btn-primary'>left</button>")
+              $left.click =>
+                @_makeMap('left', data._id)
+              $('.creatables').append($left)
+       
             that._loadAssets.call(that, data, callback)
         })
       else
         @_loadAssets.call(@, data, callback)
-        
+
     _loadAssets: (data, callback) ->
       @mapId = data._id
       @game.mapId = @mapId
@@ -60,7 +83,9 @@ define(['jquery'], ($) ->
         @layers.push(map.createLayer(layer.name))
         @layers[@layers.length - 1].resizeWorld()
 
+
       @trigger 'finishLoad'
+
 
     reload: (direction) ->
       layer.destroy() for layer in @layers
@@ -77,6 +102,16 @@ define(['jquery'], ($) ->
 
     _getLayers: (data) ->
       return data.layers;
+
+    _makeMap: (direction, mapId) ->
+      $.ajax({
+        url: "/make/#{direction}/#{mapId}"
+        type: "GET",
+        success: ->
+          console.log('hah!');
+        error: ->
+          console.log('lol');
+      });
 
 
   return Map
