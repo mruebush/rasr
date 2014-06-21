@@ -43,11 +43,11 @@ define( ->
       @arrows.setAll('checkWorldBounds', true)
       
     preload: ->
-      @game.load.spritesheet "#{@png}", "images/#{@png}.png", 32, 48
-      @game.load.image('arrow', 'images/bullet.png')
+      @game.load.atlasXML "player", "images/player.png", "images/player.xml"
+      @game.load.image 'arrow', 'images/bullet.png'
 
     create: ->
-      @sprite = @game.add.sprite(@meta.x, @meta.y, "#{@png}")
+      @sprite = @game.add.sprite(@meta.x, @meta.y, "player")
       @game.physics.enable(@sprite, @phaser.Physics.ARCADE)
       @sprite.body.collideWorldBounds = true
       @sprite.body.bounce.set(1)
@@ -56,10 +56,16 @@ define( ->
       @render()
       mana = @game.add.text(20, 50, "mana: #{@meta.mana}", fontStyle)
 
-      @sprite.animations.add "down", [0, 3], false
-      @sprite.animations.add "left", [4, 7], false
-      @sprite.animations.add "right", [8, 11], false
-      @sprite.animations.add "up", [12, 15], false
+      @sprite.animations.add("down", Phaser.Animation.generateFrameNames('player_walk_down', 0, 11, '.png', 4), 30, false)
+      @sprite.animations.add("left", Phaser.Animation.generateFrameNames('player_walk_left', 0, 11, '.png', 4), 30, false)
+      @sprite.animations.add("right", Phaser.Animation.generateFrameNames('player_walk_right', 0, 11, '.png', 4), 30, false)
+      @sprite.animations.add("up", Phaser.Animation.generateFrameNames('player_walk_up', 0, 11, '.png', 4), 30, false)
+
+      @sprite.animations.add("attack_down", Phaser.Animation.generateFrameNames('player_attack_down', 0, 4, '.png', 4), 15, false)
+      @sprite.animations.add("attack_left", Phaser.Animation.generateFrameNames('player_attack_left', 0, 4, '.png', 4), 15, false)
+      @sprite.animations.add("attack_right", Phaser.Animation.generateFrameNames('player_attack_right', 0, 4, '.png', 4), 15, false)
+      @sprite.animations.add("attack_up", Phaser.Animation.generateFrameNames('player_attack_up', 0, 4, '.png', 4), 15, false)
+
       @_setControls()
       @createArrows()
 
@@ -85,7 +91,7 @@ define( ->
 
       if @upKey.isDown
         @sprite.body.velocity.y = -@speed
-        @sprite.animations.play "up", 5, false
+        @sprite.animations.play "up", 30, false
         @directionFacing = 'up'
         @game.move 
           dir: 'up'
@@ -93,7 +99,7 @@ define( ->
           y: @sprite.y
       else if @downKey.isDown
         @sprite.body.velocity.y = @speed
-        @sprite.animations.play "down", 5, false
+        @sprite.animations.play "down", 30, false
         @directionFacing = 'down'
         @game.move 
           dir:'down'
@@ -101,7 +107,7 @@ define( ->
           y: @sprite.y
       else if @leftKey.isDown
         @sprite.body.velocity.x = -@speed
-        @sprite.animations.play "left", 5, false
+        @sprite.animations.play "left", 30, false
         @directionFacing = 'left'
         @game.move 
          dir:'left'
@@ -109,14 +115,14 @@ define( ->
          y: @sprite.y
       else if @rightKey.isDown
         @sprite.body.velocity.x = @speed
-        @sprite.animations.play "right", 5, false
+        @sprite.animations.play "right", 30, false
         @directionFacing = 'right'
         @game.move 
           dir: 'right'
           x: @sprite.x
           y: @sprite.y
-
-      if @spaceBar.isDown
+      else if @spaceBar.isDown
+        @sprite.animations.play "attack_#{@directionFacing}", 15, false
         @fire();
 
       # @sprite.bringToTop()
