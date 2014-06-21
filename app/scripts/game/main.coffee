@@ -19,6 +19,7 @@ require.config
     events: 'utils/events'
     socket: 'utils/socket'
     player: 'entity/player'
+    messages: 'utils/messages'
 
 require [
   'hero'
@@ -28,7 +29,8 @@ require [
   'socket'
   'phaser'
   'player'
-], (Hero, Map, Enemy, events, socket, Phaser, Player) ->
+  'jquery'
+], (Hero, Map, Enemy, events, socket, Phaser, Player, $) ->
   app = events({})
   window.game = game = null
   hero = null
@@ -73,10 +75,10 @@ require [
       png: png
       }))
     # window.hero = hero
-    map = events(new Map(game, Phaser, mapId))
+    map = events(new Map(game, Phaser, mapId, $))
     game.user = user
     game.map = map
-    socket rootUrl, game, players
+    socket rootUrl, game, players, $
     game.load.spritesheet "enemy", "images/leviathan.png", 96, 96
     
     # tell hero that he can move over non-blocked borders
