@@ -72,29 +72,18 @@ require [
       y: initPos.y
       png: png
       }))
-    # window.hero = hero
     map = events(new Map(game, Phaser, mapId))
     game.user = user
     game.map = map
     socket rootUrl, game, players
     
-    # tell hero that he can move over non-blocked borders
     console.log initialMap
     hero.preload()
-    # hero.set 'mapId', mapId
-    # hero.mapId = mapId
-    # map.preload()
 
-    # hero.actions = actions
-    # hero.user = user
-    # tell hero that he can move over non-blocked borders
-    # hero.preload()
-    # hero.set 'mapId', mapId
     map.preload(null, initialMap)
 
     app.trigger 'create'
     app.isLoaded = true
-    # createEnemies(4)
 
     window.game = game
     game.hero = hero
@@ -102,23 +91,34 @@ require [
   create = ->
     map.create()
     hero.create()
-
-    map.on 'finishLoad', ->
-      hero.sprite.bringToTop()
+    @game.hero = hero;
+    map.on 'finishLoad', =>
       hero.arrows.destroy()
       hero.createArrows()
-      # createEnemies(4)
       app.isLoaded = true
-    
-    # for enemy in enemies
-    #   enemy.create()
+      @game.layerRendering = @game.add.group()
+      @game.layerRendering.add(map.layers[0])
+      @game.layerRendering.add(map.layers[1])
+      @game.layerRendering.add(map.layers[2])
+      @game.layerRendering.add(hero.sprite)
+      @game.layerRendering.add(hero.arrows)
+      @game.layerRendering.add(map.layers[3])
 
-    # game.mapId = @mapId
+    @game.layerRendering = @game.add.group()
+    @game.layerRendering.add(map.layers[0])
+    @game.layerRendering.add(map.layers[1])
+    @game.layerRendering.add(map.layers[2])
+    @game.layerRendering.add(hero.sprite)
+    @game.layerRendering.add(hero.arrows)
+    @game.layerRendering.add(map.layers[3])
+
     console.log "Joining #{@game.mapId} on #{hero.sprite.x},#{hero.sprite.y}"
 
     enemies = []
     for enemyId of initialMap.enemies
       enemies.push enemyId
+
+    @game.camera.follow(hero.sprite);
 
     @game.join   
       x: hero.sprite.x
@@ -137,6 +137,16 @@ require [
           enemy.update()
       for player of players
         if player.update then do player.update
+      # map.on 'finishLoad', ->
+      #   if @game.changingScreen
+      #     @game.layerRendering = @game.add.group()
+      #     @game.layerRendering.add(map.layers[0])
+      #     @game.layerRendering.add(map.layers[1])
+      #     @game.layerRendering.add(map.layers[2])
+      #     @game.layerRendering.add(hero.sprite)
+      #     @game.layerRendering.add(hero.arrows)
+      #     @game.layerRendering.add(map.layers[3])
+      #     @game.changingScreen = false
 
   hurtHero = (enemySprite, heroSprite) ->
     @damage()
@@ -179,4 +189,6 @@ require [
       game.rootUrl = rootUrl
       game.enemies = []
       game = events(game)
+      game.realWidth = 20 * 64
+      game.realHeight = 12 * 64
 
