@@ -54,14 +54,9 @@ require [
   # actions = {}
 
   preload = ->
-    load = new Enemy 10, game, Phaser,
-      rank: 1
-      health: 10
-      dmg: 1
-      png: 'leviathan.png'
-      speed: 200
 
-    do load.preload
+    game.load.atlasXML "enemy", "images/enemy.png", "images/enemy.xml"
+
     
     hero = events(new Hero(game, Phaser, {
       exp: 150
@@ -80,9 +75,9 @@ require [
     game.user = user
     game.map = map
     socket rootUrl, game, players, $, Phaser
-    game.load.spritesheet "enemy", "images/leviathan.png", 96, 96
-    game.load.spritesheet('kaboom', 'images/explosion.png', 64, 64, 23);
-    
+
+    game.load.spritesheet 'kaboom', 'images/explosion.png', 64, 64, 23
+
     console.log initialMap
     hero.preload()
 
