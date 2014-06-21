@@ -14,9 +14,9 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
 var config = require('./lib/config/config');
 
-// var troll = 'mongodb://MongoLab-tc:lU1rRUfd7CNAuXw3Da5D.GssiVw9OR8HaqvXi4WP3.c-@ds048537.mongolab.com:48537/MongoLab-tc'
-// mongoose.connect(troll, config.mongo.options);
-mongoose.connect(config.mongo.uri, config.mongo.options);
+var troll = 'mongodb://MongoLab-tc:lU1rRUfd7CNAuXw3Da5D.GssiVw9OR8HaqvXi4WP3.c-@ds048537.mongolab.com:48537/MongoLab-tc'
+mongoose.connect(troll, config.mongo.options);
+// mongoose.connect(config.mongo.uri, config.mongo.options);
 // var db = require('./lib/models')(app);
 
 // var db = mongoose.connect(config.mongo.uri, config.mongo.options);

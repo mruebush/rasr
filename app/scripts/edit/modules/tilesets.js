@@ -7,18 +7,24 @@ define(["views/tileset_view", "jquery.mousewheel", "jquery.jscrollpane"], functi
 	/* ====== INITIALIZE ====== */
 	/* ======================== */
 
-	Tilesets.initialize = function() {
+	Tilesets.initialize = function(data) {
 
 		Editor = require("editor");
 		this.view = TilesetView.initialize();
 
-		this.add({
-			image: "/assets/tilemaps/tiles/tmw_desert_spacing.png",
-			tilewidth: 32,
-			tileheight: 32,
-			spacing: 1,
-			margin: 1
-		});
+		for(var key in data.tilesets) {
+      var tileset = data.tilesets[key];
+      Editor.Tilesets.add({
+        image: "/assets/tilemaps/tiles/" + tileset.image,
+        tilewidth: tileset.tilewidth,
+        tileheight: tileset.tileheight,
+        margin: tileset.margin,
+        spacing: tileset.spacing
+      });
+
+    }
+
+
 	};
 
 	/* ================= */
@@ -45,6 +51,7 @@ define(["views/tileset_view", "jquery.mousewheel", "jquery.jscrollpane"], functi
 	/* ================= */
 
 	Tilesets.add = function(data) {
+		this.total += 1;
 
 		var img = new Image(),
 		    bfr = document.createElement("canvas").getContext("2d"),

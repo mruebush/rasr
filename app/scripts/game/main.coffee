@@ -71,7 +71,6 @@ require [
     game.user = user
     game.map = map
     socket rootUrl, game, players, $, Phaser
-
     game.load.spritesheet 'kaboom', 'images/explosion.png', 64, 64, 23
     hero.preload()
     map.preload(null, initialMap)

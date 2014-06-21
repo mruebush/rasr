@@ -15,7 +15,6 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
 
     game.on 'enterMap', () ->
 
-      console.log 'Join map !!!!!!!!'
       game.enemyData = game.mapData.enemies || []
 
       enemies = []
@@ -35,8 +34,6 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
         y: game.hero.sprite.y
         enemies: enemies
 
-
-
     game.on 'shoot', (data) ->
       game.hero.renderMissiles data.x, data.y, data.angle, data.num
 
@@ -44,17 +41,14 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
       players[data.user].move data 
 
     game.on 'player leave', (user) ->
-      console.log "#{user} left the screen"
       players[user].sprite.kill()
       delete players[user]
 
 
     game.on 'changeMap', (direction) ->
-      console.log "Leave #{game.mapId}"
       game.leave game.mapId, game.user
 
     game.on 'player joined', (data) ->
-      console.log "#{data.user} joined on #{data.x},#{data.y}"
       player = new Player(game, Phaser,
         x: data.x
         y: data.y
@@ -65,9 +59,7 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
       players[player.user] = player
 
     game.on 'i joined', (data) ->
-
       for other in data.others
-        console.log "rendering #{other.user}"
         player = new Player(game, Phaser,
           x: other.x
           y: other.y
@@ -102,7 +94,6 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
           game.enemies.push enemy
 
     game.shoot = (user, mapId, x, y, angle, num) ->
-      console.log "#{user} shoots in #{mapId}"
       socket.emit 'shoot',
         user: user
         mapId: mapId
@@ -125,7 +116,6 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
       enemies = data.enemies
       positions = data.positions
 
-      # console.log data
 
       socket.emit 'join',
         user: game.user
@@ -145,7 +135,6 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
 
 
     game.message = (message) ->
-      console.log message, socket
       socket.emit 'message',
         user: game.user
         message: message
