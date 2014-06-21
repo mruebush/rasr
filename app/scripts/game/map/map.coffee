@@ -33,34 +33,9 @@ define(['jquery'], ($) ->
         @_loadAssets.call(@, data, callback, false)
         
     _loadAssets: (data, callback, join) ->
-      # console.log "Loading assets"
-      # if hero
-      #   hero.set 'mapId', data._id
-      #   console.log "Enter #{hero.mapId}"
-      #   console.log hero.sprite.x
-      #   console.log hero.sprite.y
-      #   hero.actions.join hero.mapId, hero.user,
-      #     x: hero.sprite.x
-      #     y: hero.sprite.y
       @mapId = data._id
 
       @game.mapId = @mapId
-      # if join
-      #   console.log 'join a new map'
-      #   # console.log data
-      #   enemies = []
-
-      #   for enemyId of data.enemies
-      #     enemies.push 
-      #       id: enemyId
-      #       count: data.enemies[enemyId].count
-
-      #   # console.log enemies
-      #   @game.join
-      #     mapId: @mapId
-      #     x: @game.hero.sprite.x
-      #     y: @game.hero.sprite.y
-      #     enemies: enemies
 
       @mapData = data
       @game.load.tilemap('map', null, data, @Phaser.Tilemap.TILED_JSON)

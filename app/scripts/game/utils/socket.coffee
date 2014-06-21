@@ -9,6 +9,14 @@ define(['events','player','phaser','enemy'], (events, Player, Phaser, Enemy) ->
     game.on 'move enemies', (data) ->
       console.log data.param
 
+      for enemy in game.enemies
+        # console.log enemy
+        enemy.setDirection data.num
+        setTimeout ->
+          do enemy.clearDirection
+        ,500
+
+
     game.on 'enterMap', () ->
 
       game.enemyData = game.mapData.enemies || []

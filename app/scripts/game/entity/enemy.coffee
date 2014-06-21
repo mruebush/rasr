@@ -14,6 +14,13 @@ define( ->
       @alive = true
       @png = @meta.png
 
+      @setDirection = (num) ->
+        @direction = num
+
+      @clearDirection = () ->
+        @direction = null
+
+
       @derender = () ->
         do @sprite.kill
 
@@ -41,12 +48,12 @@ define( ->
       @sprite.animations.add "right", [8, 11], true
       @sprite.animations.add "up", [12, 15], true
 
-      setInterval(=>
-        @direction = Math.floor(Math.random() * 4)
-        setTimeout(=>
-          @direction = null
-        , 500)
-      , 2000)
+      # setInterval(=>
+      #   @direction = Math.floor(Math.random() * 4)
+      #   setTimeout(=>
+      #     @direction = null
+      #   , 500)
+      # , 2000)
 
     update: ->
       @sprite.body.velocity.x = 0
