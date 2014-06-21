@@ -53,14 +53,15 @@ require [
   # actions = {}
 
   preload = ->
-    load = new Enemy 10, game, Phaser,
-      rank: 1
-      health: 10
-      dmg: 1
-      png: 'leviathan.png'
-      speed: 200
 
-    do load.preload
+    # load = new Enemy 10, game, Phaser,
+    #   rank: 1
+    #   health: 10
+    #   dmg: 1
+    #   png: 'leviathan.png'
+    #   speed: 200
+
+    game.load.atlasXML "enemy", "images/enemy.png", "images/enemy.xml"
     
     hero = events(new Hero(game, Phaser, {
       exp: 150

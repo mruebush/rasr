@@ -13,7 +13,7 @@ define( ->
       @health = @meta.health
       @alive = true
       @png = @meta.png
-      @id = @meta.id
+      @serverId = @meta.id
 
       @setDirection = (num) ->
         @direction = num
