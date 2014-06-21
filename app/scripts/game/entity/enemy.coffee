@@ -13,6 +13,7 @@ define( ->
       @health = @meta.health
       @alive = true
       @png = @meta.png
+      @id = @meta.id
 
       @setDirection = (num) ->
         @direction = num
@@ -29,6 +30,7 @@ define( ->
       if @health <= 0
         @alive = false
         @sprite.kill()
+
       return true
 
     preload: ->
