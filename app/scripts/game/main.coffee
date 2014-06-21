@@ -162,7 +162,6 @@ require [
       explosionAnimation.animations.add('kaboom')
 
   explosion = ->
-    console.log 'explosion!!!', @sprite.x, @sprite.y, @
     explosionAnimation = explosions.getFirstExists(false)
     explosionAnimation.reset(@sprite.x, @sprite.y)
     explosionAnimation.play('kaboom', 30, false, true)
@@ -187,7 +186,7 @@ require [
     
       $('.creatables')
 
-      game = new Phaser.Game(800, 600, Phaser.AUTO, "game-container",
+      game = new Phaser.Game(800, 600, Phaser.AUTO, "game-canvas",
         preload: preload
         create: create
         update: update
