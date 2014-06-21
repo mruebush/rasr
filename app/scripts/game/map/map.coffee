@@ -55,19 +55,6 @@ define([], ->
       for tileset in data.tilesets
         @tiles[tileset.name] = loader.image(tileset.name, "assets/tilemaps/tiles/" + tileset.image, 32, 32)
 
-      @oldBorders = @borders
-      @borders = 
-        upScreen: data.upScreen
-        rightScreen: data.rightScreen
-        downScreen: data.downScreen
-        leftScreen: data.leftScreen
-
-      for border, value of @borders
-        if !!value != !!@oldBorders[border]
-          borderDirection = border.split('Screen')[0]
-          @$(".#{borderDirection}").toggleClass('hidden')
-          @game.physics.arcade.checkCollision[borderDirection] = !value
-
       loader.start();
       loader.onLoadComplete.add =>
         do @create
@@ -106,29 +93,19 @@ define([], ->
 
     _createCtrls: (data) ->
       $('#map-id').attr('href', '/edit/' + @mapId);
-      $('.creatables > button').remove();
+      @oldBorders = @borders
+      @borders = 
+        upScreen: data.upScreen
+        rightScreen: data.rightScreen
+        downScreen: data.downScreen
+        leftScreen: data.leftScreen
 
-      if(!data.upScreen)
-        $up = $("<button class='btn btn-primary'>Up</button>")
-        $up.click =>
-          @_makeMap('up', data._id)
-        $('.creatables').append(up)
-      if(!data.rightScreen)
-        $right = $("<button class='btn btn-primary'>right</button>")
-        $right.click =>
-          @_makeMap('right', data._id)
-        $('.creatables').append($right)
-      if(!data.downScreen)
-        $down = $("<button class='btn btn-primary'>down</button>")
-        $down.click =>
-          @_makeMap('down', data._id)
-        $('.creatables').append($down)
-      if(!data.leftScreen)
-        $left = $("<button class='btn btn-primary'>left</button>")
-        $left.click =>
-          @_makeMap('left', data._id)
-        $('.creatables').append($left)
- 
+      for border, value of @borders
+        if !!value != !!@oldBorders[border]
+          borderDirection = border.split('Screen')[0]
+          @$(".#{borderDirection}").toggleClass('hidden')
+          @game.physics.arcade.checkCollision[borderDirection] = !value
+          
     _makeMap: (direction, mapId) ->
       @$.ajax({
         url: "/make/#{direction}/#{mapId}"
