@@ -54,14 +54,8 @@ require [
 
   preload = ->
 
-    # load = new Enemy 10, game, Phaser,
-    #   rank: 1
-    #   health: 10
-    #   dmg: 1
-    #   png: 'leviathan.png'
-    #   speed: 200
-
     game.load.atlasXML "enemy", "images/enemy.png", "images/enemy.xml"
+
     
     hero = events(new Hero(game, Phaser, {
       exp: 150
@@ -81,7 +75,6 @@ require [
     game.user = user
     game.map = map
     socket rootUrl, game, players, $, Phaser
-    game.load.spritesheet "enemy", "images/leviathan.png", 96, 96
     
     console.log initialMap
     hero.preload()
@@ -154,16 +147,7 @@ require [
           enemy.update()
       for player of players
         if player.update then do player.update
-      # map.on 'finishLoad', ->
-      #   if @game.changingScreen
-      #     @game.layerRendering = @game.add.group()
-      #     @game.layerRendering.add(map.layers[0])
-      #     @game.layerRendering.add(map.layers[1])
-      #     @game.layerRendering.add(map.layers[2])
-      #     @game.layerRendering.add(hero.sprite)
-      #     @game.layerRendering.add(hero.arrows)
-      #     @game.layerRendering.add(map.layers[3])
-      #     @game.changingScreen = false
+
 
   hurtHero = (enemySprite, heroSprite) ->
     @damage()
