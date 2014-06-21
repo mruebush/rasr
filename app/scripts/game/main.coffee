@@ -73,6 +73,7 @@ require [
       x: initPos.x
       y: initPos.y
       png: png
+
       }, $))
     # window.hero = hero
     map = events(new Map(game, Phaser, mapId, $))
@@ -81,36 +82,64 @@ require [
     socket rootUrl, game, players, $, Phaser
     game.load.spritesheet "enemy", "images/leviathan.png", 96, 96
     
-    # tell hero that he can move over non-blocked borders
     console.log initialMap
     hero.preload()
+
     map.preload(null, initialMap)
 
     app.trigger 'create'
     app.isLoaded = true
+
     window.game = game
     game.hero = hero
 
   create = ->
     map.create()
     hero.create()
-
-    map.on 'finishLoad', ->
-      hero.sprite.bringToTop()
+    @game.hero = hero;
+    map.on 'finishLoad', =>
       hero.arrows.destroy()
       hero.createArrows()
       app.isLoaded = true
-    
+      @game.layerRendering = @game.add.group()
+      @game.layerRendering.add(map.layers[0])
+      @game.layerRendering.add(map.layers[1])
+      @game.layerRendering.add(map.layers[2])
+      @game.layerRendering.add(hero.sprite)
+      @game.layerRendering.add(hero.arrows)
+      @game.layerRendering.add(map.layers[3])
+
+    @game.layerRendering = @game.add.group()
+    @game.layerRendering.add(map.layers[0])
+    @game.layerRendering.add(map.layers[1])
+    @game.layerRendering.add(map.layers[2])
+    @game.layerRendering.add(hero.sprite)
+    @game.layerRendering.add(hero.arrows)
+    @game.layerRendering.add(map.layers[3])
+
     console.log "Joining #{@game.mapId} on #{hero.sprite.x},#{hero.sprite.y}"
 
     enemies = []
+    enemyPositions = {}
+
     for enemyId of initialMap.enemies
-      enemies.push enemyId
+      enemies.push 
+        id: enemyId
+        count: initialMap.enemies[enemyId].count
+      enemyPositions[enemyId] = initialMap.enemies[enemyId].positions
+
+    game.enemyPositions = enemyPositions
+    # console.log enemyPositions
+
+
+    @game.camera.follow(hero.sprite);
 
     @game.join   
       x: hero.sprite.x
       y: hero.sprite.y
       enemies: enemies
+      positions: enemyPositions
+      
 
 
   update = ->
@@ -124,6 +153,16 @@ require [
           enemy.update()
       for player of players
         if player.update then do player.update
+      # map.on 'finishLoad', ->
+      #   if @game.changingScreen
+      #     @game.layerRendering = @game.add.group()
+      #     @game.layerRendering.add(map.layers[0])
+      #     @game.layerRendering.add(map.layers[1])
+      #     @game.layerRendering.add(map.layers[2])
+      #     @game.layerRendering.add(hero.sprite)
+      #     @game.layerRendering.add(hero.arrows)
+      #     @game.layerRendering.add(map.layers[3])
+      #     @game.changingScreen = false
 
   hurtHero = (enemySprite, heroSprite) ->
     @damage()
@@ -132,7 +171,6 @@ require [
     # kill enemy
     @damage()
     arrow.kill()
-
 
   # MAKE INITIAL AJAX CALL FOR PLAYER INFO
   console.log "Making request for #{user}"
@@ -155,6 +193,7 @@ require [
       initialMap = mapData
     
       $('.creatables')
+
       game = new Phaser.Game(800, 600, Phaser.AUTO, "game-container",
         preload: preload
         create: create
@@ -163,4 +202,6 @@ require [
       game.rootUrl = rootUrl
       game.enemies = []
       game = events(game)
+      game.realWidth = 20 * 64
+      game.realHeight = 12 * 64
 
