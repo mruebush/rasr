@@ -2,17 +2,29 @@
 <div class="container">
   <div ng-include="'partials/navbar'"></div>
   <div id="game-container">
-    
-  </div>
-  <p>This is the Game view. User is {{ currentUser.name }}</p> 
-  <a id="map-id" href="/edit/">Edit map here</a>
-  <div class="creatables">
-    
-  </div>
+    <p>Fight on {{ currentUser.name }}!</p> 
 
-  <script data-main="/scripts/game/main" src="bower_components/requirejs/require.js"></script>
+    <a id="map-id" href="/edit/">Edit map here</a>
+    <div>
+      <button class='btn btn-primary btn-block up createables hidden'>Create new screen above</button>
+      <div class="labels-game">
+        <div class="left-label">
+          <button class='btn btn-primary left createables hidden'>Create new screen to the left</button>
+        </div>
+        <div id="game-canvas">
+          <script data-main="/scripts/game/main" src="bower_components/requirejs/require.js"></script>
+        </div>
+        <div class="right-label">
+          <button class='btn btn-primary right createables hidden'>Create new screen to the right</button>
+        </div>
+      </div>
+      <button class='btn btn-primary btn-block down createables hidden'>Create new screen below</button>
+    </div>
 
   <div class="chatbox">
+    <div class="header">
+      Chat with your fella comrades
+    </div>
     <div class="messages">
     </div>
     <div class="footer">

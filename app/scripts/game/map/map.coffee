@@ -17,13 +17,36 @@ define([], ->
         @game.changingScreen = true;
         @reload(direction)
       )
+      @$up = @$(".up")
+      @$up.click =>
+        @_makeMap('up', @mapId)
+      @$down = @$(".down")
+      @$down.click =>
+        @_makeMap('down', @mapId)
+      @$right = @$(".right")
+      @$right.click =>
+        @_makeMap('right', @mapId)
+      @$left = @$(".left")
+      @$left.click =>
+        @_makeMap('left', @mapId)
 
     preload: (direction, data, callback) ->
       that = @
-      @_loadAssets.call(@, data, callback)
+      url = "#{@game.rootUrl}/move/#{direction}/#{@mapId}"
+      if !data
+        @$.ajax({
+          url: url
+          success: (data) =>
+            @$('#map-id').attr('href', '/edit/' + @mapId);
+            that._loadAssets.call(that, data, callback)
+            console.log "Trigerring enterMap"
+            # @game.mapData = data
+            # @game.trigger 'enterMap'
+        })
+      else
+        @_loadAssets.call(@, data, callback)
 
     _loadAssets: (data, loader = @game.load) ->
-
       @mapId = data._id
       @game.mapId = @mapId
       @mapData = data
@@ -31,18 +54,6 @@ define([], ->
 
       for tileset in data.tilesets
         @tiles[tileset.name] = loader.image(tileset.name, "assets/tilemaps/tiles/" + tileset.image, 32, 32)
-
-      @oldBorders = @borders
-      @borders = 
-        upScreen: data.upScreen
-        rightScreen: data.rightScreen
-        downScreen: data.downScreen
-        leftScreen: data.leftScreen
-
-      for border, value of @borders
-        if !!value != !!@oldBorders[border]
-          @$(".#{border}").toggleClass('no-bordering-screen')
-          @game.physics.arcade.checkCollision[border.split('Screen')[0]] = !value
 
       loader.start();
       loader.onLoadComplete.add =>
@@ -66,9 +77,10 @@ define([], ->
       $.ajax({
         url: url
         success: (data) =>
-          that._createCtrls(data)
-                
+          that._createCtrls(data)      
           that._loadAssets.call(that, data, loader)
+          that.game.mapData = data
+          that.game.trigger "enterMap"
       })
 
     reload: (direction) ->
@@ -81,29 +93,19 @@ define([], ->
 
     _createCtrls: (data) ->
       $('#map-id').attr('href', '/edit/' + @mapId);
-      $('.creatables > button').remove();
+      @oldBorders = @borders
+      @borders = 
+        upScreen: data.upScreen
+        rightScreen: data.rightScreen
+        downScreen: data.downScreen
+        leftScreen: data.leftScreen
 
-      if(!data.upScreen)
-        $up = $("<button class='btn btn-primary'>Up</button>")
-        $up.click =>
-          @_makeMap('up', data._id)
-        $('.creatables').append(up)
-      if(!data.rightScreen)
-        $right = $("<button class='btn btn-primary'>right</button>")
-        $right.click =>
-          @_makeMap('right', data._id)
-        $('.creatables').append($right)
-      if(!data.downScreen)
-        $down = $("<button class='btn btn-primary'>down</button>")
-        $down.click =>
-          @_makeMap('down', data._id)
-        $('.creatables').append($down)
-      if(!data.leftScreen)
-        $left = $("<button class='btn btn-primary'>left</button>")
-        $left.click =>
-          @_makeMap('left', data._id)
-        $('.creatables').append($left)
- 
+      for border, value of @borders
+        if !!value != !!@oldBorders[border]
+          borderDirection = border.split('Screen')[0]
+          @$(".#{borderDirection}").toggleClass('hidden')
+          @game.physics.arcade.checkCollision[borderDirection] = !value
+          
     _makeMap: (direction, mapId) ->
       @$.ajax({
         url: "/make/#{direction}/#{mapId}"
