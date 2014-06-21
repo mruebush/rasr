@@ -47,17 +47,13 @@ require [
   rootUrl = ''
   # rootUrl = 'http://localhost:9000'
   user = window.userData.name
-  console.log(user);
-  # user = prompt 'Fullen Sie das user bitte !'
   initPos = {}
-  explosion = null
+  explosions = null
   # actions = {}
 
   preload = ->
 
     game.load.atlasXML "enemy", "images/enemy.png", "images/enemy.xml"
-
-    
     hero = events(new Hero(game, Phaser, {
       exp: 150
       health: 100
@@ -77,10 +73,7 @@ require [
     socket rootUrl, game, players, $, Phaser
 
     game.load.spritesheet 'kaboom', 'images/explosion.png', 64, 64, 23
-
-    console.log initialMap
     hero.preload()
-
     map.preload(null, initialMap)
 
     app.trigger 'create'
@@ -92,30 +85,32 @@ require [
   create = ->
     map.create()
     hero.create()
-    @game.hero = hero
+    game.hero = hero
     createExplosions()
     map.on 'finishLoad', =>
       hero.arrows.destroy()
       hero.createArrows()
       createExplosions()
       app.isLoaded = true
-      @game.layerRendering = @game.add.group()
-      @game.layerRendering.add(map.layers[0])
-      @game.layerRendering.add(map.layers[1])
-      @game.layerRendering.add(map.layers[2])
-      @game.layerRendering.add(hero.sprite)
-      @game.layerRendering.add(hero.arrows)
-      @game.layerRendering.add(map.layers[3])
+      game.layerRendering = game.add.group()
+      game.layerRendering.add(map.layers[0])
+      game.layerRendering.add(map.layers[1])
+      game.layerRendering.add(map.layers[2])
+      game.layerRendering.add(hero.sprite)
+      game.layerRendering.add(hero.arrows)
+      game.layerRendering.add(explosions)
+      game.layerRendering.add(map.layers[3])
 
-    @game.layerRendering = @game.add.group()
-    @game.layerRendering.add(map.layers[0])
-    @game.layerRendering.add(map.layers[1])
-    @game.layerRendering.add(map.layers[2])
-    @game.layerRendering.add(hero.sprite)
-    @game.layerRendering.add(hero.arrows)
-    @game.layerRendering.add(map.layers[3])
+    game.layerRendering = game.add.group()
+    game.layerRendering.add(map.layers[0])
+    game.layerRendering.add(map.layers[1])
+    game.layerRendering.add(map.layers[2])
+    game.layerRendering.add(hero.sprite)
+    game.layerRendering.add(hero.arrows)
+    game.layerRendering.add(explosions)
+    game.layerRendering.add(map.layers[3])
 
-    console.log "Joining #{@game.mapId} on #{hero.sprite.x},#{hero.sprite.y}"
+    console.log "Joining #{game.mapId} on #{hero.sprite.x},#{hero.sprite.y}"
 
     enemies = []
     enemyPositions = {}
@@ -127,11 +122,10 @@ require [
       enemyPositions[enemyId] = initialMap.enemies[enemyId].positions
 
     game.enemyPositions = enemyPositions
-    # console.log enemyPositions
 
-    @game.camera.follow(hero.sprite);
+    game.camera.follow(hero.sprite);
 
-    @game.join
+    game.join
       x: hero.sprite.x
       y: hero.sprite.y
       enemies: enemies
@@ -161,22 +155,23 @@ require [
 
   createExplosions = ->
     explosions = game.add.group()
-    explosions.createMultiple(10, 'kaboom', 0, false)
-    explosions.setAll('anchor.x', 0.5)
-    explosions.setAll('anchor.y', 0.5)
+
+    for i in [0...10]
+      explosionAnimation = explosions.create(0, 0, 'kaboom', [0], false)
+      explosionAnimation.anchor.setTo(0.5, 0.5)
+      explosionAnimation.animations.add('kaboom')
 
   explosion = ->
-    explosionAnimation = expl.getFirstExists(false)
-    explosionAnimation.reset(@x, @y)
+    console.log 'explosion!!!', @sprite.x, @sprite.y, @
+    explosionAnimation = explosions.getFirstExists(false)
+    explosionAnimation.reset(@sprite.x, @sprite.y)
     explosionAnimation.play('kaboom', 30, false, true)
 
 
   # MAKE INITIAL AJAX CALL FOR PLAYER INFO
-  console.log "Making request for #{user}"
   $.ajax({
     url: "#{rootUrl}/player/me"
   }).done (playerInfo) ->
-    console.log(playerInfo, 'playerInfo')
     mapId = playerInfo.mapId
 
     initPos.x = playerInfo.x
@@ -185,7 +180,6 @@ require [
     png = playerInfo.png || 'roshan'
     $('#map-id').attr('href', '/edit/' + mapId);
     url = "#{rootUrl}/screen/#{mapId}"
-    console.log(url)
     $.ajax({
       url: url
     }).done (mapData) ->
