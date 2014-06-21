@@ -9,17 +9,24 @@ define( ->
       @user = null
 
     preload: ->
-      @game.load.spritesheet "roshan", "images/roshan.png", 32, 48
+      @game.load.atlasXML "player", "images/player.png", "images/player.xml"
+      @game.load.image 'arrow', 'images/bullet.png'
 
     create: ->
-      @sprite = @game.add.sprite(@meta.x, @meta.y, "roshan")
+      @sprite = @game.add.sprite(@meta.x, @meta.y, "player")
       @game.physics.enable(@sprite, @phaser.Physics.ARCADE)
+      @sprite.body.collideWorldBounds = true
       @sprite.body.bounce.set(1)
 
-      @sprite.animations.add "down", [0, 3], false
-      @sprite.animations.add "left", [4, 7], false
-      @sprite.animations.add "right", [8, 11], false
-      @sprite.animations.add "up", [12, 15], false
+      @sprite.animations.add("down", Phaser.Animation.generateFrameNames('player_walk_down', 0, 11, '.png', 4), 30, false)
+      @sprite.animations.add("left", Phaser.Animation.generateFrameNames('player_walk_left', 0, 11, '.png', 4), 30, false)
+      @sprite.animations.add("right", Phaser.Animation.generateFrameNames('player_walk_right', 0, 11, '.png', 4), 30, false)
+      @sprite.animations.add("up", Phaser.Animation.generateFrameNames('player_walk_up', 0, 11, '.png', 4), 30, false)
+
+      @sprite.animations.add("attack_down", Phaser.Animation.generateFrameNames('player_attack_down', 0, 4, '.png', 4), 15, false)
+      @sprite.animations.add("attack_left", Phaser.Animation.generateFrameNames('player_attack_left', 0, 4, '.png', 4), 15, false)
+      @sprite.animations.add("attack_right", Phaser.Animation.generateFrameNames('player_attack_right', 0, 4, '.png', 4), 15, false)
+      @sprite.animations.add("attack_up", Phaser.Animation.generateFrameNames('player_attack_up', 0, 4, '.png', 4), 15, false)
 
 
     move: (data) ->
