@@ -27,6 +27,13 @@ define([], ->
         appendMessages(data) if data.user isnt game.user
       )
 
-    do messageListener
+    $('.chatToSend').on('focus', ->
+      game.input.keyboard.disabled = true
+    )
 
+    $('.chatToSend').on('focusout', ->
+      game.input.keyboard.disabled = false
+    )
+
+    do messageListener
 )
