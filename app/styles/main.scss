@@ -107,6 +107,25 @@ body {
     }
 }
 
+.chatbox {
+  border: 2px solid #e5e5e5;
+  border-radius: 5px;
+  padding: 8px;
+}
+
+.messages {
+  height: 100px;
+  width: 100%;
+  overflow: scroll
+}
+
+/*.message {
+  text-align: left;
+}
+*/
+.chatToSend {
+  border-radius: 3px;
+}
 
 /*andrews border stuff*/
 canvas {

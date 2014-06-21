@@ -1,6 +1,6 @@
-define(['jquery'], ($) ->
+define([], ->
   class Map
-    constructor: (@game, @Phaser, @mapId) ->
+    constructor: (@game, @Phaser, @mapId, @$) ->
       @layers = []
       @oldBorders = null
       @borders = 
@@ -21,32 +21,32 @@ define(['jquery'], ($) ->
       that = @
       url = "#{@game.rootUrl}/move/#{direction}/#{@mapId}"
       if !data
-        $.ajax({
+        @$.ajax({
           url: url
           success: (data) =>
-            $('#map-id').attr('href', '/edit/' + @mapId);
-            $('.creatables > button').remove();
+            @$('#map-id').attr('href', '/edit/' + @mapId);
+            @$('.creatables > button').remove();
 
             if(!data.upScreen)
-              $up = $("<button class='btn btn-primary'>Up</button>")
-              $up.click =>
+              @$up = @$("<button class='btn btn-primary'>Up</button>")
+              @$up.click =>
                 @_makeMap('up', data._id)
-              $('.creatables').append(up)
+              @$('.creatables').append(up)
             if(!data.rightScreen)
-              $right = $("<button class='btn btn-primary'>right</button>")
-              $right.click =>
+              @$right = @$("<button class='btn btn-primary'>right</button>")
+              @$right.click =>
                 @_makeMap('right', data._id)
-              $('.creatables').append($right)
+              @$('.creatables').append(@$right)
             if(!data.downScreen)
-              $down = $("<button class='btn btn-primary'>down</button>")
-              $down.click =>
+              @$down = @$("<button class='btn btn-primary'>down</button>")
+              @$down.click =>
                 @_makeMap('down', data._id)
-              $('.creatables').append($down)
+              @$('.creatables').append(@$down)
             if(!data.leftScreen)
-              $left = $("<button class='btn btn-primary'>left</button>")
-              $left.click =>
+              @$left = @$("<button class='btn btn-primary'>left</button>")
+              @$left.click =>
                 @_makeMap('left', data._id)
-              $('.creatables').append($left)
+              @$('.creatables').append(@$left)
        
             that._loadAssets.call(that, data, callback)
             @game.mapData = data
@@ -73,7 +73,7 @@ define(['jquery'], ($) ->
 
       for border, value of @borders
         if !!value != !!@oldBorders[border]
-          $(".#{border}").toggleClass('no-bordering-screen')
+          @$(".#{border}").toggleClass('no-bordering-screen')
           @game.physics.arcade.checkCollision[border.split('Screen')[0]] = !value
 
     create: ->
@@ -106,7 +106,7 @@ define(['jquery'], ($) ->
       return data.layers;
 
     _makeMap: (direction, mapId) ->
-      $.ajax({
+      @$.ajax({
         url: "/make/#{direction}/#{mapId}"
         type: "GET",
         success: ->

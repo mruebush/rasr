@@ -1,9 +1,8 @@
-define(['events','player','phaser','enemy'], (events, Player, Phaser, Enemy) ->
-  return (rootUrl, game, players) ->
+define(['events','player','enemy','messages'], (events, Player, Enemy, messages) ->
+  return (rootUrl, game, players, $, Phaser) ->
     socket = io.connect()
     window.socket = socket
-    
-    
+
     mapId = game.mapId
 
     game.on 'move enemies', (data) ->
@@ -150,10 +149,11 @@ define(['events','player','phaser','enemy'], (events, Player, Phaser, Enemy) ->
 
 
     game.message = (message) ->
+      console.log message, socket
       socket.emit 'message',
         user: game.user
         message: message
-        room: game.mapId
+        # room: game.mapId
 
     game.move = (data) ->
       socket.emit 'move',
@@ -188,10 +188,14 @@ define(['events','player','phaser','enemy'], (events, Player, Phaser, Enemy) ->
         if data.user != game.user
           game.trigger('move', data)
 
+
+
+    # Initialize message module
+    messages(game, socket, $)
+
     _enemyListener = () ->
       socket.on 'move enemies', (data) ->
         game.trigger 'move enemies', data
-  
 
     _leaveListener mapId, game.user
     _moveListener game.user

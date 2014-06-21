@@ -124,7 +124,6 @@ define( ->
       return
 
     renderMissiles: (x, y, angle, num) ->
-      
       for i in [0...num]
         arrow = @arrows.children[arrowIndex]
         arrow.reset(x, y)
