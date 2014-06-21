@@ -173,12 +173,20 @@ canvas {
   left: 0;
 }
 */
-.no-bordering-screen {
+/*.no-bordering-screen {
   background-color: black;
 }
-
+*//*
 .hidden {
-  display: none;
+  display: inline;
+}
+*/
+.labels-game {
+  position: relative;
+}
+
+canvas {
+  margin: 5px auto;
 }
 
 .up, .down {
@@ -186,21 +194,40 @@ canvas {
   margin: 8px auto;
 }
 
-.left, .right {
+.left-label, .right-label {
+  position: absolute;
   text-align: center;
-  margin: 50px 0;
+  padding: 0 10px;
 }
 
-.left {
-  transform:rotate(-90deg);
-  -ms-transform:rotate(-90deg); /* IE 9 */
-  -webkit-transform:rotate(-90deg); /* Opera, Chrome, and Safari */
+.left-label {
+  top: 50%;
+  left: 2px;
+  transform: rotate(-90deg);
+  -o-transform: rotate(-90deg);
+  -ms-transform: rotate(-90deg);
+  -moz-transform: rotate(-90deg);
+  -webkit-transform:  rotate(-90deg);
+  transform-origin: 0 0;
+  -o-transform-origin: 0 0;
+  -ms-transform-origin: 0 0;
+  -moz-transform-origin: 0 0;
+  -webkit-transform-origin: 0 0;
 }
 
-.right {
-  transform:rotate(90deg);
-  -ms-transform:rotate(90deg); /* IE 9 */
-  -webkit-transform:rotate(90deg); /* Opera, Chrome, and Safari */
+.right-label {
+  top: 50%;
+  right: 2px;
+  transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -webkit-transform:  rotate(90deg);
+  transform-origin: 0 0;
+  -o-transform-origin: 0 0;
+  -ms-transform-origin: 0 0;
+  -moz-transform-origin: 0 0;
+  -webkit-transform-origin: 0 0;
 }
 
 .game-canvas {
