@@ -49,6 +49,8 @@ define(['jquery'], ($) ->
               $('.creatables').append($left)
        
             that._loadAssets.call(that, data, callback)
+            @game.mapData = data
+            @game.trigger 'enterMap'
         })
       else
         @_loadAssets.call(@, data, callback)

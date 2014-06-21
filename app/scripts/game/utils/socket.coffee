@@ -19,6 +19,7 @@ define(['events','player','phaser','enemy'], (events, Player, Phaser, Enemy) ->
 
     game.on 'enterMap', () ->
 
+      console.log 'Join map !!!!!!!!'
       game.enemyData = game.mapData.enemies || []
 
       enemies = []
