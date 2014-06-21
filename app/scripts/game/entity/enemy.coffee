@@ -6,11 +6,23 @@ define( ->
       @direction = null
       @speed = @meta.speed
       @margin = 50
-      @x = Math.min(Math.max(@game.world.randomX, @margin), @game.width - @margin)
-      @y = Math.min(Math.max(@game.world.randomY, @margin), @game.height - @margin)
+
+      @x = @meta.x
+      @y = @meta.y
+      
       @health = @meta.health
       @alive = true
-      # @png = @meta.png
+      @png = @meta.png
+
+      @setDirection = (num) ->
+        @direction = num
+
+      @clearDirection = () ->
+        @direction = null
+
+
+      @derender = () ->
+        do @sprite.kill
 
     damage: ->
       @health--
@@ -19,32 +31,8 @@ define( ->
         @sprite.kill()
       return true
 
-    # createEnemy = (enemies) ->
-
-    #   for creature,i in enemies
-    #     enemy = new Enemy i, game, Phaser
-    #       rank: 1
-    #       health: creature.health
-    #       dmg: 1
-    #       png: creature.png
-    #       speed: creature.speed  
-        
-    #     do enemy.preload
-    #     do enemy.create
-
-
-
-      # enemy = new Enemy(i, game, Phaser, {
-      #   rank: 1
-      #   health: 10
-      #   dmg: 1
-      # })
-      # enemy.preload()
-      # enemy.create()
-      # enemies.push enemy
-
     preload: ->
-      @game.load.spritesheet "enemy", "images/leviathan.png", 96, 96
+      @game.load.spritesheet "enemy", "images/#{@png}", 96, 96
 
     create: () ->
       @sprite = @game.add.sprite(@x, @y, "enemy")
@@ -55,21 +43,17 @@ define( ->
       @sprite.body.bounce.set(1)
       @sprite.body.width = 100
       @sprite.body.height = 100
-      # @sprite.body.allowCollision = true
-
-      # @sprite.body.renderDebug(@sprite, @sprite)
-
       @sprite.animations.add "down", [0, 3], true
       @sprite.animations.add "left", [4, 7], true
       @sprite.animations.add "right", [8, 11], true
       @sprite.animations.add "up", [12, 15], true
 
-      setInterval(=>
-        @direction = Math.floor(Math.random() * 4)
-        setTimeout(=>
-          @direction = null
-        , 500)
-      , 2000)
+      # setInterval(=>
+      #   @direction = Math.floor(Math.random() * 4)
+      #   setTimeout(=>
+      #     @direction = null
+      #   , 500)
+      # , 2000)
 
     update: ->
       @sprite.body.velocity.x = 0

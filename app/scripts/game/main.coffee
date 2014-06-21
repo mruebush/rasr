@@ -77,6 +77,7 @@ require [
     game.user = user
     game.map = map
     socket rootUrl, game, players
+
     game.load.spritesheet "enemy", "images/leviathan.png", 96, 96
     
     # tell hero that he can move over non-blocked borders
@@ -98,17 +99,26 @@ require [
       hero.arrows.destroy()
       hero.createArrows()
       app.isLoaded = true
-    
-    console.log "Joining #{@game.mapId} on #{hero.sprite.x},#{hero.sprite.y}"
 
     enemies = []
+    enemyPositions = {}
+
     for enemyId of initialMap.enemies
-      enemies.push enemyId
+      enemies.push 
+        id: enemyId
+        count: initialMap.enemies[enemyId].count
+      enemyPositions[enemyId] = initialMap.enemies[enemyId].positions
+
+    game.enemyPositions = enemyPositions
+    # console.log enemyPositions
+
 
     @game.join   
       x: hero.sprite.x
       y: hero.sprite.y
       enemies: enemies
+      positions: enemyPositions
+      
 
 
   update = ->
@@ -131,7 +141,6 @@ require [
     @damage()
     arrow.kill()
 
-
   # MAKE INITIAL AJAX CALL FOR PLAYER INFO
   console.log "Making request for #{user}"
   $.ajax({
@@ -153,6 +162,7 @@ require [
       initialMap = mapData
     
       $('.creatables')
+
       game = new Phaser.Game(800, 600, Phaser.AUTO, "game-container",
         preload: preload
         create: create
