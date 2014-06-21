@@ -18,9 +18,9 @@ define([], ->
     appendMessages = (message) ->
       $messages = $('.messages')
       $messages.append($(template(message)))
-      $messages[0].scrollTop = $messages[0].scrollHeight - 100
       $allMessages = $messages.children()
-      $allMessages[0].remove() if $allMessages.length > 100
+      $allMessages[0].remove() if $allMessages.length > 50
+      $messages[0].scrollTop = $messages[0].scrollHeight - 100
 
     messageListener = ->
       socket.on('message', (data) ->
