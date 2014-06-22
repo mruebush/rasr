@@ -13,6 +13,7 @@ define( ->
     numArrowsShot = 5
 
     damage: ->
+      @sprite.animations.play 'damage_down', 15, false
       @meta.health--
       @render()
       
