@@ -38,7 +38,6 @@ define(['underscore'], function(_) {
 		    tilesYCount = Math.round(tileset.height / tileset.tileheight),
 		    tilesXCount = Math.round(tileset.width / tileset.tilewidth),
 		    output, layer, coords, y, x, query, elem, data;
-		    debugger;
 
 		anchor.download = "map." + type.toLowerCase();
 
@@ -61,7 +60,6 @@ define(['underscore'], function(_) {
 					opacity: 1
 
 				};
-				debugger;
 
 				for (y = 0; y < h; y++) {
 					for (x = 0; x < w; x++) {
@@ -74,6 +72,7 @@ define(['underscore'], function(_) {
 							coords.push("0");
 						}
 						coords = (tilesXCount) * (parseInt(coords[1], 10)) + parseInt(coords[0], 10) + 1;
+						console.log('type: ', typeof coords);
 
 						layer.data.push(coords);
 					}
@@ -123,10 +122,10 @@ define(['underscore'], function(_) {
 			dataType: 'json',
 			type: 'PUT',
 			success: function() {
-				// location.href = location.origin + '/play';
+				location.href = location.origin + '/play';
 			},
 			error: function(err) {
-				// location.href = location.origin + '/play';
+				location.href = location.origin + '/play';
 			}
 		})
 	};
