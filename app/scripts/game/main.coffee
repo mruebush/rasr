@@ -31,11 +31,11 @@ require [
   'player'
   'jquery'
 ], (Hero, Map, Enemy, events, socket, Phaser, Player, $) ->
+
   app = events({})
   window.game = game = null
   hero = null
   map = null
-  # game.enemies = []
   players = events({})
   mapId = null
   initialMap = null
@@ -45,11 +45,38 @@ require [
   leftScreen = null
   png = null
   rootUrl = ''
-  # rootUrl = 'http://localhost:9000'
   user = window.userData.name
   initPos = {}
   explosions = null
-  # actions = {}
+  
+  # MAKE INITIAL AJAX CALL FOR PLAYER INFO
+  initialize = ->
+    $.ajax({
+      url: "/player/me"
+    }).done (playerInfo) ->
+      mapId = playerInfo.mapId
+      initPos.x = playerInfo.x
+      initPos.y = playerInfo.y
+
+      png = playerInfo.png || 'roshan'
+      $('#map-id').attr('href', '/edit/' + mapId);
+      url = "/screen/#{mapId}"
+      $.ajax({
+        url: url
+      }).done (mapData) ->
+        initialMap = mapData
+        $('.creatables')
+        game = new Phaser.Game(800, 600, Phaser.AUTO, "game-canvas",
+          preload: preload
+          create: create
+          update: update
+        )
+        game.rootUrl = rootUrl
+        game.enemies = []
+        game = events(game)
+        game.realWidth = 20 * 64
+        game.realHeight = 12 * 64
+
 
   preload = ->
 
@@ -86,28 +113,16 @@ require [
     hero.create()
     game.hero = hero
     createExplosions()
+    render()
+
     map.on 'finishLoad', =>
       hero.arrows.destroy()
       hero.createArrows()
       createExplosions()
       app.isLoaded = true
-      game.layerRendering = game.add.group()
-      game.layerRendering.add(map.layers[0])
-      game.layerRendering.add(map.layers[1])
-      game.layerRendering.add(map.layers[2])
-      game.layerRendering.add(hero.sprite)
-      game.layerRendering.add(hero.arrows)
-      game.layerRendering.add(explosions)
-      game.layerRendering.add(map.layers[3])
+      render()
 
-    game.layerRendering = game.add.group()
-    game.layerRendering.add(map.layers[0])
-    game.layerRendering.add(map.layers[1])
-    game.layerRendering.add(map.layers[2])
-    game.layerRendering.add(hero.sprite)
-    game.layerRendering.add(hero.arrows)
-    game.layerRendering.add(explosions)
-    game.layerRendering.add(map.layers[3])
+
 
     console.log "Joining #{game.mapId} on #{hero.sprite.x},#{hero.sprite.y}"
 
@@ -129,6 +144,17 @@ require [
       y: hero.sprite.y
       enemies: enemies
       positions: enemyPositions
+
+  render = ->
+    game.layerRendering = game.add.group()
+    game.layerRendering.add(map.layers[0])
+    game.layerRendering.add(map.layers[1])
+    game.layerRendering.add(map.layers[2])
+    game.layerRendering.add(hero.sprite)
+    game.layerRendering.add(hero.arrows)
+    game.layerRendering.add(explosions)
+    game.layerRendering.add(map.layers[3])
+    hero.sprite.bringToTop();
 
   update = ->
     if app.isLoaded
@@ -167,34 +193,6 @@ require [
     explosionAnimation.reset(@sprite.x, @sprite.y)
     explosionAnimation.play('kaboom', 30, false, true)
 
+  do initialize
 
-  # MAKE INITIAL AJAX CALL FOR PLAYER INFO
-  $.ajax({
-    url: "#{rootUrl}/player/me"
-  }).done (playerInfo) ->
-    mapId = playerInfo.mapId
-
-    initPos.x = playerInfo.x
-    initPos.y = playerInfo.y
-
-    png = playerInfo.png || 'roshan'
-    $('#map-id').attr('href', '/edit/' + mapId);
-    url = "#{rootUrl}/screen/#{mapId}"
-    $.ajax({
-      url: url
-    }).done (mapData) ->
-      initialMap = mapData
-    
-      $('.creatables')
-
-      game = new Phaser.Game(800, 600, Phaser.AUTO, "game-canvas",
-        preload: preload
-        create: create
-        update: update
-      )
-      game.rootUrl = rootUrl
-      game.enemies = []
-      game = events(game)
-      game.realWidth = 20 * 64
-      game.realHeight = 12 * 64
 
