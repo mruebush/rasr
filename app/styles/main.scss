@@ -17,11 +17,22 @@ body {
 }
 
 .container {
+  background: white;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  padding: 10px 15px 0 15px
+}
+
+.game {
+  max-width: 1170px;
   border-radius: 10px;
   padding-top: 10px;
   padding-bottom: 10px;
   background: white;
-  max-width: 960px;
+}
+
+.controls {
+
 }
 
 .landing {
@@ -45,7 +56,8 @@ body {
 
 /* Custom page header */
 .header {
-    border-bottom: 1px solid #e5e5e5;
+  background-color: white;
+  border-bottom: 1px solid #e5e5e5;
 }
 
 /* Make the masthead heading the same height as the navigation */
@@ -96,10 +108,6 @@ body {
     .footer {
         padding-left: 0;
         padding-right: 0;
-    }
-    /* Space out the masthead */
-    .header {
-        margin-bottom: 30px;
     }
     /* Remove the bottom border on the jumbotron for visual effect */
     .jumbotron {
@@ -192,42 +200,6 @@ canvas {
 .up, .down {
   text-align: center;
   margin: 8px auto;
-}
-
-.left-label, .right-label {
-  position: absolute;
-  text-align: center;
-  padding: 0 10px;
-}
-
-.left-label {
-  top: 50%;
-  left: 2px;
-  transform: rotate(-90deg);
-  -o-transform: rotate(-90deg);
-  -ms-transform: rotate(-90deg);
-  -moz-transform: rotate(-90deg);
-  -webkit-transform:  rotate(-90deg);
-  transform-origin: 0 0;
-  -o-transform-origin: 0 0;
-  -ms-transform-origin: 0 0;
-  -moz-transform-origin: 0 0;
-  -webkit-transform-origin: 0 0;
-}
-
-.right-label {
-  top: 50%;
-  right: 2px;
-  transform: rotate(90deg);
-  -o-transform: rotate(90deg);
-  -ms-transform: rotate(90deg);
-  -moz-transform: rotate(90deg);
-  -webkit-transform:  rotate(90deg);
-  transform-origin: 0 0;
-  -o-transform-origin: 0 0;
-  -ms-transform-origin: 0 0;
-  -moz-transform-origin: 0 0;
-  -webkit-transform-origin: 0 0;
 }
 
 .game-canvas {
