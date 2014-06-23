@@ -16,12 +16,10 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
           do creature.sprite.kill
 
     game.on 'move enemies', (data) ->
-      for enemy in game.enemies
-        enemy.setDirection data.num
-        setTimeout ->
-          do enemy.clearDirection
-        ,500
-
+      nums = data.nums
+      for enemy,i in game.enemies
+        enemy.setDirection nums[i]
+        do enemy.clearDirection
 
     game.on 'enterMap', () ->
 
@@ -86,28 +84,32 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
       data.enemies = data.enemies || []
       game.enemies = []
 
-      for creature,i in data.enemies
-        for num in [0...creature.count]
-          console.log "Creating new enemy, #{num}"
-          x = +game.enemyPositions[creature.data._id][i][0]
-          y = +game.enemyPositions[creature.data._id][i][1]
-          enemy = new Enemy i, game, Phaser,
+      for enemyType of data.enemies
+        type = data.enemies[enemyType]
+        num = 0
+        for i,creature of type
+          console.log type[creature]
+          enemy = new Enemy game, Phaser,
             rank: 1
-            health: creature.data.health
+            health: creature.health
             dmg: 1
-            png: creature.data.png
-            speed: creature.data.speed
-            x: x
-            y: y
+            png: creature.png
+            speed: creature.speed
+            x: +creature.position[0]
+            y: +creature.position[1]
             id: num
+            dbId: creature._id
+
           do enemy.create
           game.enemies.push enemy
+          num++
 
     game.killEnemy = (enemy) ->
       console.log "enemy dies", enemy
       socket.emit 'enemyDies', 
         enemy: enemy.serverId
         mapId: game.mapId
+        _id: enemy.dbId
         # user: game.user
 
     _derenderEnemyListener = () ->
@@ -184,6 +186,7 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
 
     _joinListener = (user) ->
       socket.on game.mapId, (data) ->
+        console.log data
         if data.user != game.user
           game.trigger('player joined', data)
         else
