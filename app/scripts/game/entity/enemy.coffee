@@ -23,6 +23,7 @@ define( ->
         that = @
         setTimeout ->
           that.direction = null
+          that.game.stopEnemy(that)
         , 500
 
       @derender = () ->
