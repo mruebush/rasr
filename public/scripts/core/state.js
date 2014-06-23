@@ -3,33 +3,33 @@ app.config(function ($stateProvider, $locationProvider, $httpProvider, $urlRoute
     $stateProvider
       .state('landing', {
         url: '/',
-        templateUrl: 'partials/main',
+        templateUrl: 'templates/main',
         controller: 'MainCtrl'
       })
       .state('login', {
         url: '/login',
-        templateUrl: 'partials/login',
+        templateUrl: 'templates/login',
         controller: 'LoginCtrl'
       })
       .state('signup', {
         url: '/signup',
-        templateUrl: 'partials/signup',
+        templateUrl: 'templates/signup',
         controller: 'SignupCtrl'
       })
       .state('play', {
         url: '/play',
-        templateUrl: 'partials/game',
+        templateUrl: 'templates/game',
         controller: 'GameCtrl',
         authenticate: true
       })
       .state('edit', {
         url: '/edit/:mapId',
-        templateUrl: 'partials/edit',
+        templateUrl: 'templates/edit',
         authenticate: true
       })
       .state('settings', {
         url: '/settings',
-        templateUrl: 'partials/settings',
+        templateUrl: 'templates/settings',
         controller: 'SettingsCtrl',
         authenticate: true
       });
@@ -52,7 +52,6 @@ app.config(function ($stateProvider, $locationProvider, $httpProvider, $urlRoute
     }]);
   })
   .run(function ($rootScope, $location, Auth) {
-
     // Redirect to login if route requires auth and you're not logged in
     $rootScope.$on('$stateChangeStart', function (event, next) {
       // if($location.path() === '/play') {

@@ -237,8 +237,7 @@ module.exports = function (grunt) {
     // concat, minify and revision files. Creates configurations in memory so
     // additional tasks can operate on them
     useminPrepare: {
-      html: ['<%= yeoman.app %>/views/index.html',
-             '<%= yeoman.app %>/views/index.jade'],
+      html: ['<%= yeoman.app %>/index.html'],
       options: {
         dest: '<%= yeoman.dist %>/public'
       }
@@ -514,7 +513,7 @@ module.exports = function (grunt) {
     'cssmin',
     'uglify',
     'rev',
-    'usemin',
+    '',
     'coffee'
   ]);
 
