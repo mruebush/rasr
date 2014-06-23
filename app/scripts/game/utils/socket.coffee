@@ -70,7 +70,6 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
       players[player.user] = player
 
     game.on 'i joined', (data) ->
-      console.log data
       for other in data.others
         player = new Player(game, Phaser,
           x: other.x
@@ -87,23 +86,44 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
       data.enemies = data.enemies || []
       game.enemies = []
 
-      for creature,i in data.enemies
-        for num in [0...creature.count]
-          console.log "Creating new enemy, #{num}"
-          x = +game.enemyPositions[creature.data._id][i][0]
-          y = +game.enemyPositions[creature.data._id][i][1]
+      console.log 'data', data
+
+      for enemyType of data.enemies
+        type = data.enemies[enemyType]
+        for creature,i of type
+          console.log type[creature]
           enemy = new Enemy i, game, Phaser,
             rank: 1
-            health: creature.data.health
+            health: type[creature].health
             dmg: 1
-            png: creature.data.png
-            speed: creature.data.speed
-            x: x
-            y: y
-            id: num
-            dbId: creature.data._id
+            png: type[creature].png
+            speed: type[creature].speed
+            x: +type[creature].position[0]
+            y: +type[creature].position[1]
+            id: i
+            dbId: type[creature]._id
+
           do enemy.create
           game.enemies.push enemy
+
+
+      # for creature,i in data.enemies
+      #   for num in [0...creature.count]
+      #     console.log "Creating new enemy, #{num}"
+      #     x = +game.enemyPositions[creature.data._id][i][0]
+      #     y = +game.enemyPositions[creature.data._id][i][1]
+      #     enemy = new Enemy i, game, Phaser,
+      #       rank: 1
+      #       health: creature.data.health
+      #       dmg: 1
+      #       png: creature.data.png
+      #       speed: creature.data.speed
+      #       x: x
+      #       y: y
+      #       id: num
+      #       dbId: creature.data._id
+      #     do enemy.create
+      #     game.enemies.push enemy
 
     game.killEnemy = (enemy) ->
       console.log "enemy dies", enemy
