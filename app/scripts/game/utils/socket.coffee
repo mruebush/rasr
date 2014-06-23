@@ -52,6 +52,7 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
     game.on 'derender enemy', (data) ->
       game.enemies[data.enemy].alive = false
       do game.enemies[data.enemy].sprite.kill
+      game.enemies.splice data.enemy, 1
 
     _derenderEnemyListener = () ->
       socket.on 'derenderEnemy', (data) ->
