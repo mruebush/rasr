@@ -14,6 +14,7 @@ define( ->
       @alive = true
       @png = @meta.png
       @serverId = @meta.id
+      @dbId = @meta.dbId
 
       @setDirection = (num) ->
         @direction = num
@@ -29,8 +30,6 @@ define( ->
       @health--
       if @health <= 0
         @game.killEnemy @ 
-        # @alive = false
-        # @sprite.kill()
 
       return true
 

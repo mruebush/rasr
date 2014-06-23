@@ -70,6 +70,7 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
       players[player.user] = player
 
     game.on 'i joined', (data) ->
+      console.log data
       for other in data.others
         player = new Player(game, Phaser,
           x: other.x
@@ -100,6 +101,7 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
             x: x
             y: y
             id: num
+            dbId: creature.data._id
           do enemy.create
           game.enemies.push enemy
 
