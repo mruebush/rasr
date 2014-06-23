@@ -36,7 +36,7 @@ require [
   hero = null
   map = null
   # game.enemies = []
-  players = events({})
+  players = {}
   mapId = null
   initialMap = null
   upScreen = null
@@ -54,7 +54,7 @@ require [
   preload = ->
 
     game.load.atlasXML "enemy", "images/enemy.png", "images/enemy.xml"
-    hero = events(new Hero(game, Phaser, {
+    hero = events new Hero(game, Phaser, 
       exp: 150
       health: 100
       mana: 100
@@ -65,15 +65,14 @@ require [
       x: initPos.x
       y: initPos.y
       png: png
-    }, $))
-    # window.hero = hero
-    map = events(new Map(game, Phaser, mapId, $))
+    , $)
+    map = events new Map(game, Phaser, mapId, $)
     game.user = user
     game.map = map
     socket rootUrl, game, players, $, Phaser
     game.load.spritesheet 'kaboom', 'images/explosion.png', 64, 64, 23
-    hero.preload()
-    map.preload(null, initialMap)
+    do hero.preload
+    map.preload null, initialMap
 
     app.trigger 'create'
     app.isLoaded = true
@@ -139,7 +138,6 @@ require [
           hero.sprite.facing = hero.facing
           game.physics.arcade.collide(hero.sprite, enemy.sprite, hurtHero, null, hero)
           game.physics.arcade.collide(hero.arrows, hero.sprite, arrowHurt, null, hero)
-          # game.physics.arcade.collide(hero.arrows, player.sprite, arrowHurt, null, player)
           game.physics.arcade.collide(hero.arrows, enemy.sprite, arrowHurt, null, enemy)
 
           enemy.update()

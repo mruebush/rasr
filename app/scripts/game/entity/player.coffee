@@ -36,13 +36,13 @@ define( ->
       @sprite.x = data.x
 
       if dir is 'up'
-        @sprite.animations.play "up", 5, false
+        @sprite.animations.play "up", 30, false
       else if dir is 'down'
-        @sprite.animations.play "down", 5, false
-      if dir is 'left'
-        @sprite.animations.play "left", 5, false
+        @sprite.animations.play "down", 30, false
+      else if dir is 'left'
+        @sprite.animations.play "left", 30, false
       else if dir is 'right'
-        @sprite.animations.play "right", 5, false
+        @sprite.animations.play "right", 30, false
 
       do @update
       
