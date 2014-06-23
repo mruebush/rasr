@@ -88,7 +88,6 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
         type = data.enemies[enemyType]
         num = 0
         for i,creature of type
-          console.log type[creature]
           enemy = new Enemy game, Phaser,
             rank: 1
             health: creature.health
@@ -111,6 +110,16 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
         mapId: game.mapId
         _id: enemy.dbId
         # user: game.user
+
+
+    game.stopEnemy = (enemy) ->
+      socket.emit 'stopEnemy', 
+        enemy: enemy.serverId
+        mapId: game.mapId
+        _id: enemy.dbId
+        x: enemy.sprite.x
+        y: enemy.sprite.y
+
 
     _derenderEnemyListener = () ->
       socket.on 'derenderEnemy', (data) ->
