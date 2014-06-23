@@ -30,7 +30,8 @@ define( ->
         do @sprite.kill
 
     damage: ->
-      @health--
+      # @health--
+      @game.damageEnemy @
       if @health <= 0
         @game.killEnemy @ 
 

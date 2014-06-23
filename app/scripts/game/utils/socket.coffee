@@ -53,7 +53,6 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
       players[user].sprite.kill()
       delete players[user]
 
-
     game.on 'changeMap', (direction) ->
       game.leave game.mapId, game.user
 
@@ -109,8 +108,26 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
         enemy: enemy.serverId
         mapId: game.mapId
         _id: enemy.dbId
-        # user: game.user
+    
 
+    game.damageEnemy = (enemy) ->
+      socket.emit 'damageEnemy', 
+        enemy: enemy.serverId
+        room: game.mapId
+        _id: enemy.dbId
+        user: game.user
+
+    _damageEnemyListener = () ->
+      socket.on 'damageEnemy', (data) ->
+        console.log 'receive damageEnemy'
+        game.trigger 'damageEnemy', data
+
+    game.on 'damageEnemy', (data) ->
+      for enemy in game.enemies
+        console.log enemy
+        if enemy.serverId is data.serverId
+          enemy.health--
+        
 
     game.stopEnemy = (enemy) ->
       socket.emit 'stopEnemy', 
@@ -218,6 +235,7 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
     _leaveListener mapId, game.user
     _moveListener game.user
     _shootListener game.user
+    do _damageEnemyListener
     do _enemyListener
     do _derenderEnemyListener
 
