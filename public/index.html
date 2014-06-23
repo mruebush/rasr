@@ -10,20 +10,12 @@
     <title></title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
-    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-    <!-- build:css(app) styles/vendor.css -->
-    <!-- bower:css -->
-    <!-- endbower -->
-    <!-- endbuild -->
-    <!-- build:css({.tmp,app}) styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
-    <!-- endbuild -->
   </head>
-<body ng-app="komApp" onselectstart="return false;">
+<body ng-app="komApp" ng-controller="AppCtrl">
   <!--[if lt IE 7]>
     <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
   <![endif]-->
-
 
   <div ui-sref="navigation"></div>
   <!-- Add your site or application content here -->
@@ -58,16 +50,19 @@
   <!-- CORE -->
   <script src="scripts/app.js"></script>
   <script src="scripts/core/state.js"></script>
-  <script src="scripts/core/controllers/main.js"></script>
+
+  <script src="scripts/core/controllers/AppCtrl.js"></script>
   <script src="scripts/core/controllers/navbar.js"></script>
   <script src="scripts/core/controllers/login.js"></script>
   <script src="scripts/core/controllers/signup.js"></script>
   <script src="scripts/core/controllers/settings.js"></script>
-  <script src="scripts/core/controllers/game.js"></script>
   <script src="scripts/core/services/auth.js"></script>
   <script src="scripts/core/services/session.js"></script>
   <script src="scripts/core/services/user.js"></script>
   <script src="scripts/core/directives/mongooseError.js"></script>
+
+  <!-- GAME -->
+  <!-- <script src="scripts/core/controllers/game.js"></script> -->
 
 </body>
 </html>

@@ -13,4 +13,4 @@ angular.module('komApp')
         $scope.chats.pop();
       }
     }
-  })
+  });
