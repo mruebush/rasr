@@ -195,7 +195,6 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
 
     _joinListener = (user) ->
       socket.on game.mapId, (data) ->
-        console.log data
         if data.user != game.user
           game.trigger('player joined', data)
         else
