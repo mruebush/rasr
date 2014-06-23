@@ -1,0 +1,207 @@
+$icon-font-path: "/bower_components/bootstrap-sass-official/vendor/assets/fonts/bootstrap/";
+
+@import 'bootstrap-sass-official/vendor/assets/stylesheets/bootstrap';
+
+.browsehappy {
+    margin: 0.2em 0;
+    background: #ccc;
+    color: #000;
+    padding: 0.2em 0;
+}
+
+/* Space out content a bit */
+body {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    background: url('../images/background.jpg');
+}
+
+.container {
+  background: white;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  padding: 10px 15px 0 15px
+}
+
+.game {
+  max-width: 1170px;
+  border-radius: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background: white;
+}
+
+.controls {
+
+}
+
+.landing {
+  position: fixed;
+  width: 400px;
+  height: 400px;
+  background: white;
+  border-radius: 10px;
+  top:0;right:0;bottom:0;left:0;
+  margin:auto;
+  padding: 20px;
+}
+
+/* Everything but the jumbotron gets side spacing for mobile first views */
+.header,
+.marketing,
+.footer {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Custom page header */
+.header {
+  background-color: white;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+/* Make the masthead heading the same height as the navigation */
+.header h3 {
+    margin-top: 0;
+    margin-bottom: 0;
+    line-height: 40px;
+    padding-bottom: 19px;
+}
+
+/* Custom page footer */
+.footer {
+    padding-top: 19px;
+    color: #777;
+    border-top: 1px solid #e5e5e5;
+}
+
+.container-narrow > hr {
+    margin: 30px 0;
+}
+
+/* Main marketing message and sign up button */
+.jumbotron {
+    text-align: center;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.jumbotron .btn {
+    font-size: 21px;
+    padding: 14px 24px;
+}
+
+/* Supporting marketing content */
+.marketing {
+    margin: 40px 0;
+}
+
+.marketing p + h4 {
+    margin-top: 28px;
+}
+
+/* Responsive: Portrait tablets and up */
+@media screen and (min-width: 768px) {
+
+    /* Remove the padding we set earlier */
+    .header,
+    .marketing,
+    .footer {
+        padding-left: 0;
+        padding-right: 0;
+    }
+    /* Remove the bottom border on the jumbotron for visual effect */
+    .jumbotron {
+        border-bottom: 0;
+    }
+}
+
+.chatbox {
+  border: 2px solid #e5e5e5;
+  border-radius: 5px;
+  padding: 8px;
+  margin-top: 10px;
+  background-color: #F8F7FF;
+}
+
+.chatbox > .header {
+  margin-bottom: 8px;
+  font-size: 1.5em;
+}
+
+.messages {
+  height: 100px;
+  width: 100%;
+  overflow: scroll
+}
+
+/*.message {
+  text-align: left;
+}
+*/
+.chatToSend {
+  border-radius: 3px;
+}
+
+/*andrews border stuff*/
+canvas {
+  text-align: center;
+}
+
+/*.border {
+  position: fixed;
+}
+
+.border-top, .border-bottom {
+  width: 900px;
+  height: 50px;
+}
+
+.border-right, .border-left {
+  width: 50px;
+  height: 700px;
+}
+
+.border-top {
+  top: 0;
+  left: 0;
+}
+
+.border-bottom {
+  top: 650px;
+  left: 0;
+}
+
+.border-right {
+  top: 0;
+  left: 850px;
+}
+
+.border-left {
+  top: 0;
+  left: 0;
+}
+*/
+/*.no-bordering-screen {
+  background-color: black;
+}
+*//*
+.hidden {
+  display: inline;
+}
+*/
+.labels-game {
+  position: relative;
+}
+
+canvas {
+  margin: 5px auto;
+}
+
+.up, .down {
+  text-align: center;
+  margin: 8px auto;
+}
+
+.game-canvas {
+
+}

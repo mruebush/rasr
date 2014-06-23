@@ -11,7 +11,6 @@
     "angular-cookies": ">=1.2.*",
     "angular-sanitize": ">=1.2.*",
     "angular-route": ">=1.2.*",
-    "requirejs": "~2.1.14",
     "phaser": "~2.0.4",
     "socket.io-client": "~1.0.4",
     "angular-ui-router": "~0.2.10",

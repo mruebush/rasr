@@ -1,11 +1,10 @@
 node_modules
-public
 .tmp
 .sass-cache
-app/bower_components
+public/bower_components
 heroku
 /views
 dist
-/app/scripts/game/**/*.js
+/public/scripts/game/**/*.js
 
 .DS_Store
