@@ -10,7 +10,7 @@ define( ->
     arrowIndex = 0
     arrowSpeed = 600
     numArrows = 50
-    numArrowsShot = 5
+    numArrowsShot = 1
 
     damage: ->
       @sprite.animations.play 'damage_down', 15, false
