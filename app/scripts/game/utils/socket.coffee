@@ -86,8 +86,6 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
       data.enemies = data.enemies || []
       game.enemies = []
 
-      console.log 'data', data
-
       for enemyType of data.enemies
         type = data.enemies[enemyType]
         for creature,i of type
@@ -105,25 +103,6 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
 
           do enemy.create
           game.enemies.push enemy
-
-
-      # for creature,i in data.enemies
-      #   for num in [0...creature.count]
-      #     console.log "Creating new enemy, #{num}"
-      #     x = +game.enemyPositions[creature.data._id][i][0]
-      #     y = +game.enemyPositions[creature.data._id][i][1]
-      #     enemy = new Enemy i, game, Phaser,
-      #       rank: 1
-      #       health: creature.data.health
-      #       dmg: 1
-      #       png: creature.data.png
-      #       speed: creature.data.speed
-      #       x: x
-      #       y: y
-      #       id: num
-      #       dbId: creature.data._id
-      #     do enemy.create
-      #     game.enemies.push enemy
 
     game.killEnemy = (enemy) ->
       console.log "enemy dies", enemy
