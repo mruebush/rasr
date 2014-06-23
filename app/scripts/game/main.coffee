@@ -139,6 +139,7 @@ require [
           hero.sprite.facing = hero.facing
           game.physics.arcade.collide(hero.sprite, enemy.sprite, hurtHero, null, hero)
           game.physics.arcade.collide(hero.arrows, hero.sprite, arrowHurt, null, hero)
+          # game.physics.arcade.collide(hero.arrows, player.sprite, arrowHurt, null, player)
           game.physics.arcade.collide(hero.arrows, enemy.sprite, arrowHurt, null, enemy)
 
           enemy.update()
@@ -146,7 +147,6 @@ require [
         if player.update then do player.update
 
   hurtHero = (heroSprite, enemySprite) ->
-    heroSprite.animations.play 'damage_down', 15, false
     @damage()
 
   arrowHurt = (sprite, arrow) ->
