@@ -110,6 +110,7 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
       socket.emit 'enemyDies', 
         enemy: enemy.serverId
         mapId: game.mapId
+        _id: enemy.dbId
         # user: game.user
 
     _derenderEnemyListener = () ->
