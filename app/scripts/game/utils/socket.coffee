@@ -17,9 +17,7 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
 
     game.on 'move enemies', (data) ->
       nums = data.nums
-      console.log 'moving'
       for enemy,i in game.enemies
-        console.log enemy
         enemy.setDirection nums[i]
         do enemy.clearDirection
 
