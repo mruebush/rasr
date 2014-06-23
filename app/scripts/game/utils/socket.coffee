@@ -16,12 +16,12 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
           do creature.sprite.kill
 
     game.on 'move enemies', (data) ->
-      for enemy in game.enemies
-        enemy.setDirection data.num
-        setTimeout ->
-          do enemy.clearDirection
-        ,500
-
+      nums = data.nums
+      console.log 'moving'
+      for enemy,i in game.enemies
+        console.log enemy
+        enemy.setDirection nums[i]
+        do enemy.clearDirection
 
     game.on 'enterMap', () ->
 
@@ -88,21 +88,23 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
 
       for enemyType of data.enemies
         type = data.enemies[enemyType]
-        for creature,i of type
+        num = 0
+        for i,creature of type
           console.log type[creature]
-          enemy = new Enemy i, game, Phaser,
+          enemy = new Enemy game, Phaser,
             rank: 1
-            health: type[creature].health
+            health: creature.health
             dmg: 1
-            png: type[creature].png
-            speed: type[creature].speed
-            x: +type[creature].position[0]
-            y: +type[creature].position[1]
-            id: i
-            dbId: type[creature]._id
+            png: creature.png
+            speed: creature.speed
+            x: +creature.position[0]
+            y: +creature.position[1]
+            id: num
+            dbId: creature._id
 
           do enemy.create
           game.enemies.push enemy
+          num++
 
     game.killEnemy = (enemy) ->
       console.log "enemy dies", enemy
@@ -186,6 +188,7 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
 
     _joinListener = (user) ->
       socket.on game.mapId, (data) ->
+        console.log data
         if data.user != game.user
           game.trigger('player joined', data)
         else

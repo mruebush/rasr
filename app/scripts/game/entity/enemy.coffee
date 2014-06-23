@@ -1,7 +1,7 @@
 define( ->
 
   class Enemy
-    constructor: (@index, @game, @phaser, @meta) ->
+    constructor: (@game, @phaser, @meta) ->
       @sprite = null
       @direction = null
       @speed = @meta.speed
@@ -20,8 +20,10 @@ define( ->
         @direction = num
 
       @clearDirection = () ->
-        @direction = null
-
+        that = @
+        setTimeout ->
+          that.direction = null
+        , 500
 
       @derender = () ->
         do @sprite.kill
