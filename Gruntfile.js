@@ -49,7 +49,7 @@ module.exports = function (grunt) {
           expand: true,
           cwd: '<%= yeoman.app %>/scripts',
           src: '**/*.coffee',
-          dest: '<%= yeoman.app %>/scripts',
+          dest: '<%= yeoman.app %>/js',
           ext: '.js'
         }]
       }

@@ -31,7 +31,7 @@ app.config(function ($stateProvider, $locationProvider, $httpProvider, $urlRoute
       });
       // .state('edit', {
       //   url: '/edit/:mapId',
-      //   templateUrl: '/js/core/templates/edit',
+      //   templateUrl: '/scripts/core/templates/edit',
       //   authenticate: true
       // })
 

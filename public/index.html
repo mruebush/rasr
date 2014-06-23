@@ -47,22 +47,33 @@
   <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
   <script src="bower_components/socket.io-client/socket.io.js"></script>
 
-  <!-- CORE -->
-  <script src="scripts/app.js"></script>
-  <script src="scripts/core/state.js"></script>
+  <!-- APP -->
+  <script src="js/app.js"></script>
 
-  <script src="scripts/core/controllers/AppCtrl.js"></script>
-  <script src="scripts/core/controllers/navbar.js"></script>
-  <script src="scripts/core/controllers/login.js"></script>
-  <script src="scripts/core/controllers/signup.js"></script>
-  <script src="scripts/core/controllers/settings.js"></script>
-  <script src="scripts/core/services/auth.js"></script>
-  <script src="scripts/core/services/session.js"></script>
-  <script src="scripts/core/services/user.js"></script>
-  <script src="scripts/core/directives/mongooseError.js"></script>
+  <!-- CORE -->
+  <script src="js/core/state.js"></script>
+  <script src="js/core/controllers/AppCtrl.js"></script>
+  <script src="js/core/controllers/navbar.js"></script>
+  <script src="js/core/controllers/login.js"></script>
+  <script src="js/core/controllers/signup.js"></script>
+  <script src="js/core/controllers/settings.js"></script>
+  <script src="js/core/services/auth.js"></script>
+  <script src="js/core/services/session.js"></script>
+  <script src="js/core/services/user.js"></script>
+  <script src="js/core/directives/mongooseError.js"></script>
 
   <!-- GAME -->
-  <!-- <script src="scripts/core/controllers/game.js"></script> -->
+  <script src="js/game/state.js"></script>
+  <script src="js/game/controllers/GameCtrl.js"></script>
+  <script src="js/game/services/entity/ArrowModel.js"></script>
+  <script src="js/game/services/entity/EnemyModel.js"></script>
+  <script src="js/game/services/entity/HeroModel.js"></script>
+  <script src="js/game/services/entity/PlayerModel.js"></script>
+  <script src="js/game/services/map/MapModel.js"></script>
+  <script src="js/game/services/utils/EventService.js"></script>
+  <script src="js/game/services/utils/MessageService.js"></script>
+  <script src="js/game/services/utils/SocketService.js"></script>
+
 
 </body>
 </html>
