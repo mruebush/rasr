@@ -115,7 +115,7 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
     game.stopEnemy = (enemy) ->
       socket.emit 'stopEnemy', 
         enemy: enemy.serverId
-        mapId: game.mapId
+        room: game.mapId
         _id: enemy.dbId
         x: enemy.sprite.x
         y: enemy.sprite.y
