@@ -1,22 +1,22 @@
 (function() {
   app.controller('EditCtrl', [
-    'Editor', '$rootScope', function(Editor, $rootScope) {
+    'Editor', '$rootScope', '$http', '$stateParams', 'SERVER_URL', 'GET_SCREEN', function(Editor, $rootScope, $http, $stateParams, SERVER_URL, GET_SCREEN) {
       var load;
       $rootScope.Editor = Editor;
       Editor = $rootScope.Editor;
       Editor.$ = $;
       $(document).ready(function() {
-        var mapId;
-        mapId = location.pathname.split("/")[2];
-        $.ajax({
-          url: "/screen/" + mapId,
-          success: function(data) {
-            Editor.initialize(data);
-            load(data);
-            setTimeout((function() {
-              Editor.Import.process(JSON.stringify(data), "json");
-            }), 2000);
-          }
+        var url;
+        url = "" + SERVER_URL + "/" + GET_SCREEN + "/" + $stateParams.screenId;
+        $http({
+          method: 'GET',
+          url: url
+        }).success(function(data, status, headers, config) {
+          Editor.initialize(data);
+          load(data);
+          return setTimeout(function() {
+            Editor.Import.process(JSON.stringify(data), "json");
+          }, 2000);
         });
       });
       load = function(data) {

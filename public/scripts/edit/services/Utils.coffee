@@ -9,15 +9,10 @@ app.factory('Utils', ['$rootScope', ($rootScope) ->
   # ======================== 
   Utils.initialize = ->
     Editor = $rootScope.Editor
-    # Editor = require("editor")
-
-    # return
 
   
   # ============================ 
-  
   # ====== MAKE SELECTION ====== 
-  
   # ============================ 
   Utils.makeSelection = (e, container) ->
     tileset = Editor.activeTileset

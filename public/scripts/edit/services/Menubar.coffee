@@ -47,7 +47,7 @@ app.service('Menubar', ['$rootScope', ($rootScope) ->
   Menubar.openDialog = (e) ->
     template = Editor.$(e.currentTarget).attr("data-template")
     title = Editor.$(e.currentTarget).text()
-    $.get "/scripts/edit/templates/" + template + ".html", (data) ->
+    $.get "/js/edit/templates/" + template + ".tpl.html", (data) ->
       Editor.$("#dialog").html(data).dialog
         title: title
         modal: true
