@@ -1,18 +1,8 @@
-define [
-  "underscore"
-  "modules/utils"
-  "modules/menubar"
-  "modules/tools"
-  "modules/canvas"
-  "modules/tilesets"
-  "modules/layers"
-  "modules/export"
-  "modules/import"
-  "events"
-], ->
+app.factory('Editor', ['Utils', 'Menubar', 'Tools', 'Canvas', 'Tilesets', 'Layers', 'Export', 'Import', 'EventService', (Utils, Menubar, Tools, Canvas, Tilesets, Layers, Export, Import, EventService) ->
   events = require("events")
   Editor = events({})
   args = arguments_
+  debugger
   argNames = [
     "_"
     "Utils"
@@ -118,3 +108,4 @@ define [
 
   Editor
 
+])

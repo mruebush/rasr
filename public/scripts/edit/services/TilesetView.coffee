@@ -1,6 +1,5 @@
-define ->
+app.factory('TilesetView', ['Editor', (Editor) ->
   TilesetView = {}
-  Editor = undefined
   TilesetView.config = filetypes: [
     "png"
     "jpg"
@@ -14,7 +13,7 @@ define ->
   
   # ======================== 
   TilesetView.initialize = ->
-    Editor = require("editor")
+    # Editor = require("editor")
     
     # Tileset UI functionality
     Editor.$("body").on("change", "#tilesets select", @changeTileset).on("change", "input[name=file_tileset]", @cacheFile).on("click", "#tilesets_add", @add).on "click", "#tilesets_remove", @remove
@@ -204,5 +203,6 @@ define ->
       delete Editor.selection.custom
     return
 
-  TilesetView
+  return TilesetView
 
+ ])

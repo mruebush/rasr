@@ -1,4 +1,4 @@
-define ->
+app.factory('Tools', [->
   Tools = {}
   Editor = undefined
   
@@ -34,5 +34,6 @@ define ->
     Editor.tool = $target.attr("data-tool")
     return
 
-  Tools
+  return Tools
 
+ ])

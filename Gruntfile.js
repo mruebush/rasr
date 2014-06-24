@@ -12,10 +12,20 @@ module.exports = function (grunt) {
     yeoman: {
       app: 'public'
     },
+    clean: {
+      dist: {
+        files: [{
+          dot: true,
+          src: [
+            '<%= yeoman.app %>/js/**/*.js'
+          ]
+        }]
+      }
+    },
     watch: {
       coffee: {
         files: ['<%= yeoman.app %>/**/*.coffee'],
-        tasks: ['newer:coffee']
+        tasks: ['clean:dist', 'newer:coffee']
       },
       compass: {
         files: ['<%= yeoman.app %>/compass/{,*/}*.{scss,sass}'],
@@ -86,6 +96,7 @@ module.exports = function (grunt) {
   });
 
   grunt.registerTask('build', [
+    'clean:dist',
     'coffee',
     'compass'
   ]);

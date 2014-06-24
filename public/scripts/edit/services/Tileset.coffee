@@ -1,8 +1,4 @@
-define [
-  "views/tileset_view"
-  "jquery.mousewheel"
-  "jquery.jscrollpane"
-], (TilesetView) ->
+app.factory('Tileset', ['TilesetView', (TilesetView) ->
   Tilesets = {}
   Editor = undefined
   Tilesets.collection = {}
@@ -184,5 +180,6 @@ define [
   Tilesets.getActive = ->
     Tilesets.collection[Editor.$("#tilesets select option:selected").val()]
 
-  Tilesets
+  return Tilesets
 
+ ])

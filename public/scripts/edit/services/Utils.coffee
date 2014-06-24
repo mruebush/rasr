@@ -1,6 +1,6 @@
-define ->
+app.factory('Utils', ['Editor', (Editor) ->
   Utils = {}
-  Editor = undefined
+  # Editor = undefined
   
   # ======================== 
   
@@ -8,8 +8,8 @@ define ->
   
   # ======================== 
   Utils.initialize = ->
-    Editor = require("editor")
-    return
+    # Editor = require("editor")
+    # return
 
   
   # ============================ 
@@ -122,5 +122,6 @@ define ->
       ]
     return
 
-  Utils
+  return Utils
 
+])

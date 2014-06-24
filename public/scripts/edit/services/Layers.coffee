@@ -1,4 +1,4 @@
-define ->
+app.factory('Layers', ['Editor', (Editor) ->
   Layers = {}
   Editor = undefined
   
@@ -8,7 +8,7 @@ define ->
   
   # ======================== 
   Layers.initialize = ->
-    Editor = require("editor")
+    # Editor = require("editor")
     
     # Make layers sortable
     Editor.$("#layerlist").sortable
@@ -210,5 +210,6 @@ define ->
 
     return
 
-  Layers
+  return Layers
 
+])

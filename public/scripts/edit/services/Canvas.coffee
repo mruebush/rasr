@@ -1,4 +1,4 @@
-define ->
+app.factory('Canvas', ['Editor', (Editor) -> 
   Canvas = {}
   Editor = undefined
   Canvas.cursor = []
@@ -383,5 +383,6 @@ define ->
 
     return
 
-  Canvas
+  return Canvas
 
+])

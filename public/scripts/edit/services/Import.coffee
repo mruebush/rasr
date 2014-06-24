@@ -1,4 +1,4 @@
-define ->
+app.factory('Import', ['Editor', (Editor) ->
   Import = {}
   Editor = undefined
   Tilesets = undefined
@@ -158,5 +158,6 @@ define ->
       Editor.$("#dialog input[name=file_overlay]").val Import.tmp.name
     return
 
-  Import
+  return Import
 
+ ])

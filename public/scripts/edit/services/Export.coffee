@@ -1,6 +1,6 @@
-define ["underscore"], (_) ->
+app.factory('Export', ['Editor', (Editor) ->
   Export = {}
-  Editor = undefined
+  # Editor = undefined
   
   # ======================== 
   
@@ -8,7 +8,7 @@ define ["underscore"], (_) ->
   
   # ======================== 
   Export.initialize = ->
-    Editor = require("editor")
+    # Editor = require("editor")
     return
 
   
@@ -123,5 +123,6 @@ define ["underscore"], (_) ->
 
     return
 
-  Export
+  return Export
 
+])

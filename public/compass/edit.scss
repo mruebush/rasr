@@ -469,17 +469,17 @@ a span { padding-right: 2px; }
 	box-shadow: inset 0px 1px #777;
 	background-color: #555;
 	
-	background-image: url("/images/icons/select_arrow.png");
+	background-image: url("/assets/icons/select_arrow.png");
 	background-position: right;
 	background-repeat: no-repeat;
 
 }
 
-#custom_select:hover { background-image: url("/images/icons/select_arrow_hover.png"); }
+#custom_select:hover { background-image: url("/assets/icons/select_arrow_hover.png"); }
 
 #tileset {
 	background-color: #FFF;
-	background-image: url("/images/icons/transparent.png");
+	background-image: url("/assets/icons/transparent.png");
 	border: 5px solid #555;
 	border-top: 0px;
 	border-radius: 0px 0px 3px 3px;

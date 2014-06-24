@@ -1,6 +1,5 @@
-define ->
+app.factory('Menubar', ['Editor', (Editor) ->
   Menubar = {}
-  Editor = undefined
   
   # ======================== 
   
@@ -8,7 +7,7 @@ define ->
   
   # ======================== 
   Menubar.initialize = ->
-    Editor = require("editor")
+    # Editor = require("editor")
     return
 
   
@@ -142,5 +141,6 @@ define ->
     return
 
   Menubar.toggleFunctions = {}
-  Menubar
+  return Menubar
 
+ ])
