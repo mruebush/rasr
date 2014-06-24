@@ -81,16 +81,16 @@ require [
     game.hero = hero
 
   create = ->
-    map.create()
-    hero.create()
+    do map.create
+    do hero.create
     game.hero = hero
-    createExplosions()
+    do createExplosions
     map.on 'finishLoad', =>
-      hero.arrows.destroy()
-      hero.createArrows()
-      createExplosions()
+      do hero.arrows.destroy
+      do hero.createArrows
+      do createExplosions
       app.isLoaded = true
-      game.layerRendering = game.add.group()
+      game.layerRendering = do game.add.group
       game.layerRendering.add(map.layers[0])
       game.layerRendering.add(map.layers[1])
       game.layerRendering.add(map.layers[2])
@@ -99,7 +99,7 @@ require [
       game.layerRendering.add(explosions)
       game.layerRendering.add(map.layers[3])
 
-    game.layerRendering = game.add.group()
+    game.layerRendering = do game.add.group
     game.layerRendering.add(map.layers[0])
     game.layerRendering.add(map.layers[1])
     game.layerRendering.add(map.layers[2])
@@ -133,8 +133,8 @@ require [
 
   update = ->
     if app.isLoaded
-      map.update()
-      hero.update()
+      do map.update
+      do hero.update
       for enemy in game.enemies
         if enemy.alive
           hero.sprite.facing = hero.facing
@@ -151,11 +151,11 @@ require [
 
   arrowHurt = (sprite, arrow) ->
     explosion.call(@)
-    @damage()
-    arrow.kill()
+    do @damage
+    do arrow.kill
 
   createExplosions = ->
-    explosions = game.add.group()
+    explosions = do game.add.group
 
     for i in [0...10]
       explosionAnimation = explosions.create(0, 0, 'kaboom', [0], false)

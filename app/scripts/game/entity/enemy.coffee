@@ -18,21 +18,35 @@ define( ->
       @name = @meta.name
       @xp = @meta.xp
 
+      @reportDirection = () ->
+        that = @
+        report = () -> 
+          that.game.enemyMoving
+            enemy: that.serverId
+            _id: that.dbId
+            x: that.sprite.x
+            y: that.sprite.y
+
+        setInterval report, 250
+
+      @reportDirection = _.once(@reportDirection)
+
       @setDirection = (num) ->
         @direction = num
 
       @clearDirection = () ->
         that = @
-        setTimeout ->
+        that.timer = setTimeout ->
           that.direction = null
           that.game.stopEnemy(that)
         , 500
 
       @derender = () ->
         do @sprite.kill
+        clearInterval @timer
 
     damage: ->
-      # @health--
+      do @reportDirection
       @game.damageEnemy @
       if @health <= 0
         @game.killEnemy @ 

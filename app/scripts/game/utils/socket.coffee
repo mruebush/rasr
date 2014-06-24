@@ -43,7 +43,25 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
 
     game.on 'move', (data) ->
       if players[data.user]
-        players[data.user].move data 
+        players[data.user].move data
+
+    game.enemyMoving = (data) ->
+      data.room = game.mapId
+      socket.emit 'enemyMoving', data
+
+    _enemyMovingListener = () ->
+      socket.on 'enemyMoving', (data) ->
+        game.trigger 'enemyMoving', data
+
+    game.on 'enemyMoving', (data) ->
+      
+      enemy = game.enemies[data.serverId]
+      
+      if enemy
+        enemy.setDirection data.dir
+
+    do _enemyMovingListener
+
 
     game.on 'levelUp', (data) ->
       game.hero.speed += data.speed;
@@ -236,8 +254,12 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
     game.on 'move enemies', (data) ->
       nums = data.nums
       for enemy,i in game.enemies
-        enemy.setDirection nums[i]
-        do enemy.clearDirection
+        enemy.setDirection nums[i].dir
+        if nums[i].passive
+          do enemy.clearDirection
+
+        
+
 
     # Initialize message module
     messages(game, socket, $)
