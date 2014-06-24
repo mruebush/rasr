@@ -74,9 +74,7 @@ define([], ->
         layer.resizeWorld()
         if (layer.name == 'collision')
           # collide on everything, set on from 1 to 1000 from now
-          map.setCollisionBetween(1, 1000, true, layer)
-          layer.debug = true
-        
+          map.setCollisionBetween(1, 1000, true, layer)        
 
       @trigger 'finishLoad'
       # @game.trigger 'enterMap'
