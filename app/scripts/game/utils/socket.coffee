@@ -48,6 +48,8 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
         enemy: enemy.serverId
         mapId: game.mapId
         _id: enemy.dbId
+        user: game.user
+        enemyName: enemy.name
     
     game.on 'derender enemy', (data) ->
       game.enemies[data.enemy].alive = false
@@ -163,6 +165,7 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
         type = data.enemies[enemyType]
         num = 0
         for i,creature of type
+          console.log creature
           enemy = new Enemy game, Phaser,
             rank: 1
             health: creature.health
@@ -173,6 +176,7 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
             y: +creature.position[1]
             id: num
             dbId: creature._id
+            name: creature.name
 
           do enemy.create
           game.enemies.push enemy
