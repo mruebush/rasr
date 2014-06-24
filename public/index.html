@@ -17,11 +17,19 @@
     <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
   <![endif]-->
 
-  <div ui-sref="navigation"></div>
   <!-- Add your site or application content here -->
   <div ui-view></div>
+<!-- 
+  <div class="container">
+    <div ui-view="navbar"></div>
+  </div>
 
-  <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
+  <div>
+    <div ui-view="main"></div>
+  </div>
+
+ --> 
+   <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
    <script>
      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -75,7 +83,6 @@
   <!-- <script src="js/game/services/utils/SocketService.js"></script> -->
 
   <!-- EDITOR -->
-  
 
 
 </body>

@@ -11,6 +11,7 @@ app.use('/mocks', express.static(path.resolve(__dirname + '/public/mocks')));
 app.use('/node_modules', express.static(path.resolve(__dirname + '/node_modules')));
 
 app.get( '/*', function( req, res, next ) {
+  console.log('req: ', req.url);
   res.sendfile(path.resolve(__dirname + '/public/index.html'));
 });
 
