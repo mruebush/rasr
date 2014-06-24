@@ -1,8 +1,8 @@
 (function() {
   var __slice = [].slice;
 
-  app.factory('EventService', function(obj) {
-    return function() {
+  app.factory('Events', function() {
+    return function(obj) {
       obj._listeners = {};
       obj.on = function(key, callback) {
         if (obj._listeners[key]) {
