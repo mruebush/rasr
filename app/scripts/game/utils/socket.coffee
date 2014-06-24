@@ -51,8 +51,9 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
 
     _levelUpListener = () ->
       socket.on 'levelUp', (data) ->
-        console.log 'levelUp in socket'
-        game.trigger 'levelUp', data
+        if data.user == game.user
+          console.log 'levelUp in socket'
+          game.trigger 'levelUp', data
 
     game.killEnemy = (enemy) ->
       console.log "enemy dies", enemy
