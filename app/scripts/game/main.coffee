@@ -36,7 +36,7 @@ require [
   hero = null
   map = null
   # game.enemies = []
-  players = events({})
+  players = {}
   mapId = null
   initialMap = null
   upScreen = null
@@ -47,33 +47,32 @@ require [
   rootUrl = ''
   # rootUrl = 'http://localhost:9000'
   user = window.userData.name
-  initPos = {}
+  init = {}
   explosions = null
   # actions = {}
 
   preload = ->
 
     game.load.atlasXML "enemy", "images/enemy.png", "images/enemy.xml"
-    hero = events(new Hero(game, Phaser, {
-      exp: 150
+    hero = events new Hero(game, Phaser, 
       health: 100
       mana: 100
-      str: 10
-      dex: 10
-      int: 10
-      luk: 10
-      x: initPos.x
-      y: initPos.y
-      png: png
-    }, $))
-    # window.hero = hero
-    map = events(new Map(game, Phaser, mapId, $))
+      # str: 10
+      # dex: 10
+      # int: 10
+      # luk: 10
+      x: init.pos.x
+      y: init.pos.y
+      png: init.png
+      speed: init.speed
+    , $)
+    map = events new Map(game, Phaser, mapId, $)
     game.user = user
     game.map = map
     socket rootUrl, game, players, $, Phaser
     game.load.spritesheet 'kaboom', 'images/explosion.png', 64, 64, 23
-    hero.preload()
-    map.preload(null, initialMap)
+    do hero.preload
+    map.preload null, initialMap
 
     app.trigger 'create'
     app.isLoaded = true
@@ -137,6 +136,8 @@ require [
       enemies: enemies
       positions: enemyPositions
 
+    game.trigger 'login'
+
   update = ->
     if app.isLoaded
       map.update()
@@ -175,9 +176,9 @@ require [
 
   explosion = ->
     explosionAnimation = explosions.getFirstExists(false)
-    explosionAnimation.reset(@sprite.x, @sprite.y)
-    explosionAnimation.play('kaboom', 30, false, true)
-
+    if explosionAnimation
+      explosionAnimation.reset(@sprite.x, @sprite.y)
+      explosionAnimation.play('kaboom', 30, false, true)
 
 
   render =->
@@ -195,8 +196,14 @@ require [
   }).done (playerInfo) ->
     mapId = playerInfo.mapId
 
-    initPos.x = playerInfo.x
-    initPos.y = playerInfo.y
+    init.pos = {}
+
+    init.pos.x = playerInfo.x
+    init.pos.y = playerInfo.y
+
+    init.xp = playerInfo.xp
+    init.speed = playerInfo.speed
+    # init.
 
     png = playerInfo.png || 'roshan'
     $('#map-id').attr('href', '/edit/' + mapId);
@@ -219,4 +226,5 @@ require [
       game = events(game)
       game.realWidth = 20 * 64
       game.realHeight = 12 * 64
+
 

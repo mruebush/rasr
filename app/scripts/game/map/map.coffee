@@ -46,7 +46,7 @@ define([], ->
       else
         @_loadAssets.call(@, data, callback)
 
-    _loadAssets: (data, loader = @game.load) ->
+    _loadAssets: (data, loader = @game.load, triggerEnter) ->
       @mapId = data._id
       @game.mapId = @mapId
       @mapData = data
@@ -57,9 +57,10 @@ define([], ->
 
       loader.start();
       loader.onLoadComplete.add =>
-        do @create
+        # do @create
+        @create triggerEnter
 
-    create: ->
+    create: (triggerEnter) ->
       map = @game.add.tilemap('map')
 
       for tileset in @mapData.tilesets
@@ -78,6 +79,8 @@ define([], ->
         
 
       @trigger 'finishLoad'
+      # @game.trigger 'enterMap'
+      if triggerEnter then @game.trigger 'enterMap'
 
     reloadMap: (loader, direction) ->
       that = @
@@ -86,9 +89,10 @@ define([], ->
         url: url
         success: (data) =>
           that._createCtrls(data)      
-          that._loadAssets.call(that, data, loader)
+          that._loadAssets.call(that, data, loader, true)
           that.game.mapData = data
-          that.game.trigger "enterMap"
+          # console.log ''
+          # that.game.trigger "enterMap"
       })
 
     reload: (direction) ->

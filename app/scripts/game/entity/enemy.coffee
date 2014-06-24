@@ -1,7 +1,7 @@
 define( ->
 
   class Enemy
-    constructor: (@index, @game, @phaser, @meta) ->
+    constructor: (@game, @phaser, @meta) ->
       @sprite = null
       @direction = null
       @speed = @meta.speed
@@ -14,19 +14,26 @@ define( ->
       @alive = true
       @png = @meta.png
       @serverId = @meta.id
+      @dbId = @meta.dbId
+      @name = @meta.name
+      @xp = @meta.xp
 
       @setDirection = (num) ->
         @direction = num
 
       @clearDirection = () ->
-        @direction = null
-
+        that = @
+        setTimeout ->
+          that.direction = null
+          that.game.stopEnemy(that)
+        , 500
 
       @derender = () ->
         do @sprite.kill
 
     damage: ->
-      @health--
+      # @health--
+      @game.damageEnemy @
       if @health <= 0
         @game.killEnemy @ 
 
