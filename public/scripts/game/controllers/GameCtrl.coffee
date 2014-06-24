@@ -1,8 +1,8 @@
 'use strict'
 
-app.controller 'GameCtrl', ['$scope', 'User', 'Auth', 'Hero', 'Enemy', 'Player', 'Events', 'Socket',
- ($scope, User, Auth, Hero, Enemy, Player, Events, Socket) ->
-  $scope.currentUser = window.userData
+app.controller 'GameCtrl', ['$scope', 'User', 'Auth', 'Hero', 'Enemy', 'Player', 'Events', 'Socket', 'PlayerAPI', 'MapAPI'
+ ($scope, User, Auth, Hero, Enemy, Player, Events, Socket, PlayerAPI, MapAPI) ->
+  $scope.currentUser = window.userData || {name: "test"}
 
   $scope.chats = []
 
@@ -19,7 +19,7 @@ app.controller 'GameCtrl', ['$scope', 'User', 'Auth', 'Hero', 'Enemy', 'Player',
   window.game = game = null
   hero = null
   map = null
-  players = events({})
+  players = Events({})
   mapId = null
   initialMap = null
   upScreen = null
@@ -28,25 +28,22 @@ app.controller 'GameCtrl', ['$scope', 'User', 'Auth', 'Hero', 'Enemy', 'Player',
   leftScreen = null
   png = null
   rootUrl = ''
-  user = window.userData.name
+  user = $scope.currentUser.name
   initPos = {}
   explosions = null
   
   # MAKE INITIAL AJAX CALL FOR PLAYER INFO
   initialize = ->
-    $.ajax({
-      url: "/api/player/me"
-    }).done (playerInfo) ->
+    PlayerAPI.get (playerInfo) ->
       mapId = playerInfo.mapId
       initPos.x = playerInfo.x
       initPos.y = playerInfo.y
 
       png = playerInfo.png || 'roshan'
-      $('#map-id').attr('href', '/edit/' + mapId);
+      $scope.mapId = mapId
+      # $('#map-id').attr('href', '/edit/' + mapId);
       url = "/screen/#{mapId}"
-      $.ajax({
-        url: url
-      }).done (mapData) ->
+      MapAPI.getMap(mapId).get (mapData) ->
         initialMap = mapData
         # $('.creatables')
         game = new Phaser.Game(800, 600, Phaser.AUTO, "game-canvas",
@@ -75,12 +72,12 @@ app.controller 'GameCtrl', ['$scope', 'User', 'Auth', 'Hero', 'Enemy', 'Player',
       x: initPos.x
       y: initPos.y
       png: png
-    }, $))
+    }))
     # window.hero = hero
     map = Events(Map(game, Phaser, mapId, $))
     game.user = user
     game.map = map
-    Socket rootUrl, game, players, $, Phaser
+    Socket rootUrl, game, players, Phaser
     game.load.spritesheet 'kaboom', 'images/explosion.png', 64, 64, 23
     hero.preload()
     map.preload(null, initialMap)

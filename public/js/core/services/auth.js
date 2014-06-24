@@ -8,7 +8,6 @@
         name: $rootScope.currentUser.name
       });
     }
-    $cookieStore.remove("user");
     return {
       /*
       Authenticate user
@@ -25,9 +24,10 @@
           email: user.email,
           password: user.password
         }, function(user) {
-          console.log("troll");
+          console.log("troll", user);
           $rootScope.currentUser = user;
           window.userData = Object.freeze(user);
+          console.log($cookieStore.get("user"), $cookieStore);
           return cb();
         }, function(err) {
           return cb(err);

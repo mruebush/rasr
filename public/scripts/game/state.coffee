@@ -3,6 +3,5 @@ app.config ($stateProvider) ->
     url: "/game"
     templateUrl: "/js/game/templates/game.tpl.html"
     controller: "GameCtrl"
-    authenticate: false
+    authenticate: true
 
-  return

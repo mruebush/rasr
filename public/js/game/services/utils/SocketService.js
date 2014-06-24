@@ -1,6 +1,6 @@
 (function() {
   app.service('Socket', function(Player, Enemy, Messages) {
-    return function(rootUrl, game, players, $, Phaser) {
+    return function(rootUrl, game, players, Phaser) {
       var mapId, socket, _derenderEnemyListener, _enemyListener, _joinListener, _leaveListener, _moveListener, _shootListener;
       socket = io.connect();
       window.socket = socket;

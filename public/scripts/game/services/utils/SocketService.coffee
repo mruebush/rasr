@@ -1,5 +1,5 @@
 app.service 'Socket', (Player, Enemy, Messages) ->
-  return (rootUrl, game, players, $, Phaser) ->
+  return (rootUrl, game, players, Phaser) ->
     socket = io.connect()
     window.socket = socket
 

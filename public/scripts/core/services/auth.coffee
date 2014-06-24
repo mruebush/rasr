@@ -3,7 +3,7 @@ app.factory "Auth", Auth = ($location, $rootScope, Session, User, $cookieStore) 
   # Get currentUser from cookie
   $rootScope.currentUser = $cookieStore.get("user") or null
   window.userData = Object.freeze(name: $rootScope.currentUser.name)  if $rootScope.currentUser
-  $cookieStore.remove "user"
+  # $cookieStore.remove "user"
   
   ###
   Authenticate user
@@ -16,9 +16,10 @@ app.factory "Auth", Auth = ($location, $rootScope, Session, User, $cookieStore) 
       email: user.email
       password: user.password
     , (user) ->
-      console.log "troll"
+      console.log "troll", user
       $rootScope.currentUser = user
       window.userData = Object.freeze(user)
+      console.log($cookieStore.get("user"), $cookieStore);
       cb()
     , (err) ->
       cb err

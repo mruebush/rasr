@@ -1,9 +1,11 @@
 (function() {
   'use strict';
   app.controller('GameCtrl', [
-    '$scope', 'User', 'Auth', 'Hero', 'Enemy', 'Player', 'Events', 'Socket', function($scope, User, Auth, Hero, Enemy, Player, Events, Socket) {
+    '$scope', 'User', 'Auth', 'Hero', 'Enemy', 'Player', 'Events', 'Socket', 'PlayerAPI', 'MapAPI', function($scope, User, Auth, Hero, Enemy, Player, Events, Socket, PlayerAPI, MapAPI) {
       var app, arrowHurt, create, createExplosions, downScreen, explosion, explosions, game, hero, hurtHero, initPos, initialMap, initialize, leftScreen, map, mapId, players, png, preload, render, rightScreen, rootUrl, upScreen, update, user;
-      $scope.currentUser = window.userData;
+      $scope.currentUser = window.userData || {
+        name: "test"
+      };
       $scope.chats = [];
       $scope.sendChat = function() {
         var _results;
@@ -22,7 +24,7 @@
       window.game = game = null;
       hero = null;
       map = null;
-      players = events({});
+      players = Events({});
       mapId = null;
       initialMap = null;
       upScreen = null;
@@ -31,23 +33,19 @@
       leftScreen = null;
       png = null;
       rootUrl = '';
-      user = window.userData.name;
+      user = $scope.currentUser.name;
       initPos = {};
       explosions = null;
       initialize = function() {
-        return $.ajax({
-          url: "/api/player/me"
-        }).done(function(playerInfo) {
+        return PlayerAPI.get(function(playerInfo) {
           var url;
           mapId = playerInfo.mapId;
           initPos.x = playerInfo.x;
           initPos.y = playerInfo.y;
           png = playerInfo.png || 'roshan';
-          $('#map-id').attr('href', '/edit/' + mapId);
+          $scope.mapId = mapId;
           url = "/screen/" + mapId;
-          return $.ajax({
-            url: url
-          }).done(function(mapData) {
+          return MapAPI.getMap(mapId).get(function(mapData) {
             initialMap = mapData;
             game = new Phaser.Game(800, 600, Phaser.AUTO, "game-canvas", {
               preload: preload,
@@ -75,11 +73,11 @@
           x: initPos.x,
           y: initPos.y,
           png: png
-        }, $));
+        }));
         map = Events(Map(game, Phaser, mapId, $));
         game.user = user;
         game.map = map;
-        Socket(rootUrl, game, players, $, Phaser);
+        Socket(rootUrl, game, players, Phaser);
         game.load.spritesheet('kaboom', 'images/explosion.png', 64, 64, 23);
         hero.preload();
         map.preload(null, initialMap);

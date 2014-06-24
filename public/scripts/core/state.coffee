@@ -22,7 +22,6 @@ app.config ($stateProvider, $locationProvider, $httpProvider, $urlRouterProvider
     controller: "SettingsCtrl"
     authenticate: true
 
-  return
 
 
 # .state('edit', {
