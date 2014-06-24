@@ -12,6 +12,7 @@
           return $location.path("/");
         })["catch"](function(err) {
           err = err.data;
+          console.log(err);
           return $scope.errors.other = err.message;
         });
       }

@@ -2,7 +2,7 @@
   app.config(function($stateProvider, $locationProvider, $httpProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise("/404");
     $locationProvider.html5Mode(true);
-    $stateProvider.state("home", {
+    return $stateProvider.state("home", {
       url: "/",
       templateUrl: "/js/core/templates/home.tpl.html",
       controller: "AppCtrl"

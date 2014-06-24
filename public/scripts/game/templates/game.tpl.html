@@ -24,6 +24,7 @@
           Chat with your fella comrades
         </div>
         <div class="messages">
+          <div ng-repeat="chat in chats">{{ chat.user }}: {{ chat.message }}</div>
         </div>
         <div class="footer">
           <div class="form-group">
@@ -43,7 +44,7 @@
         <button class='btn btn-danger left createables hidden'>Create new screen to the left</button>
         <button class='btn btn-danger right createables hidden'>Create new screen to the right</button>
         <button class='btn btn-danger down createables hidden'>Create new screen below</button>
-        <a id="map-id" class="btn btn-danger" href="/edit/">Edit map here</a>
+        <a id="map-id" class="btn btn-danger" href="/edit/{{ mapId }}">Edit map here</a>
         
       </div>
     </div>

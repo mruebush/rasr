@@ -12,16 +12,8 @@
           email: $scope.user.email,
           password: $scope.user.password
         }).then(function() {
-          $.ajax({
-            method: "POST",
-            url: "/makeuser",
-            data: {
-              user: $scope.user.name
-            }
-          });
           return $location.path("/");
-        })["catch"](function() {
-          var err;
+        })["catch"](function(err) {
           err = err.data;
           $scope.errors = {};
           return angular.forEach(err.errors, function(error, field) {

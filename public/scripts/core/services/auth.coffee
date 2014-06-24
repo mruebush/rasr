@@ -3,7 +3,7 @@ app.factory "Auth", Auth = ($location, $rootScope, Session, User, $cookieStore) 
   # Get currentUser from cookie
   $rootScope.currentUser = $cookieStore.get("user") or null
   window.userData = Object.freeze(name: $rootScope.currentUser.name)  if $rootScope.currentUser
-  $cookieStore.remove "user"
+  # $cookieStore.remove "user"
   
   ###
   Authenticate user
@@ -11,14 +11,15 @@ app.factory "Auth", Auth = ($location, $rootScope, Session, User, $cookieStore) 
   param  {Function} callback - optional
   return {Promise}
   ###
-  login: (user, cb) ->
+  login: (user, cb = angular.noop) ->
     Session.save(
       email: user.email
       password: user.password
     , (user) ->
-      console.log "troll"
+      console.log "troll", user
       $rootScope.currentUser = user
       window.userData = Object.freeze(user)
+      console.log($cookieStore.get("user"), $cookieStore);
       cb()
     , (err) ->
       cb err
@@ -32,7 +33,7 @@ app.factory "Auth", Auth = ($location, $rootScope, Session, User, $cookieStore) 
   return {Promise}
   ###
   
-  logout: (cb) ->
+  logout: (cb = angular.noop) ->
   
     return Session.delete( ->
             $rootScope.currentUser = null;
@@ -48,7 +49,7 @@ app.factory "Auth", Auth = ($location, $rootScope, Session, User, $cookieStore) 
   param  {Function} callback - optional
   return {Promise}
   ###
-  createUser: (user, cb) ->
+  createUser: (user, cb = angular.noop) ->
     User.save(user, (user) ->
       $rootScope.currentUser = user
       cb user
@@ -65,7 +66,7 @@ app.factory "Auth", Auth = ($location, $rootScope, Session, User, $cookieStore) 
   param  {Function} callback    - optional
   return {Promise}
   ###
-  changePassword: (oldPassword, newPassword, cb) ->
+  changePassword: (oldPassword, newPassword, cb = angular.noop) ->
     User.update(
       oldPassword: oldPassword
       newPassword: newPassword

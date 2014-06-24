@@ -1,6 +1,6 @@
 "use strict"
-app.factory "User", ($resource) ->
-  $resource "/api/users/:id",
+app.factory "User", ($resource, SERVER_URL) ->
+  $resource "#{SERVER_URL}/api/users/:id",
     id: "@id"
   ,
     #parameters default
@@ -12,5 +12,3 @@ app.factory "User", ($resource) ->
       method: "GET"
       params:
         id: "me"
-
-

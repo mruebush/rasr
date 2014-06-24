@@ -1,6 +1,6 @@
 (function() {
-  define(['events', 'player', 'enemy', 'messages'], function(events, Player, Enemy, messages) {
-    return function(rootUrl, game, players, $, Phaser) {
+  app.service('Socket', function(Player, Enemy, Messages) {
+    return function(rootUrl, game, players, Phaser) {
       var mapId, socket, _derenderEnemyListener, _enemyListener, _joinListener, _leaveListener, _moveListener, _shootListener;
       socket = io.connect();
       window.socket = socket;
@@ -72,7 +72,7 @@
       });
       game.on('player joined', function(data) {
         var player;
-        player = new Player(game, Phaser, {
+        player = Player(game, Phaser, {
           x: data.x,
           y: data.y
         });
@@ -86,7 +86,7 @@
         _ref = data.others;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           other = _ref[_i];
-          player = new Player(game, Phaser, {
+          player = Player(game, Phaser, {
             x: other.x,
             y: other.y
           });
@@ -113,7 +113,7 @@
               console.log("Creating new enemy, " + num);
               x = +game.enemyPositions[creature.data._id][i][0];
               y = +game.enemyPositions[creature.data._id][i][1];
-              enemy = new Enemy(i, game, Phaser, {
+              enemy = Enemy(i, game, Phaser, {
                 rank: 1,
                 health: creature.data.health,
                 dmg: 1,
@@ -229,7 +229,6 @@
           }
         });
       };
-      messages(game, socket, $);
       _enemyListener = function() {
         return socket.on('move enemies', function(data) {
           return game.trigger('move enemies', data);

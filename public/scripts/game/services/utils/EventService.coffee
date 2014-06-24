@@ -1,5 +1,5 @@
-app.factory 'EventService', (obj) ->
-  return ->
+app.factory 'Events', ->
+  return (obj) ->
     obj._listeners = {}
     obj.on = (key, callback) ->
       if obj._listeners[key]

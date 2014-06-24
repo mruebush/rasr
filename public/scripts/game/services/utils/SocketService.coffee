@@ -1,5 +1,5 @@
-define(['events','player','enemy','messages'], (events, Player, Enemy, messages) ->
-  return (rootUrl, game, players, $, Phaser) ->
+app.service 'Socket', (Player, Enemy, Messages) ->
+  return (rootUrl, game, players, Phaser) ->
     socket = io.connect()
     window.socket = socket
 
@@ -60,7 +60,7 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
       game.leave game.mapId, game.user
 
     game.on 'player joined', (data) ->
-      player = new Player(game, Phaser,
+      player = Player(game, Phaser,
         x: data.x
         y: data.y
       )
@@ -71,7 +71,7 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
 
     game.on 'i joined', (data) ->
       for other in data.others
-        player = new Player(game, Phaser,
+        player = Player(game, Phaser,
           x: other.x
           y: other.y
         )
@@ -91,7 +91,7 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
           console.log "Creating new enemy, #{num}"
           x = +game.enemyPositions[creature.data._id][i][0]
           y = +game.enemyPositions[creature.data._id][i][1]
-          enemy = new Enemy i, game, Phaser,
+          enemy = Enemy i, game, Phaser,
             rank: 1
             health: creature.data.health
             dmg: 1
@@ -132,7 +132,6 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
         y: y
 
     game.join = (data) ->
-
       x = data.x
       y = data.y
       enemies = data.enemies
@@ -198,7 +197,7 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
 
 
     # Initialize message module
-    messages(game, socket, $)
+    # messages(game, socket, $)
 
     _enemyListener = () ->
       socket.on 'move enemies', (data) ->
@@ -213,4 +212,3 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
     # actions = events(actions)
     # window.actions = actions
     # actions
-  )

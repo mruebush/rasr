@@ -12,6 +12,7 @@ app.controller "LoginCtrl", ($scope, Auth, $location) ->
         $location.path "/"
       ).catch (err) ->
         err = err.data
+        console.log(err)
         $scope.errors.other = err.message
 
     return

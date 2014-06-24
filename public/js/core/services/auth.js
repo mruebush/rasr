@@ -8,7 +8,6 @@
         name: $rootScope.currentUser.name
       });
     }
-    $cookieStore.remove("user");
     return {
       /*
       Authenticate user
@@ -18,13 +17,17 @@
       */
 
       login: function(user, cb) {
+        if (cb == null) {
+          cb = angular.noop;
+        }
         return Session.save({
           email: user.email,
           password: user.password
         }, function(user) {
-          console.log("troll");
+          console.log("troll", user);
           $rootScope.currentUser = user;
           window.userData = Object.freeze(user);
+          console.log($cookieStore.get("user"), $cookieStore);
           return cb();
         }, function(err) {
           return cb(err);
@@ -38,6 +41,9 @@
       */
 
       logout: function(cb) {
+        if (cb == null) {
+          cb = angular.noop;
+        }
         return Session["delete"](function() {
           $rootScope.currentUser = null;
           return cb();
@@ -54,6 +60,9 @@
       */
 
       createUser: function(user, cb) {
+        if (cb == null) {
+          cb = angular.noop;
+        }
         return User.save(user, function(user) {
           $rootScope.currentUser = user;
           return cb(user);
@@ -71,6 +80,9 @@
       */
 
       changePassword: function(oldPassword, newPassword, cb) {
+        if (cb == null) {
+          cb = angular.noop;
+        }
         return User.update({
           oldPassword: oldPassword,
           newPassword: newPassword
