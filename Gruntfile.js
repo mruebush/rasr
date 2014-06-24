@@ -63,8 +63,22 @@ module.exports = function (grunt) {
         files: [{
           expand: true,
           dot: true,
-          cwd: '<%= yeoman.app %>/scripts/**/templates',
-          dest: '<%= yeoman.app %>/js/**/templates',
+          cwd: '<%= yeoman.app %>/scripts/core/templates',
+          dest: '<%= yeoman.app %>/js/core/templates',
+          src: '**'
+        },
+        {
+          expand: true,
+          dot: true,
+          cwd: '<%= yeoman.app %>/scripts/game/templates',
+          dest: '<%= yeoman.app %>/js/game/templates',
+          src: '**'
+        },
+        {
+          expand: true,
+          dot: true,
+          cwd: '<%= yeoman.app %>/scripts/edit/templates',
+          dest: '<%= yeoman.app %>/js/edit/templates',
           src: '**'
         }]
       }
