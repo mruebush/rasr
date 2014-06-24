@@ -1,9 +1,12 @@
 (function() {
-  app.factory('Menubar', [
-    'Editor', function(Editor) {
-      var Menubar;
+  app.service('Menubar', [
+    '$rootScope', function($rootScope) {
+      var Editor, Menubar;
       Menubar = {};
-      Menubar.initialize = function() {};
+      Editor = void 0;
+      Menubar.initialize = function() {
+        Editor = $rootScope.Editor;
+      };
       Menubar.events = {
         "click *[data-template]": function(e) {
           Menubar.openDialog(e);

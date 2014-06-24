@@ -1,8 +1,9 @@
 (function() {
   app.factory('Export', [
-    'Editor', function(Editor) {
-      var Export;
+    '$rootScope', function($rootScope) {
+      var Editor, Export;
       Export = {};
+      Editor = $rootScope;
       Export.initialize = function() {};
       Export.events = {
         "click #export": function(e) {

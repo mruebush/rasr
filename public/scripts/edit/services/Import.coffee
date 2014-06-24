@@ -1,7 +1,7 @@
-app.factory('Import', ['Editor', (Editor) ->
+app.factory('Import', ['$rootScope', ($rootScope) ->
   Import = {}
-  Editor = undefined
   Tilesets = undefined
+  Editor = undefined
   
   # ======================== 
   
@@ -9,7 +9,8 @@ app.factory('Import', ['Editor', (Editor) ->
   
   # ======================== 
   Import.initialize = ->
-    Editor = require("editor")
+    Editor = $rootScope.Editor
+    # Editor = require("editor")
     return
 
   

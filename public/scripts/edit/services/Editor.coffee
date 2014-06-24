@@ -1,10 +1,10 @@
-app.factory('Editor', ['Utils', 'Menubar', 'Tools', 'Canvas', 'Tilesets', 'Layers', 'Export', 'Import', 'EventService', (Utils, Menubar, Tools, Canvas, Tilesets, Layers, Export, Import, EventService) ->
-  events = require("events")
-  Editor = events({})
-  args = arguments_
-  debugger
+app.factory('Editor', ['Utils', 'Menubar', 'Tools', 'Canvas', 'Tilesets', 'Layers', 'Export', 'Import', (Utils, Menubar, Tools, Canvas, Tilesets, Layers, Export, Import) ->
+
+  # events = require("events")
+  Editor = {}
+  args = arguments
+  # debugger
   argNames = [
-    "_"
     "Utils"
     "Menubar"
     "Tools"
@@ -106,6 +106,6 @@ app.factory('Editor', ['Utils', 'Menubar', 'Tools', 'Canvas', 'Tilesets', 'Layer
 
     return
 
-  Editor
+  return Editor
 
 ])

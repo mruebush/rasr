@@ -1,13 +1,15 @@
 (function() {
   app.factory('TilesetView', [
-    'Editor', function(Editor) {
-      var TilesetView;
+    '$rootScope', function($rootScope) {
+      var Editor, TilesetView;
       TilesetView = {};
       TilesetView.config = {
         filetypes: ["png", "jpg", "jpeg"]
       };
       TilesetView.tmp = {};
+      Editor = void 0;
       TilesetView.initialize = function() {
+        Editor = $rootScope.Editor;
         Editor.$("body").on("change", "#tilesets select", this.changeTileset).on("change", "input[name=file_tileset]", this.cacheFile).on("click", "#tilesets_add", this.add).on("click", "#tilesets_remove", this.remove);
         Editor.$("#tileset_container").on("mousedown mouseup mousemove", this.makeSelection);
         Editor.$("#tileset_remove").on("click", this.remove);

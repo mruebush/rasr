@@ -1,6 +1,6 @@
-app.factory('Export', ['Editor', (Editor) ->
+app.factory('Export', ['$rootScope', ($rootScope) ->
   Export = {}
-  # Editor = undefined
+  Editor = $rootScope
   
   # ======================== 
   

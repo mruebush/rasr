@@ -1,12 +1,12 @@
 (function() {
   app.factory('Import', [
-    'Editor', function(Editor) {
-      var Import, Tilesets, getDefaultTileset;
+    '$rootScope', function($rootScope) {
+      var Editor, Import, Tilesets, getDefaultTileset;
       Import = {};
-      Editor = void 0;
       Tilesets = void 0;
+      Editor = void 0;
       Import.initialize = function() {
-        Editor = require("editor");
+        Editor = $rootScope.Editor;
       };
       Import.events = {
         "change input[name=file_import]": function(e) {

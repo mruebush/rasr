@@ -1,4 +1,4 @@
-app.factory('Layers', ['Editor', (Editor) ->
+app.factory('Layers', ['$rootScope', ($rootScope) ->
   Layers = {}
   Editor = undefined
   
@@ -8,6 +8,7 @@ app.factory('Layers', ['Editor', (Editor) ->
   
   # ======================== 
   Layers.initialize = ->
+    Editor = $rootScope.Editor
     # Editor = require("editor")
     
     # Make layers sortable

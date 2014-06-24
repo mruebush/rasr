@@ -1,13 +1,13 @@
 (function() {
-  app.factory('Tileset', [
-    'TilesetView', function(TilesetView) {
+  app.factory('Tilesets', [
+    'TilesetView', '$rootScope', function(TilesetView, $rootScope) {
       var Editor, Tilesets;
       Tilesets = {};
-      Editor = void 0;
       Tilesets.collection = {};
+      Editor = void 0;
       Tilesets.initialize = function(data) {
         var key, tileset;
-        Editor = require("editor");
+        Editor = $rootScope.Editor;
         this.view = TilesetView.initialize();
         for (key in data.tilesets) {
           tileset = data.tilesets[key];

@@ -1,7 +1,7 @@
-app.factory('Tileset', ['TilesetView', (TilesetView) ->
+app.factory('Tilesets', ['TilesetView', '$rootScope', (TilesetView, $rootScope) ->
   Tilesets = {}
-  Editor = undefined
   Tilesets.collection = {}
+  Editor = undefined
   
   # ======================== 
   
@@ -9,7 +9,8 @@ app.factory('Tileset', ['TilesetView', (TilesetView) ->
   
   # ======================== 
   Tilesets.initialize = (data) ->
-    Editor = require("editor")
+    # Editor = require("editor")
+    Editor = $rootScope.Editor
     @view = TilesetView.initialize()
     for key of data.tilesets
       tileset = data.tilesets[key]

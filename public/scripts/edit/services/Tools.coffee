@@ -1,4 +1,4 @@
-app.factory('Tools', [->
+app.factory('Tools', ['$rootScope', ($rootScope) ->
   Tools = {}
   Editor = undefined
   
@@ -8,7 +8,7 @@ app.factory('Tools', [->
   
   # ======================== 
   Tools.initialize = ->
-    Editor = require("editor")
+    Editor = $rootScope.Editor
     return
 
   

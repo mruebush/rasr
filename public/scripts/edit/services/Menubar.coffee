@@ -1,12 +1,14 @@
-app.factory('Menubar', ['Editor', (Editor) ->
+app.service('Menubar', ['$rootScope', ($rootScope) ->
   Menubar = {}
-  
+  Editor = undefined
+
   # ======================== 
   
   # ====== INITIALIZE ====== 
   
   # ======================== 
   Menubar.initialize = ->
+    Editor = $rootScope.Editor
     # Editor = require("editor")
     return
 

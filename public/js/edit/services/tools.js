@@ -1,11 +1,11 @@
 (function() {
   app.factory('Tools', [
-    function() {
+    '$rootScope', function($rootScope) {
       var Editor, Tools;
       Tools = {};
       Editor = void 0;
       Tools.initialize = function() {
-        Editor = require("editor");
+        Editor = $rootScope.Editor;
       };
       Tools.events = {
         "click *[data-tool]": function(e) {

@@ -1,8 +1,8 @@
-app.factory('Canvas', ['Editor', (Editor) -> 
+app.factory('Canvas', ['$rootScope', ($rootScope) -> 
   Canvas = {}
-  Editor = undefined
   Canvas.cursor = []
   Canvas.cursor.last = {}
+  Editor = undefined
   
   # ======================== 
   
@@ -10,7 +10,8 @@ app.factory('Canvas', ['Editor', (Editor) ->
   
   # ======================== 
   Canvas.initialize = ->
-    Editor = require("editor")
+    Editor = $rootScope.Editor
+    # Editor = require("editor")
     Editor.$("#canvas").draggable
       mouseButton: 1
       cursor: "move"

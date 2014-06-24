@@ -1,6 +1,6 @@
-app.factory('Utils', ['Editor', (Editor) ->
+app.factory('Utils', ['$rootScope', ($rootScope) ->
   Utils = {}
-  # Editor = undefined
+  Editor = undefined
   
   # ======================== 
   
@@ -8,7 +8,9 @@ app.factory('Utils', ['Editor', (Editor) ->
   
   # ======================== 
   Utils.initialize = ->
+    Editor = $rootScope.Editor
     # Editor = require("editor")
+
     # return
 
   

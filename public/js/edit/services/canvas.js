@@ -1,13 +1,13 @@
 (function() {
   app.factory('Canvas', [
-    'Editor', function(Editor) {
-      var Canvas;
+    '$rootScope', function($rootScope) {
+      var Canvas, Editor;
       Canvas = {};
-      Editor = void 0;
       Canvas.cursor = [];
       Canvas.cursor.last = {};
+      Editor = void 0;
       Canvas.initialize = function() {
-        Editor = require("editor");
+        Editor = $rootScope.Editor;
         Editor.$("#canvas").draggable({
           mouseButton: 1,
           cursor: "move",

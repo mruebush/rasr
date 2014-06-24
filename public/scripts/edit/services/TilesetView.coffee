@@ -1,4 +1,4 @@
-app.factory('TilesetView', ['Editor', (Editor) ->
+app.factory('TilesetView', ['$rootScope', ($rootScope) ->
   TilesetView = {}
   TilesetView.config = filetypes: [
     "png"
@@ -6,6 +6,7 @@ app.factory('TilesetView', ['Editor', (Editor) ->
     "jpeg"
   ]
   TilesetView.tmp = {}
+  Editor = undefined
   
   # ======================== 
   
@@ -14,6 +15,7 @@ app.factory('TilesetView', ['Editor', (Editor) ->
   # ======================== 
   TilesetView.initialize = ->
     # Editor = require("editor")
+    Editor = $rootScope.Editor
     
     # Tileset UI functionality
     Editor.$("body").on("change", "#tilesets select", @changeTileset).on("change", "input[name=file_tileset]", @cacheFile).on("click", "#tilesets_add", @add).on "click", "#tilesets_remove", @remove

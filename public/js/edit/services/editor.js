@@ -1,12 +1,10 @@
 (function() {
   app.factory('Editor', [
-    'Utils', 'Menubar', 'Tools', 'Canvas', 'Tilesets', 'Layers', 'Export', 'Import', 'EventService', function(Utils, Menubar, Tools, Canvas, Tilesets, Layers, Export, Import, EventService) {
-      var Editor, argNames, args, events;
-      events = require("events");
-      Editor = events({});
-      args = arguments_;
-      debugger;
-      argNames = ["_", "Utils", "Menubar", "Tools", "Canvas", "Tilesets", "Layers", "Export", "Import"];
+    'Utils', 'Menubar', 'Tools', 'Canvas', 'Tilesets', 'Layers', 'Export', 'Import', function(Utils, Menubar, Tools, Canvas, Tilesets, Layers, Export, Import) {
+      var Editor, argNames, args;
+      Editor = {};
+      args = arguments;
+      argNames = ["Utils", "Menubar", "Tools", "Canvas", "Tilesets", "Layers", "Export", "Import"];
       Editor.tool = "draw";
       Editor.keystatus = {};
       Editor.mousedown = false;

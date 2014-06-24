@@ -1,10 +1,11 @@
 (function() {
   app.factory('Layers', [
-    'Editor', function(Editor) {
-      var Layers;
+    '$rootScope', function($rootScope) {
+      var Editor, Layers;
       Layers = {};
       Editor = void 0;
       Layers.initialize = function() {
+        Editor = $rootScope.Editor;
         Editor.$("#layerlist").sortable({
           axis: "y",
           mouseButton: 1,

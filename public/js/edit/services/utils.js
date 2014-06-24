@@ -1,9 +1,12 @@
 (function() {
   app.factory('Utils', [
-    'Editor', function(Editor) {
-      var Utils;
+    '$rootScope', function($rootScope) {
+      var Editor, Utils;
       Utils = {};
-      Utils.initialize = function() {};
+      Editor = void 0;
+      Utils.initialize = function() {
+        return Editor = $rootScope.Editor;
+      };
       Utils.makeSelection = function(e, container) {
         var $container, $selection, ex, ey, h, id, offset, s, sx, sy, th, tileset, tw, w, x, y;
         tileset = Editor.activeTileset;
