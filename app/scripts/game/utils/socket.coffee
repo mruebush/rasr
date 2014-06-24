@@ -42,7 +42,8 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
       players = {}
 
     game.on 'move', (data) ->
-      players[data.user].move data 
+      if players[data.user]
+        players[data.user].move data 
 
     game.on 'levelUp', (data) ->
       console.log 'levelUp in game'
@@ -144,6 +145,7 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
           game.trigger('i joined', data)
 
     game.on 'player joined', (data) ->
+      console.log 'trigger player joined'
       player = new Player(game, Phaser,
         x: data.x
         y: data.y
@@ -154,7 +156,6 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
       players[player.user] = player
 
     game.on 'i joined', (data) ->
-      console.log data
       for other in data.others
         player = new Player(game, Phaser,
           x: other.x
@@ -176,7 +177,6 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
         type = data.enemies[enemyType]
         num = 0
         for i,creature of type
-          console.log creature
           enemy = new Enemy game, Phaser,
             rank: 1
             health: creature.health
