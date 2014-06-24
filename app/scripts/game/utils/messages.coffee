@@ -24,7 +24,6 @@ define([], ->
 
     messageListener = ->
       socket.on('message', (data) ->
-        console.log data
         appendMessages(data)# if data.user isnt game.user
       )
 

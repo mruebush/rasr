@@ -46,17 +46,14 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
         players[data.user].move data 
 
     game.on 'levelUp', (data) ->
-      console.log 'levelUp in game'
       game.hero.speed += data.speed;
 
     _levelUpListener = () ->
       socket.on 'levelUp', (data) ->
         if data.user == game.user
-          console.log 'levelUp in socket'
           game.trigger 'levelUp', data
 
     game.killEnemy = (enemy) ->
-      console.log "enemy dies", enemy
       socket.emit 'enemyDies', 
         enemy: enemy.serverId
         mapId: game.mapId
@@ -66,9 +63,10 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
         xp: enemy.xp
     
     game.on 'derender enemy', (data) ->
-      game.enemies[data.enemy].alive = false
-      do game.enemies[data.enemy].sprite.kill
-      game.enemies.splice data.enemy, 1
+      if game.enemies[data.enemy]
+        game.enemies[data.enemy].alive = false
+        do game.enemies[data.enemy].sprite.kill
+        game.enemies.splice data.enemy, 1
 
     _derenderEnemyListener = () ->
       socket.on 'derenderEnemy', (data) ->

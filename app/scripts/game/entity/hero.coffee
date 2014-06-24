@@ -5,12 +5,12 @@ define( ->
     expText = null
     healthText = null
     manaText = null
-    fireRate = 400
+    fireRate = 200
     nextFire = 0
     arrowIndex = 0
     arrowSpeed = 600
     numArrows = 50
-    numArrowsShot = 1
+    numArrowsShot = 6
 
     damage: ->
       @sprite.animations.play 'damage_down', 15, false

@@ -164,6 +164,7 @@ require [
 
   explosion = ->
     explosionAnimation = explosions.getFirstExists(false)
+    # debugger
     explosionAnimation.reset(@sprite.x, @sprite.y)
     explosionAnimation.play('kaboom', 30, false, true)
 
