@@ -51,11 +51,7 @@ define( ->
       @sprite = @game.add.sprite(@meta.x, @meta.y, "player")
       @game.physics.enable(@sprite, @phaser.Physics.ARCADE)
       @sprite.body.collideWorldBounds = true
-      @sprite.body.bounce.set(1)
-      expText = @game.add.text(20, 10, "exp: #{@meta.exp}", fontStyle)
-      # healthText = @game.add.text(20, 30, "health: #{@meta.health}", fontStyle)
-      @render()
-      mana = @game.add.text(20, 50, "mana: #{@meta.mana}", fontStyle)
+      @sprite.body.setSize(@sprite.body.halfWidth, -@sprite.body.sourceHeight / 3, @sprite.body.sourceWidth / 4, @sprite.body.sourceHeight)
 
       @sprite.animations.add("down", Phaser.Animation.generateFrameNames('player_walk_down', 0, 11, '.png', 4), 30, false)
       @sprite.animations.add("left", Phaser.Animation.generateFrameNames('player_walk_left', 0, 11, '.png', 4), 30, false)
