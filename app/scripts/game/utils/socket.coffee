@@ -35,7 +35,6 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
       socket.removeListener game.mapId
       for key,player of players
         do player.sprite.kill
-        # delete players[key]
 
       players = {}
 
@@ -50,6 +49,7 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
         _id: enemy.dbId
         user: game.user
         enemyName: enemy.name
+        xp: enemy.xp
     
     game.on 'derender enemy', (data) ->
       game.enemies[data.enemy].alive = false
@@ -58,7 +58,6 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
 
     _derenderEnemyListener = () ->
       socket.on 'derenderEnemy', (data) ->
-        console.log 'time to derender', data.enemy
         game.trigger 'derender enemy', data
 
     game.damageEnemy = (enemy) ->
@@ -143,7 +142,6 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
       players[player.user] = player
 
     game.on 'i joined', (data) ->
-      console.log data.others
       for other in data.others
         player = new Player(game, Phaser,
           x: other.x
@@ -177,6 +175,7 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
             id: num
             dbId: creature._id
             name: creature.name
+            xp: creature.xp
 
           do enemy.create
           game.enemies.push enemy
