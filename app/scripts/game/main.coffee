@@ -129,6 +129,8 @@ require [
       enemies: enemies
       positions: enemyPositions
 
+    game.trigger 'login'
+
   update = ->
     if app.isLoaded
       map.update()
@@ -195,4 +197,5 @@ require [
       game = events(game)
       game.realWidth = 20 * 64
       game.realHeight = 12 * 64
+
 

@@ -6,6 +6,9 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
 
     mapId = game.mapId
 
+    game.on 'login', () ->
+      socket.emit 'login', game.user
+
     game.on 'enterMap', () ->
 
       console.log 'trigger enterMap'
