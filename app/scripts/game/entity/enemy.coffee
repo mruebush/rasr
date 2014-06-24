@@ -29,8 +29,6 @@ define( ->
       @health--
       if @health <= 0
         @game.killEnemy @ 
-        # @alive = false
-        # @sprite.kill()
 
       return true
 
@@ -42,10 +40,8 @@ define( ->
       @game.physics.enable(@sprite, @phaser.Physics.ARCADE)
       @sprite.body.immovable = true
       @sprite.body.collideWorldBounds = true
-      @sprite.anchor.setTo(.3, .5)
-      @sprite.body.bounce.set(1)
-      @sprite.body.width = 100
-      @sprite.body.height = 100
+      @sprite.body.setSize(@sprite.body.sourceWidth, @sprite.body.halfHeight , 0, @sprite.body.halfHeight)
+
       @sprite.animations.add("down", Phaser.Animation.generateFrameNames('enemy_move_down', 0, 10, '.png', 4), 30, false)
       @sprite.animations.add("left", Phaser.Animation.generateFrameNames('enemy_move_left', 0, 10, '.png', 4), 30, false)
       @sprite.animations.add("right", Phaser.Animation.generateFrameNames('enemy_move_right', 0, 10, '.png', 4), 30, false)
