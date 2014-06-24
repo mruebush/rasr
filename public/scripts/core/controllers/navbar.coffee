@@ -1,4 +1,4 @@
-angular.module("komApp").controller "NavbarCtrl", ($scope, $location, Auth) ->
+app.controller "NavbarCtrl", ($scope, $location, Auth) ->
   $scope.menu = [
     {
       title: "Home"

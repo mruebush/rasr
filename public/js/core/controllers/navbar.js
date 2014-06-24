@@ -1,5 +1,5 @@
 (function() {
-  angular.module("komApp").controller("NavbarCtrl", function($scope, $location, Auth) {
+  app.controller("NavbarCtrl", function($scope, $location, Auth) {
     $scope.menu = [
       {
         title: "Home",

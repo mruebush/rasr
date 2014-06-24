@@ -12,14 +12,28 @@ module.exports = function (grunt) {
     yeoman: {
       app: 'public'
     },
+    clean: {
+      dist: {
+        files: [{
+          dot: true,
+          src: [
+            '<%= yeoman.app %>/js/**/*.js'
+          ]
+        }]
+      }
+    },
     watch: {
       coffee: {
         files: ['<%= yeoman.app %>/**/*.coffee'],
-        tasks: ['newer:coffee']
+        tasks: ['clean:dist', 'newer:coffee']
       },
       compass: {
         files: ['<%= yeoman.app %>/compass/{,*/}*.{scss,sass}'],
         tasks: ['compass:server']
+      },
+      copy: {
+        files: ['<%= yeoman.app %>/scripts/**/templates/*.html'],
+        tasks: ['copy']
       }
     },
     // Compiles Sass to CSS and generates necessary files if requested
@@ -53,10 +67,36 @@ module.exports = function (grunt) {
           ext: '.js'
         }]
       }
+    },
+    copy: {
+      dist: {
+        files: [{
+          expand: true,
+          dot: true,
+          cwd: '<%= yeoman.app %>/scripts/core/templates',
+          dest: '<%= yeoman.app %>/js/core/templates',
+          src: '**'
+        },
+        {
+          expand: true,
+          dot: true,
+          cwd: '<%= yeoman.app %>/scripts/game/templates',
+          dest: '<%= yeoman.app %>/js/game/templates',
+          src: '**'
+        },
+        {
+          expand: true,
+          dot: true,
+          cwd: '<%= yeoman.app %>/scripts/edit/templates',
+          dest: '<%= yeoman.app %>/js/edit/templates',
+          src: '**'
+        }]
+      }
     }
   });
 
   grunt.registerTask('build', [
+    'clean:dist',
     'coffee',
     'compass'
   ]);
