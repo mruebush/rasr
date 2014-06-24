@@ -20,7 +20,6 @@ define( ->
 
       @reportDirection = () ->
         that = @
-        console.log 'Executed'
         report = () -> 
           that.game.enemyMoving
             enemy: that.serverId
@@ -28,7 +27,7 @@ define( ->
             x: that.sprite.x
             y: that.sprite.y
 
-        setInterval report, 500
+        setInterval report, 250
 
       @reportDirection = _.once(@reportDirection)
 
@@ -37,13 +36,14 @@ define( ->
 
       @clearDirection = () ->
         that = @
-        setTimeout ->
+        that.timer = setTimeout ->
           that.direction = null
           that.game.stopEnemy(that)
         , 500
 
       @derender = () ->
         do @sprite.kill
+        clearInterval @timer
 
     damage: ->
       do @reportDirection

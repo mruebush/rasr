@@ -49,11 +49,18 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
       data.room = game.mapId
       socket.emit 'enemyMoving', data
 
-    # _enemyMovingListener = () ->
-    #   socket.on 'enemyMoving', (data) ->
-    #     game.trigger 'enemyMoving'
+    _enemyMovingListener = () ->
+      socket.on 'enemyMoving', (data) ->
+        game.trigger 'enemyMoving', data
 
-    # game.on 'enemyMoving', (data) ->
+    game.on 'enemyMoving', (data) ->
+      
+      enemy = game.enemies[data.serverId]
+      
+      if enemy
+        enemy.setDirection data.dir
+
+    do _enemyMovingListener
 
 
     game.on 'levelUp', (data) ->
