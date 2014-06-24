@@ -28,7 +28,7 @@ define( ->
             x: that.sprite.x
             y: that.sprite.y
 
-        setTimeout report, 1000
+        setInterval report, 500
 
       @reportDirection = _.once(@reportDirection)
 

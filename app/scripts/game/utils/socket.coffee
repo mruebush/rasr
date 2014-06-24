@@ -54,7 +54,7 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
     #     game.trigger 'enemyMoving'
 
     # game.on 'enemyMoving', (data) ->
-      
+
 
     game.on 'levelUp', (data) ->
       game.hero.speed += data.speed;
