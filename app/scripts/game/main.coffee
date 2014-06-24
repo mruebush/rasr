@@ -182,8 +182,9 @@ require [
 
 
   render =->
-    debug = false
+    debug = true
     if debug
+      map.collisionLayer.debug = true
       @game.debug.body(hero.sprite)
       for enemy in game.enemies
         if enemy.alive
