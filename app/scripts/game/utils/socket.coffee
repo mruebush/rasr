@@ -44,6 +44,15 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
     game.on 'move', (data) ->
       players[data.user].move data 
 
+    game.on 'levelUp', (data) ->
+      console.log 'levelUp in game'
+      game.hero.speed += data.speed;
+
+    _levelUpListener = () ->
+      socket.on 'levelUp', (data) ->
+        console.log 'levelUp in socket'
+        game.trigger 'levelUp', data
+
     game.killEnemy = (enemy) ->
       console.log "enemy dies", enemy
       socket.emit 'enemyDies', 
@@ -240,6 +249,7 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
     do _damageEnemyListener
     do _enemyListener
     do _derenderEnemyListener
+    do _levelUpListener
 
     # actions = events(actions)
     # window.actions = actions
