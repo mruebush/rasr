@@ -1,6 +1,7 @@
-'use strict';
-
-angular.module('komApp')
-  .factory('Session', function ($resource) {
-    return $resource('/api/session/');
+(function() {
+  "use strict";
+  app.factory("Session", function($resource) {
+    return $resource("/api/session/");
   });
+
+}).call(this);

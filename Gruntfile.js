@@ -18,14 +18,14 @@ module.exports = function (grunt) {
         tasks: ['newer:coffee']
       },
       compass: {
-        files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
+        files: ['<%= yeoman.app %>/compass/{,*/}*.{scss,sass}'],
         tasks: ['compass:server']
       }
     },
     // Compiles Sass to CSS and generates necessary files if requested
     compass: {
       options: {
-        sassDir: '<%= yeoman.app %>/styles',
+        sassDir: '<%= yeoman.app %>/compass',
         cssDir: '<%= yeoman.app %>/styles',
         fontsDir: '<%= yeoman.app %>/styles/fonts',
         importPath: '<%= yeoman.app %>/bower_components',
@@ -48,7 +48,7 @@ module.exports = function (grunt) {
           // require them into your main .coffee file
           expand: true,
           cwd: '<%= yeoman.app %>/scripts',
-          src: '**/*.coffee',
+          src: ['app.coffee', '**/*.coffee'],
           dest: '<%= yeoman.app %>/js',
           ext: '.js'
         }]

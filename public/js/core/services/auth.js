@@ -1,34 +1,28 @@
-'use strict';
+(function() {
+  var Auth;
 
-angular.module('komApp')
-  .factory('Auth', function Auth($location, $rootScope, Session, User, $cookieStore) {
-    
-    // Get currentUser from cookie
-    $rootScope.currentUser = $cookieStore.get('user') || null;
+  app.factory("Auth", Auth = function($location, $rootScope, Session, User, $cookieStore) {
+    $rootScope.currentUser = $cookieStore.get("user") || null;
     if ($rootScope.currentUser) {
       window.userData = Object.freeze({
         name: $rootScope.currentUser.name
       });
     }
-    $cookieStore.remove('user');
-
+    $cookieStore.remove("user");
     return {
+      /*
+      Authenticate user
+      param  {Object}   user     - login info
+      param  {Function} callback - optional
+      return {Promise}
+      */
 
-      /**
-       * Authenticate user
-       * 
-       * @param  {Object}   user     - login info
-       * @param  {Function} callback - optional
-       * @return {Promise}            
-       */
-      login: function(user, callback) {
-        var cb = callback || angular.noop;
-
+      login: function(user, cb) {
         return Session.save({
           email: user.email,
           password: user.password
         }, function(user) {
-          console.log('troll')
+          console.log("troll");
           $rootScope.currentUser = user;
           window.userData = Object.freeze(user);
           return cb();
@@ -36,56 +30,47 @@ angular.module('komApp')
           return cb(err);
         }).$promise;
       },
+      /*
+      Unauthenticate user
+      
+      param  {Function} callback - optional
+      return {Promise}
+      */
 
-      /**
-       * Unauthenticate user
-       * 
-       * @param  {Function} callback - optional
-       * @return {Promise}           
-       */
-      logout: function(callback) {
-        var cb = callback || angular.noop;
-
-        return Session.delete(function() {
-            $rootScope.currentUser = null;
-            return cb();
-          },
-          function(err) {
-            return cb(err);
-          }).$promise;
+      logout: function(cb) {
+        return Session["delete"](function() {
+          $rootScope.currentUser = null;
+          return cb();
+        }, function(err) {
+          return cb(err);
+        }).$promise;
       },
+      /*
+      Create a new user
+      
+      param  {Object}   user     - user info
+      param  {Function} callback - optional
+      return {Promise}
+      */
 
-      /**
-       * Create a new user
-       * 
-       * @param  {Object}   user     - user info
-       * @param  {Function} callback - optional
-       * @return {Promise}            
-       */
-      createUser: function(user, callback) {
-        var cb = callback || angular.noop;
-
-        return User.save(user,
-          function(user) {
-            $rootScope.currentUser = user;
-            return cb(user);
-          },
-          function(err) {
-            return cb(err);
-          }).$promise;
+      createUser: function(user, cb) {
+        return User.save(user, function(user) {
+          $rootScope.currentUser = user;
+          return cb(user);
+        }, function(err) {
+          return cb(err);
+        }).$promise;
       },
+      /*
+      Change password
+      
+      param  {String}   oldPassword
+      param  {String}   newPassword
+      param  {Function} callback    - optional
+      return {Promise}
+      */
 
-      /**
-       * Change password
-       * 
-       * @param  {String}   oldPassword 
-       * @param  {String}   newPassword 
-       * @param  {Function} callback    - optional
-       * @return {Promise}              
-       */
-      changePassword: function(oldPassword, newPassword, callback) {
-        var cb = callback || angular.noop;
-
+      changePassword: function(oldPassword, newPassword, cb) {
         return User.update({
           oldPassword: oldPassword,
           newPassword: newPassword
@@ -95,24 +80,25 @@ angular.module('komApp')
           return cb(err);
         }).$promise;
       },
+      /*
+      Gets all available info on authenticated user
+      return {Object} user
+      */
 
-      /**
-       * Gets all available info on authenticated user
-       * 
-       * @return {Object} user
-       */
       currentUser: function() {
         return User.get();
       },
+      /*
+      Simple check to see if a user is logged in
+      return {Boolean}
+      */
 
-      /**
-       * Simple check to see if a user is logged in
-       * 
-       * @return {Boolean}
-       */
       isLoggedIn: function() {
-        var user = $rootScope.currentUser;
+        var user;
+        user = $rootScope.currentUser;
         return !!user;
-      },
+      }
     };
   });
+
+}).call(this);

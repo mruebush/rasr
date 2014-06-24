@@ -1,42 +1,36 @@
-'use strict';
-
-angular.module('komApp')
-  .controller('SignupCtrl', function ($scope, Auth, $location) {
+(function() {
+  "use strict";
+  app.controller("SignupCtrl", function($scope, Auth, $location) {
     $scope.user = {};
     $scope.errors = {};
-    console.log('submit stuff');
-    $scope.register = function(form) {
+    console.log("submit stuff");
+    return $scope.register = function(form) {
       $scope.submitted = true;
-  
-      if(form.$valid) {
-        Auth.createUser({
+      if (form.$valid) {
+        return Auth.createUser({
           name: $scope.user.name,
           email: $scope.user.email,
           password: $scope.user.password
-        })
-        .then( function() {
-          // Account created, redirect to home
-
-         $.ajax({
-          method: 'POST',
-          url: '/makeuser',
-          data: {
-            user: $scope.user.name
-          }
-         });
-
-          $location.path('/');
-        })
-        .catch( function(err) {
+        }).then(function() {
+          $.ajax({
+            method: "POST",
+            url: "/makeuser",
+            data: {
+              user: $scope.user.name
+            }
+          });
+          return $location.path("/");
+        })["catch"](function() {
+          var err;
           err = err.data;
           $scope.errors = {};
-
-          // Update validity of form fields that match the mongoose errors
-          angular.forEach(err.errors, function(error, field) {
+          return angular.forEach(err.errors, function(error, field) {
             form[field].$setValidity('mongoose', false);
-            $scope.errors[field] = error.message;
+            return $scope.errors[field] = error.message;
           });
         });
       }
     };
   });
+
+}).call(this);

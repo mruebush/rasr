@@ -160,5 +160,3 @@
     explosionAnimation.play('kaboom', 30, false, true)
 
   do initialize
-
-

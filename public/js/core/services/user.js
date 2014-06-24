@@ -1,19 +1,20 @@
-'use strict';
-
-angular.module('komApp')
-  .factory('User', function ($resource) {
-    return $resource('/api/users/:id', {
-      id: '@id'
-    }, { //parameters default
+(function() {
+  "use strict";
+  app.factory("User", function($resource) {
+    return $resource("/api/users/:id", {
+      id: "@id"
+    }, {
       update: {
-        method: 'PUT',
+        method: "PUT",
         params: {}
       },
       get: {
-        method: 'GET',
+        method: "GET",
         params: {
-          id:'me'
+          id: "me"
         }
       }
-	  });
+    });
   });
+
+}).call(this);

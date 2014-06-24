@@ -1,26 +1,21 @@
-'use strict';
-
-angular.module('komApp')
-  .controller('LoginCtrl', function ($scope, Auth, $location) {
+(function() {
+  app.controller("LoginCtrl", function($scope, Auth, $location) {
     $scope.user = {};
     $scope.errors = {};
-
     $scope.login = function(form) {
       $scope.submitted = true;
-      
-      if(form.$valid) {
+      if (form.$valid) {
         Auth.login({
           email: $scope.user.email,
           password: $scope.user.password
-        })
-        .then( function() {
-          // Logged in, redirect to home
-          $location.path('/');
-        })
-        .catch( function(err) {
+        }).then(function() {
+          return $location.path("/");
+        })["catch"](function(err) {
           err = err.data;
-          $scope.errors.other = err.message;
+          return $scope.errors.other = err.message;
         });
       }
     };
   });
+
+}).call(this);

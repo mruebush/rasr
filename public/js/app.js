@@ -1,11 +1,9 @@
-'use strict';
+(function() {
+  "use strict";
+  var app;
 
-var app = angular.module('komApp', [
-  'ngCookies',
-  'ngResource',
-  'ngSanitize',
-  'ui.router'
-]);
+  window.app = app = angular.module("komApp", ["ngCookies", "ngResource", "ngSanitize", "ui.router"]);
 
-app.constant('SERVER_URL', 'http://localhost:8000');
-  
+  app.constant("SERVER_URL", "http://localhost:8000");
+
+}).call(this);
