@@ -5,4 +5,4 @@ window.app = app = angular.module("komApp", [
   "ngSanitize"
   "ui.router"
 ])
-app.constant "SERVER_URL", "http://localhost:8000"
+app.constant "SERVER_URL", "http://localhost:3000"

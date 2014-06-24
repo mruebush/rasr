@@ -1,4 +1,4 @@
 "use strict"
-app.factory "Session", ($resource) ->
-  $resource "/api/session/"
+app.factory "Session", ($resource, SERVER_URL) ->
+  $resource "#{SERVER_URL}/api/session"
 

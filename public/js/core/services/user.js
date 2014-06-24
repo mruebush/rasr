@@ -1,7 +1,7 @@
 (function() {
   "use strict";
-  app.factory("User", function($resource) {
-    return $resource("/api/users/:id", {
+  app.factory("User", function($resource, SERVER_URL) {
+    return $resource("" + SERVER_URL + "/api/users/:id", {
       id: "@id"
     }, {
       update: {

@@ -12,14 +12,8 @@ app.controller "SignupCtrl", ($scope, Auth, $location) ->
         password: $scope.user.password
       .then ->
         # Account created, redirect to home
-        $.ajax
-          method: "POST"
-          url: "/makeuser"
-          data:
-            user: $scope.user.name
-
         $location.path "/"
-      .catch ->
+      .catch (err) ->
         err = err.data
         $scope.errors = {}
 

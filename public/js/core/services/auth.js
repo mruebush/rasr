@@ -18,6 +18,9 @@
       */
 
       login: function(user, cb) {
+        if (cb == null) {
+          cb = angular.noop;
+        }
         return Session.save({
           email: user.email,
           password: user.password
@@ -38,6 +41,9 @@
       */
 
       logout: function(cb) {
+        if (cb == null) {
+          cb = angular.noop;
+        }
         return Session["delete"](function() {
           $rootScope.currentUser = null;
           return cb();
@@ -54,6 +60,9 @@
       */
 
       createUser: function(user, cb) {
+        if (cb == null) {
+          cb = angular.noop;
+        }
         return User.save(user, function(user) {
           $rootScope.currentUser = user;
           return cb(user);
@@ -71,6 +80,9 @@
       */
 
       changePassword: function(oldPassword, newPassword, cb) {
+        if (cb == null) {
+          cb = angular.noop;
+        }
         return User.update({
           oldPassword: oldPassword,
           newPassword: newPassword
