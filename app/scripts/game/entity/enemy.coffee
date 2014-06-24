@@ -18,6 +18,20 @@ define( ->
       @name = @meta.name
       @xp = @meta.xp
 
+      @reportDirection = () ->
+        that = @
+        console.log 'Executed'
+        report = () -> 
+          that.game.enemyMoving
+            enemy: that.serverId
+            _id: that.dbId
+            x: that.sprite.x
+            y: that.sprite.y
+
+        setTimeout report, 1000
+
+      @reportDirection = _.once(@reportDirection)
+
       @setDirection = (num) ->
         @direction = num
 
@@ -32,7 +46,7 @@ define( ->
         do @sprite.kill
 
     damage: ->
-      # @health--
+      do @reportDirection
       @game.damageEnemy @
       if @health <= 0
         @game.killEnemy @ 
