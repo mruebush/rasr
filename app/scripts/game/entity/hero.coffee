@@ -22,7 +22,7 @@ define( ->
 
     constructor: (@game, @phaser, @meta) ->
       @sprite = null
-      @speed = 200
+      @speed = @meta.speed
       @startOnScreenPos = 10
       @png = @meta.png
 

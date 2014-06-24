@@ -15,6 +15,8 @@ define( ->
       @png = @meta.png
       @serverId = @meta.id
       @dbId = @meta.dbId
+      @name = @meta.name
+      @xp = @meta.xp
 
       @setDirection = (num) ->
         @direction = num

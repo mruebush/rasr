@@ -47,7 +47,7 @@ require [
   rootUrl = ''
   # rootUrl = 'http://localhost:9000'
   user = window.userData.name
-  initPos = {}
+  init = {}
   explosions = null
   # actions = {}
 
@@ -55,16 +55,16 @@ require [
 
     game.load.atlasXML "enemy", "images/enemy.png", "images/enemy.xml"
     hero = events new Hero(game, Phaser, 
-      exp: 150
       health: 100
       mana: 100
-      str: 10
-      dex: 10
-      int: 10
-      luk: 10
-      x: initPos.x
-      y: initPos.y
-      png: png
+      # str: 10
+      # dex: 10
+      # int: 10
+      # luk: 10
+      x: init.pos.x
+      y: init.pos.y
+      png: init.png
+      speed: init.speed
     , $)
     map = events new Map(game, Phaser, mapId, $)
     game.user = user
@@ -129,6 +129,8 @@ require [
       enemies: enemies
       positions: enemyPositions
 
+    game.trigger 'login'
+
   update = ->
     if app.isLoaded
       map.update()
@@ -172,8 +174,14 @@ require [
   }).done (playerInfo) ->
     mapId = playerInfo.mapId
 
-    initPos.x = playerInfo.x
-    initPos.y = playerInfo.y
+    init.pos = {}
+
+    init.pos.x = playerInfo.x
+    init.pos.y = playerInfo.y
+
+    init.xp = playerInfo.xp
+    init.speed = playerInfo.speed
+    # init.
 
     png = playerInfo.png || 'roshan'
     $('#map-id').attr('href', '/edit/' + mapId);
@@ -195,4 +203,5 @@ require [
       game = events(game)
       game.realWidth = 20 * 64
       game.realHeight = 12 * 64
+
 

@@ -6,6 +6,9 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
 
     mapId = game.mapId
 
+    game.on 'login', () ->
+      socket.emit 'login', game.user
+
     game.on 'enterMap', () ->
 
       console.log 'trigger enterMap'
@@ -35,12 +38,20 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
       socket.removeListener game.mapId
       for key,player of players
         do player.sprite.kill
-        # delete players[key]
 
       players = {}
 
     game.on 'move', (data) ->
       players[data.user].move data 
+
+    game.on 'levelUp', (data) ->
+      console.log 'levelUp in game'
+      game.hero.speed += data.speed;
+
+    _levelUpListener = () ->
+      socket.on 'levelUp', (data) ->
+        console.log 'levelUp in socket'
+        game.trigger 'levelUp', data
 
     game.killEnemy = (enemy) ->
       console.log "enemy dies", enemy
@@ -48,14 +59,17 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
         enemy: enemy.serverId
         mapId: game.mapId
         _id: enemy.dbId
+        user: game.user
+        enemyName: enemy.name
+        xp: enemy.xp
     
     game.on 'derender enemy', (data) ->
       game.enemies[data.enemy].alive = false
       do game.enemies[data.enemy].sprite.kill
+      game.enemies.splice data.enemy, 1
 
     _derenderEnemyListener = () ->
       socket.on 'derenderEnemy', (data) ->
-        console.log 'time to derender', data.enemy
         game.trigger 'derender enemy', data
 
     game.damageEnemy = (enemy) ->
@@ -140,7 +154,6 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
       players[player.user] = player
 
     game.on 'i joined', (data) ->
-      console.log data.others
       for other in data.others
         player = new Player(game, Phaser,
           x: other.x
@@ -162,6 +175,7 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
         type = data.enemies[enemyType]
         num = 0
         for i,creature of type
+          console.log creature
           enemy = new Enemy game, Phaser,
             rank: 1
             health: creature.health
@@ -172,6 +186,8 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
             y: +creature.position[1]
             id: num
             dbId: creature._id
+            name: creature.name
+            xp: creature.xp
 
           do enemy.create
           game.enemies.push enemy
@@ -233,6 +249,7 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
     do _damageEnemyListener
     do _enemyListener
     do _derenderEnemyListener
+    do _levelUpListener
 
     # actions = events(actions)
     # window.actions = actions
