@@ -46,7 +46,7 @@ define ->
   Menubar.openDialog = (e) ->
     template = Editor.$(e.currentTarget).attr("data-template")
     title = Editor.$(e.currentTarget).text()
-    $.get "/partials/edit/" + template + ".html", (data) ->
+    $.get "/scripts/edit/templates/" + template + ".html", (data) ->
       Editor.$("#dialog").html(data).dialog
         title: title
         modal: true

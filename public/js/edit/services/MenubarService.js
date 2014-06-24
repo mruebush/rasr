@@ -24,7 +24,7 @@
       var template, title;
       template = Editor.$(e.currentTarget).attr("data-template");
       title = Editor.$(e.currentTarget).text();
-      $.get("/partials/edit/" + template + ".html", function(data) {
+      $.get("/scripts/edit/templates/" + template + ".html", function(data) {
         Editor.$("#dialog").html(data).dialog({
           title: title,
           modal: true,
