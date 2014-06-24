@@ -6,4 +6,3 @@ app.config ($stateProvider) ->
     authenticate: false
 
   return
-

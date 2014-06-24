@@ -13,5 +13,4 @@ app.controller 'GameCtrl', ['$scope', 'User', 'Auth', ($scope, User, Auth) ->
     $scope.chatToSend = ''
     do $scope.chats.pop while $scope.chats.length > 100
 
-  
 ]
