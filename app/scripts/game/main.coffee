@@ -181,7 +181,7 @@ require [
 
 
   render =->
-    debug = true
+    debug = false
     if debug
       map.collisionLayer.debug = true
       @game.debug.body(hero.sprite)
