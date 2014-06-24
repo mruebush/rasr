@@ -20,6 +20,10 @@ module.exports = function (grunt) {
       compass: {
         files: ['<%= yeoman.app %>/compass/{,*/}*.{scss,sass}'],
         tasks: ['compass:server']
+      },
+      copy: {
+        files: ['<%= yeoman.app %>/scripts/**/templates/*.html'],
+        tasks: ['copy']
       }
     },
     // Compiles Sass to CSS and generates necessary files if requested
@@ -51,6 +55,17 @@ module.exports = function (grunt) {
           src: ['app.coffee', '**/*.coffee'],
           dest: '<%= yeoman.app %>/js',
           ext: '.js'
+        }]
+      }
+    },
+    copy: {
+      dist: {
+        files: [{
+          expand: true,
+          dot: true,
+          cwd: '<%= yeoman.app %>/scripts/**/templates',
+          dest: '<%= yeoman.app %>/js/**/templates',
+          src: '**'
         }]
       }
     }
