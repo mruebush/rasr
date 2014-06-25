@@ -1,6 +1,8 @@
 define(['events','player','enemy','messages'], (events, Player, Enemy, messages) ->
   return (rootUrl, game, players, $, Phaser) ->
-    socket = io.connect()
+    socket = io.connect(void 0, 
+      'sync disconnect on unload': true
+    )
     window.socket = socket
     window.players = players
 
