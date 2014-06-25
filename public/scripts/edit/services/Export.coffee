@@ -1,11 +1,9 @@
-app.factory('Export', ['$rootScope', 'SERVER_URL', 'GET_SCREEN', ($rootScope, SERVER_URL, GET_SCREEN) ->
+app.factory('Export', ['$rootScope', 'SERVER_URL', 'GET_SCREEN', 'GAME_SCREEN', '$state', ($rootScope, SERVER_URL, GET_SCREEN, GAME_SCREEN, $state) ->
   Export = {}
   Editor = undefined
   
   # ======================== 
-  
   # ====== INITIALIZE ====== 
-  
   # ======================== 
   Export.initialize = ->
     Editor = $rootScope.Editor
@@ -13,9 +11,7 @@ app.factory('Export', ['$rootScope', 'SERVER_URL', 'GET_SCREEN', ($rootScope, SE
 
   
   # ==================== 
-  
   # ====== EVENTS ====== 
-  
   # ==================== 
   Export.events = "click #export": (e) ->
     Export.process e
@@ -23,12 +19,8 @@ app.factory('Export', ['$rootScope', 'SERVER_URL', 'GET_SCREEN', ($rootScope, SE
 
   
   # ===================== 
-  
   # ====== PROCESS ====== 
-  
   # ===================== 
-  
-  # TODO comment this
   Export.process = ->
     type = "JSON"
     include_base64 = Editor.$("select[name=include_base64]").val() is "yes"
@@ -110,15 +102,16 @@ app.factory('Export', ['$rootScope', 'SERVER_URL', 'GET_SCREEN', ($rootScope, SE
       url: "#{SERVER_URL}#{GET_SCREEN}/#{Editor.cached._id}"
       data:
         map: output
-
       dataType: "json"
       type: "PUT"
       success: ->
-        location.href = location.origin + "/play"
+        # location.href = "#{location.origin}#{GAME_SCREEN}"
+        $state.go('game')
         return
 
       error: (err) ->
-        location.href = location.origin + "/play"
+        location.href = "#{location.origin}#{GAME_SCREEN}"
+        $state.go('game')
         return
 
     return

@@ -14,9 +14,9 @@
         }).success(function(data, status, headers, config) {
           Editor.initialize(data);
           load(data);
-          return setTimeout(function() {
-            Editor.Import.process(JSON.stringify(data), "json");
-          }, 2000);
+          return $rootScope.$on('editorReady', function() {
+            return Editor.Import.process(JSON.stringify(data), "json");
+          });
         });
       });
       load = function(data) {

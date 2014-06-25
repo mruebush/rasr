@@ -1,14 +1,17 @@
 (function() {
   app.factory('Tilesets', [
     'TilesetView', '$rootScope', function(TilesetView, $rootScope) {
-      var Editor, Tilesets;
+      var Editor, Tilesets, count, tilesetCount;
       Tilesets = {};
       Tilesets.collection = {};
       Editor = void 0;
+      count = 0;
+      tilesetCount = 0;
       Tilesets.initialize = function(data) {
         var key, tileset;
         Editor = $rootScope.Editor;
         this.view = TilesetView.initialize();
+        tilesetCount = data.tilesets.length;
         for (key in data.tilesets) {
           tileset = data.tilesets[key];
           Editor.Tilesets.add({
@@ -73,6 +76,10 @@
           Editor.$("#tilesets select").val(name);
           Editor.$("#tileset").jScrollPane();
           Editor.Canvas.updateGrid();
+          count++;
+          if (count === tilesetCount) {
+            $rootScope.$broadcast('editorReady');
+          }
         }), false);
       };
       Tilesets.setAlpha = function(img, alpha) {

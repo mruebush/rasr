@@ -1,6 +1,6 @@
 (function() {
   app.factory('Export', [
-    '$rootScope', 'SERVER_URL', 'GET_SCREEN', function($rootScope, SERVER_URL, GET_SCREEN) {
+    '$rootScope', 'SERVER_URL', 'GET_SCREEN', 'GAME_SCREEN', '$state', function($rootScope, SERVER_URL, GET_SCREEN, GAME_SCREEN, $state) {
       var Editor, Export;
       Export = {};
       Editor = void 0;
@@ -104,10 +104,11 @@
           dataType: "json",
           type: "PUT",
           success: function() {
-            location.href = location.origin + "/play";
+            $state.go('game');
           },
           error: function(err) {
-            location.href = location.origin + "/play";
+            location.href = "" + location.origin + GAME_SCREEN;
+            $state.go('game');
           }
         });
       };

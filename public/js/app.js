@@ -14,4 +14,6 @@
 
   app.constant("GET_SESSION", "/api/session");
 
+  app.constant("GAME_SCREEN", "/game");
+
 }).call(this);
