@@ -16,6 +16,11 @@ define( ->
       @sprite.animations.play 'damage_down', 15, false
       @meta.health--
       @render()
+      if @meta.health <= 0
+        console.log "hero takes lethal damage"
+        # do @sprite.kill
+        do @game.gameOver
+        # do @game.destroy
       
     render: ->
       @game.debug.text("health: #{@meta.health}", 20, 30, fontStyle)
@@ -51,7 +56,11 @@ define( ->
       @sprite = @game.add.sprite(@meta.x, @meta.y, "player")
       @game.physics.enable(@sprite, @phaser.Physics.ARCADE)
       @sprite.body.collideWorldBounds = true
-      @sprite.body.setSize(@sprite.body.halfWidth, -@sprite.body.sourceHeight / 3, @sprite.body.sourceWidth / 4, @sprite.body.sourceHeight)
+      @sprite.body.bounce.set(1)
+      expText = @game.add.text(20, 10, "exp: #{@meta.exp}", fontStyle)
+      # healthText = @game.add.text(20, 30, "health: #{@meta.health}", fontStyle)
+      @render()
+      mana = @game.add.text(20, 50, "mana: #{@meta.mana}", fontStyle)
 
       @sprite.animations.add("down", Phaser.Animation.generateFrameNames('player_walk_down', 0, 11, '.png', 4), 30, false)
       @sprite.animations.add("left", Phaser.Animation.generateFrameNames('player_walk_left', 0, 11, '.png', 4), 30, false)
@@ -125,7 +134,7 @@ define( ->
           y: @sprite.y
       else if @spaceBar.isDown
         @sprite.animations.play "attack_#{@directionFacing}", 15, false
-        @fire();
+        do @fire
 
       # @sprite.bringToTop()
 
@@ -156,7 +165,7 @@ define( ->
         else if @directionFacing is 'left'
           baseAngle = -Math.PI/2
 
-        @game.shoot @game.user, @game.mapId, @sprite.x, @sprite.y, baseAngle, numArrowsShot
+        @game.shoot @game.user, @game.mapId, @sprite.x, @sprite.y, baseAngle, numArrowsShot, @directionFacing
         @renderMissiles @sprite.x, @sprite.y, baseAngle, numArrowsShot
         nextFire = @game.time.now + fireRate;
 
