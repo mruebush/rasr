@@ -8,11 +8,8 @@ dist
 /public/scripts/game/**/*.js
 /public/js
 
-public/js/game/controllers/GameCtrl.js
-public/js/game/services/map/MapModel.js
-public/js/game/services/entity/EnemyModel.js
-public/js/game/services/entity/PlayerModel.js
-public/js/game/services/utils/SocketService.js
+public/js
+public/styles
 
 
 .DS_Store
