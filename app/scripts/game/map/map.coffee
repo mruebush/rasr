@@ -62,13 +62,19 @@ define([], ->
 
     create: (triggerEnter) ->
       map = @game.add.tilemap('map')
+
       for tileset in @mapData.tilesets
           map.addTilesetImage(tileset.name)
 
-      for layer in @mapData.layers
-        layer = map.createLayer(layer.name)
+      @layers = []
+      for layerInfo in @mapData.layers
+        layer = map.createLayer(layerInfo.name)
+        layer.name = layerInfo.name
         @layers.push(layer)
         layer.resizeWorld()
+        if (layer.name == 'collision')
+          # collide on everything, set on from 1 to 1000 from now
+          map.setCollisionBetween(1, 1000, true, layer)        
 
       @trigger 'finishLoad'
       # @game.trigger 'enterMap'

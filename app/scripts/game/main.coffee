@@ -98,6 +98,9 @@ require [
       game.layerRendering.add(hero.arrows)
       game.layerRendering.add(explosions)
       game.layerRendering.add(map.layers[3])
+      map.collisionLayer = undefined;
+      for layer in map.layers
+        map.collisionLayer = layer if layer.name == 'collision'
 
     game.layerRendering = do game.add.group
     game.layerRendering.add(map.layers[0])
@@ -123,6 +126,9 @@ require [
 
     game.camera.follow(hero.sprite);
 
+    for layer in map.layers
+      map.collisionLayer = layer if layer.name == 'collision'
+
     game.join
       x: hero.sprite.x
       y: hero.sprite.y
@@ -136,19 +142,24 @@ require [
     if app.isLoaded
       do map.update
       do hero.update
+      game.physics.arcade.collide(hero.sprite, map.collisionLayer)
+      game.physics.arcade.collide(hero.arrows, map.collisionLayer, tileCollision)
       for enemy in game.enemies
         if enemy.alive
           hero.sprite.facing = hero.facing
           game.physics.arcade.collide(hero.sprite, enemy.sprite, hurtHero, null, hero)
           game.physics.arcade.collide(hero.arrows, hero.sprite, arrowHurt, null, hero)
           game.physics.arcade.collide(hero.arrows, enemy.sprite, arrowHurt, null, enemy)
-
+          game.physics.arcade.collide(enemy.sprite, map.collisionLayer)
           enemy.update()
       for player of players
         if player.update then do player.update
 
   hurtHero = (heroSprite, enemySprite) ->
     @damage()
+
+  tileCollision = (arrow, tile) ->
+    arrow.kill()
 
   arrowHurt = (sprite, arrow) ->
     explosion.call(@)
@@ -168,6 +179,17 @@ require [
     if explosionAnimation
       explosionAnimation.reset(@sprite.x, @sprite.y)
       explosionAnimation.play('kaboom', 30, false, true)
+
+
+  render =->
+    debug = false
+    if debug
+      map.collisionLayer.debug = true
+      @game.debug.body(hero.sprite)
+      for enemy in game.enemies
+        if enemy.alive
+          @game.debug.body(enemy.sprite)
+    hero.render()
 
   # MAKE INITIAL AJAX CALL FOR PLAYER INFO
   $.ajax({
@@ -198,6 +220,7 @@ require [
         preload: preload
         create: create
         update: update
+        render: render
       )
 
       game.rootUrl = rootUrl
