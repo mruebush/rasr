@@ -85,8 +85,11 @@ app.controller 'GameCtrl', ['$scope', 'User', 'Auth', 'Map', 'Hero', 'Enemy', 'P
     game.user = user
     game.map = map
     Socket SERVER_URL, game, players, Phaser
+
     game.load.spritesheet 'kaboom', 'assets/explosion.png', 64, 64, 23
-    console.log(hero)
+    game.load.image 'lifebar', 'assets/lifebar.png'
+    game.load.image 'heart', 'assets/heart.png'
+
     hero.preload()
     map.preload(null, initialMap)
 
@@ -99,10 +102,23 @@ app.controller 'GameCtrl', ['$scope', 'User', 'Auth', 'Map', 'Hero', 'Enemy', 'P
     game.addChat = addChat
 
   create = ->
+    game.lifebar = game.add.sprite(0, 0, 'lifebar')
+    game.lifebar.fixedToCamera = true
+    game.lifebar.alpha = 0.8
+
+    game.hearts = game.add.group()
+    initPos = 95
+    offset = 28
+    y = 13
+    for i in [0...5]
+      game.hearts.add(game.add.sprite(initPos + offset*i, y, 'heart'))
+    game.hearts.fixedToCamera = true
+    game.hearts.alpha = 0.8
+
     map.create()
     hero.create()
     game.hero = hero
-    createExplosions()
+    # createExplosions()
     # render()
 
     map.on 'finishLoad', =>
@@ -138,6 +154,7 @@ app.controller 'GameCtrl', ['$scope', 'User', 'Auth', 'Map', 'Hero', 'Enemy', 'P
 
   render = ->
     game.layerRendering = game.add.group()
+    debugger;
     game.layerRendering.add(map.layers[0])
     game.layerRendering.add(map.layers[1])
     game.layerRendering.add(map.layers[2])
@@ -145,9 +162,13 @@ app.controller 'GameCtrl', ['$scope', 'User', 'Auth', 'Map', 'Hero', 'Enemy', 'P
     game.layerRendering.add(hero.arrow.arrows)
     game.layerRendering.add(explosions)
     game.layerRendering.add(map.layers[3])
+    game.layerRendering.add(game.lifebar)
+    game.layerRendering.add(game.hearts)
     # hero.sprite.bringToTop();
     for layer in map.layers
-      map.collisionLayer = layer if layer.name = 'collision'
+      if layer.name = 'collision'
+        console.log('collision layer!!!', layer)
+        map.collisionLayer = layer 
 
 
   update = ->

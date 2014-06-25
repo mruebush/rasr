@@ -91,7 +91,8 @@
         game.map = map;
         Socket(SERVER_URL, game, players, Phaser);
         game.load.spritesheet('kaboom', 'assets/explosion.png', 64, 64, 23);
-        console.log(hero);
+        game.load.image('lifebar', 'assets/lifebar.png');
+        game.load.image('heart', 'assets/heart.png');
         hero.preload();
         map.preload(null, initialMap);
         app.trigger('create');
@@ -102,12 +103,23 @@
         return game.addChat = addChat;
       };
       create = function() {
-        var enemies, enemyId, enemyPositions,
+        var enemies, enemyId, enemyPositions, i, initPos, offset, y, _i,
           _this = this;
+        game.lifebar = game.add.sprite(0, 0, 'lifebar');
+        game.lifebar.fixedToCamera = true;
+        game.lifebar.alpha = 0.8;
+        game.hearts = game.add.group();
+        initPos = 95;
+        offset = 28;
+        y = 13;
+        for (i = _i = 0; _i < 5; i = ++_i) {
+          game.hearts.add(game.add.sprite(initPos + offset * i, y, 'heart'));
+        }
+        game.hearts.fixedToCamera = true;
+        game.hearts.alpha = 0.8;
         map.create();
         hero.create();
         game.hero = hero;
-        createExplosions();
         map.on('finishLoad', function() {
           hero.arrow.arrows.destroy();
           hero.createArrows();
@@ -139,6 +151,7 @@
       render = function() {
         var layer, _i, _len, _ref, _results;
         game.layerRendering = game.add.group();
+        debugger;
         game.layerRendering.add(map.layers[0]);
         game.layerRendering.add(map.layers[1]);
         game.layerRendering.add(map.layers[2]);
@@ -146,11 +159,14 @@
         game.layerRendering.add(hero.arrow.arrows);
         game.layerRendering.add(explosions);
         game.layerRendering.add(map.layers[3]);
+        game.layerRendering.add(game.lifebar);
+        game.layerRendering.add(game.hearts);
         _ref = map.layers;
         _results = [];
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           layer = _ref[_i];
           if (layer.name = 'collision') {
+            console.log('collision layer!!!', layer);
             _results.push(map.collisionLayer = layer);
           } else {
             _results.push(void 0);
