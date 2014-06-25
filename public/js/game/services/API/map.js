@@ -1,22 +1,22 @@
 (function() {
   "use strict";
-  app.factory("MapAPI", function($resource, SERVER_URL) {
+  app.factory("MapAPI", function($resource, SERVER_URL, GET_SCREEN, MOVE_SCREEN, MAKE_SCREEN) {
     return {
-      getMap: function(mapId) {
-        return $resource("" + SERVER_URL + "/api/screen/:mapId", {
-          mapId: mapId
+      getMap: function() {
+        return $resource("" + SERVER_URL + GET_SCREEN + "/:mapId", {
+          mapId: this.mapId
         });
       },
-      moveMap: function(direction, mapId) {
-        return $resource("" + SERVER_URL + "/api/screen/move/:direction/:mapId", {
-          direction: direction,
-          mapId: mapId
+      moveMap: function() {
+        return $resource("" + SERVER_URL + MOVE_SCREEN + "/:direction/:mapId", {
+          direction: this.direction,
+          mapId: this.mapId
         });
       },
-      makeMap: function(direction, mapId) {
-        return $resource("" + SERVER_URL + "/api/screen/make/:direction/:mapId", {
-          direction: direction,
-          mapId: mapId
+      makeMap: function() {
+        return $resource("" + SERVER_URL + MAKE_SCREEN + "/:direction/:mapId", {
+          direction: this.direction,
+          mapId: this.mapId
         });
       }
     };

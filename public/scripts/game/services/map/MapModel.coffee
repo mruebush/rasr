@@ -1,11 +1,10 @@
 app.service 'Map', (MapAPI) ->
   Map = {}
 
-  return (game, Phaser, mapId, $) ->
+  return (game, Phaser, mapId) ->
     Map.game = game
     Map.Phaser = Phaser
     Map.mapId = mapId
-    Map.$ = $
     Map.layers = []
     Map.tiles = []
     
@@ -19,18 +18,14 @@ app.service 'Map', (MapAPI) ->
     )
 
     Map.preload = (direction, data, callback) ->
-      that = Map
       if !data
         MapAPI.moveMap().get {direction: direction, mapId: Map.mapId}, (mapData) ->
-          Map.$('#map-id').attr('href', '/edit/' + Map.mapId);
-          Map._loadAssets.call(that, mapData, callback)
+          Map._loadAssets.call(Map, mapData, callback)
           console.log "Triggering enterMap"
-          # Map.game.mapData = data
-          # Map.game.trigger 'enterMap'
       else
         Map._loadAssets.call(Map, data, callback)
 
-    Map._loadAssets = (data, loader = Map.game.load) ->
+    Map._loadAssets = (data, loader = Map.game.load, triggerEnter) ->
       Map.mapId = data._id
       Map.game.mapId = Map.mapId
       Map.mapData = data
@@ -41,9 +36,9 @@ app.service 'Map', (MapAPI) ->
 
       loader.start();
       loader.onLoadComplete.add =>
-        do Map.create
+        Map.create triggerEnter
 
-    Map.create = ->
+    Map.create = (triggerEnter) ->
       map = Map.game.add.tilemap('map')
       for tileset in Map.mapData.tilesets
           map.addTilesetImage(tileset.name)
@@ -52,14 +47,18 @@ app.service 'Map', (MapAPI) ->
         layer = map.createLayer(layer.name)
         Map.layers.push(layer)
         layer.resizeWorld()
+        # collide on everything, set on from 1 to 1000 for now
+        map.setCollisionBetween(1, 1000, true, layer) if layer.name is 'collision'
 
       Map.game._createCtrls(Map.mapData)
       Map.trigger 'finishLoad'
 
+      if triggerEnter then Map.game.trigger 'enterMap'
+
     Map.reloadMap = (loader, direction) ->
       # url = "#{Map.game.rootUrl}/move/#{direction}/#{Map.mapId}"
       MapAPI.moveMap().get {direction: direction, mapId: Map.mapId}, (mapData) ->
-        Map._loadAssets.call(Map, mapData, loader)
+        Map._loadAssets.call(Map, mapData, loader, true)
         Map.game.mapData = mapData
         Map.game.trigger "enterMap"
 

@@ -17,9 +17,9 @@ app.factory 'Hero', (Arrow) ->
     Hero.phaser = phaser
     Hero.meta = meta
     Hero.sprite = null
-    Hero.speed = 200
+    Hero.speed = meta.speed
     Hero.startOnScreenPos = 10
-    Hero.png = Hero.meta.png
+    Hero.png = meta.png
 
     Hero.upKey = null
     Hero.downKey = null
@@ -32,6 +32,9 @@ app.factory 'Hero', (Arrow) ->
       Hero.sprite.animations.play 'damage_down', 15, false
       Hero.meta.health--
       Hero.render()
+      if @meta.health <= 0
+        console.log "Hero takes lethal damage"
+        do @game.gameOver
       
     Hero.render = ->
       Hero.game.debug.text("health: #{Hero.meta.health}", 20, 30, fontStyle)
@@ -157,7 +160,7 @@ app.factory 'Hero', (Arrow) ->
         else if Hero.directionFacing is 'left'
           baseAngle = -Math.PI/2
 
-        Hero.game.shoot Hero.game.user, Hero.game.mapId, Hero.sprite.x, Hero.sprite.y, baseAngle, numArrowsShot
+        Hero.game.shoot Hero.game.user, Hero.game.mapId, Hero.sprite.x, Hero.sprite.y, baseAngle, numArrowsShot, @directionFacing
         Hero.renderMissiles Hero.sprite.x, Hero.sprite.y, baseAngle, numArrowsShot
         nextFire = Hero.game.time.now + fireRate;
 

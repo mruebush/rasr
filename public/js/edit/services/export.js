@@ -1,6 +1,6 @@
 (function() {
   app.factory('Export', [
-    '$rootScope', 'SERVER_URL', 'SAVE_SCREEN', function($rootScope, SERVER_URL, SAVE_SCREEN) {
+    '$rootScope', 'SERVER_URL', 'GET_SCREEN', function($rootScope, SERVER_URL, GET_SCREEN) {
       var Editor, Export;
       Export = {};
       Editor = void 0;
@@ -97,7 +97,7 @@
         }
         console.log("posting");
         $.ajax({
-          url: "" + SERVER_URL + "/" + SAVE_SCREEN + "/" + Editor.cached._id,
+          url: "" + SERVER_URL + GET_SCREEN + "/" + Editor.cached._id,
           data: {
             map: output
           },

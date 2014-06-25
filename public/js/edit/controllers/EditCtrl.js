@@ -7,7 +7,7 @@
       Editor.$ = $;
       $(document).ready(function() {
         var url;
-        url = "" + SERVER_URL + "/" + GET_SCREEN + "/" + $stateParams.screenId;
+        url = "" + SERVER_URL + GET_SCREEN + "/" + $stateParams.screenId;
         $http({
           method: 'GET',
           url: url

@@ -11,7 +11,7 @@
           obj._listeners[key] = [callback];
         }
       };
-      return obj.trigger = function() {
+      obj.trigger = function() {
         var callback, callbacks, data, i, key;
         key = arguments[0], data = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
         if (obj._listeners[key]) {
@@ -24,6 +24,7 @@
           }
         }
       };
+      return obj;
     };
   });
 

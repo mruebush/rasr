@@ -1,29 +1,20 @@
 app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
   return (rootUrl, game, players, Phaser) ->
-    socket = io.connect(SERVER_URL)
+    socket = io.connect(SERVER_URL, 
+      'sync disconnect on unload': true
+    )
+
     window.socket = socket
+    window.players = players
 
     mapId = game.mapId
 
-    game.on 'derender enemy', (data) ->
-      console.log "time to derender", data
-
-      console.log game.enemies
-      for creature in game.enemies
-        if creature.serverId is data.enemy
-          creature.alive = false
-          console.log creature
-          do creature.sprite.kill
-
-    game.on 'move enemies', (data) ->
-      for enemy in game.enemies
-        enemy.setDirection data.num
-        setTimeout ->
-          do enemy.clearDirection
-        ,500
-
+    game.on 'login', () ->
+      socket.emit 'login', game.user
 
     game.on 'enterMap', () ->
+
+      console.log 'trigger enterMap'
 
       game.enemyData = game.mapData.enemies || []
 
@@ -45,77 +36,98 @@ app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
         enemies: enemies
         positions: enemyPositions
 
-    game.on 'shoot', (data) ->
-      game.hero.renderMissiles data.x, data.y, data.angle, data.num
-
-    game.on 'move', (data) ->
-      players[data.user].move data 
-
-    game.on 'player leave', (user) ->
-      players[user].sprite.kill()
-      delete players[user]
-
-
     game.on 'changeMap', (direction) ->
       game.leave game.mapId, game.user
+      socket.removeListener game.mapId
+      for key,player of players
+        do player.sprite.kill
 
-    game.on 'player joined', (data) ->
-      player = Player(game, Phaser,
-        x: data.x
-        y: data.y
-      )
-      player.user = data.user
-      do player.preload
-      do player.create
-      players[player.user] = player
+      players = {}
 
-    game.on 'i joined', (data) ->
-      for other in data.others
-        player = Player(game, Phaser,
-          x: other.x
-          y: other.y
-        )
-        player.user = other.user
-        do player.preload
-        do player.create
-        players[player.user] = player
+    game.on 'move', (data) ->
+      if players[data.user]
+        players[data.user].move data
 
-      for enemy in game.enemies
-        do enemy.derender
+    game.gameOver = () ->
+      console.log "trigger game.gameOver"
+      socket.emit 'gameOver', 
+        user: game.user
+        room: game.mapId
 
-      data.enemies = data.enemies || []
-      game.enemies = []
+    _gameOverListener = () ->
+      socket.on 'gameOver', (data) ->
+        game.trigger 'player leave', data.user
 
-      for creature,i in data.enemies
-        for num in [0...creature.count]
-          console.log "Creating new enemy, #{num}"
-          x = +game.enemyPositions[creature.data._id][i][0]
-          y = +game.enemyPositions[creature.data._id][i][1]
-          enemy = Enemy i, game, Phaser,
-            rank: 1
-            health: creature.data.health
-            dmg: 1
-            png: creature.data.png
-            speed: creature.data.speed
-            x: x
-            y: y
-            id: num
-          do enemy.create
-          game.enemies.push enemy
+    do _gameOverListener
+
+    game.enemyMoving = (data) ->
+      data.room = game.mapId
+      socket.emit 'enemyMoving', data
+
+    _enemyMovingListener = () ->
+      socket.on 'enemyMoving', (data) ->
+        game.trigger 'enemyMoving', data
+
+    game.on 'enemyMoving', (data) ->
+      
+      enemy = game.enemies[data.serverId]
+      
+      if enemy
+        enemy.setDirection data.dir
+
+    do _enemyMovingListener
+
+
+    game.on 'levelUp', (data) ->
+      game.hero.speed += data.speed;
+
+    _levelUpListener = () ->
+      socket.on 'levelUp', (data) ->
+        if data.user == game.user
+          game.trigger 'levelUp', data
 
     game.killEnemy = (enemy) ->
-      console.log "enemy dies", enemy
       socket.emit 'enemyDies', 
         enemy: enemy.serverId
         mapId: game.mapId
-        # user: game.user
+        _id: enemy.dbId
+        user: game.user
+        enemyName: enemy.name
+        xp: enemy.xp
+    
+    game.on 'derender enemy', (data) ->
+      if game.enemies[data.enemy]
+        game.enemies[data.enemy].alive = false
+        do game.enemies[data.enemy].sprite.kill
+        game.enemies.splice data.enemy, 1
 
     _derenderEnemyListener = () ->
       socket.on 'derenderEnemy', (data) ->
-        console.log 'time to derender', data.enemy
         game.trigger 'derender enemy', data
 
-    game.shoot = (user, mapId, x, y, angle, num) ->
+    game.damageEnemy = (enemy) ->
+      socket.emit 'damageEnemy', 
+        enemy: enemy.serverId
+        room: game.mapId
+        _id: enemy.dbId
+        user: game.user
+
+    _damageEnemyListener = () ->
+      socket.on 'damageEnemy', (data) ->
+        game.trigger 'damageEnemy', data
+
+    game.on 'damageEnemy', (data) ->
+      game.enemies[data.serverId].health--
+
+    game.stopEnemy = (enemy) ->
+      socket.emit 'stopEnemy', 
+        enemy: enemy.serverId
+        room: game.mapId
+        _id: enemy.dbId
+        x: enemy.sprite.x
+        y: enemy.sprite.y
+
+    game.shoot = (user, mapId, x, y, angle, num, dir) ->
       socket.emit 'shoot',
         user: user
         mapId: mapId
@@ -123,6 +135,17 @@ app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
         y: y
         angle: angle
         num: num
+        dir: dir
+
+    _shootListener = (user) ->
+      socket.on 'shoot', (data) ->
+        if data.user != game.user
+          game.trigger 'shoot', data
+
+    game.on 'shoot', (data) ->
+      game.hero.renderMissiles data.x, data.y, data.angle, data.num
+      players[data.user].animateShoot data.dir
+
     
     game.logout = (x, y) ->
       socket.emit 'logout',
@@ -132,6 +155,7 @@ app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
         y: y
 
     game.join = (data) ->
+
       x = data.x
       y = data.y
       enemies = data.enemies
@@ -148,12 +172,81 @@ app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
 
       _joinListener game.user
 
+    _joinListener = (user) ->
+      socket.on game.mapId, (data) ->
+        if data.user != game.user
+          game.trigger('player joined', data)
+        else
+          game.trigger('i joined', data)
+
+    game.on 'player joined', (data) ->
+      console.log 'trigger player joined'
+      player = new Player(game, Phaser,
+        x: data.x
+        y: data.y
+      )
+      player.user = data.user
+      do player.preload
+      do player.create
+      players[player.user] = player
+
+    game.on 'i joined', (data) ->
+      for other in data.others
+        player = new Player(game, Phaser,
+          x: other.x
+          y: other.y
+        )
+        player.user = other.user
+        do player.preload
+        do player.create
+        players[player.user] = player
+        console.log player
+
+      for enemy in game.enemies
+        do enemy.derender
+
+      data.enemies = data.enemies || []
+      game.enemies = []
+
+      for enemyType of data.enemies
+        type = data.enemies[enemyType]
+        num = 0
+        for i,creature of type
+          enemy = new Enemy game, Phaser,
+            rank: 1
+            health: creature.health
+            dmg: 1
+            png: creature.png
+            speed: creature.speed
+            x: +creature.position[0]
+            y: +creature.position[1]
+            id: num
+            dbId: creature._id
+            name: creature.name
+            xp: creature.xp
+
+          do enemy.create
+          game.enemies.push enemy
+          num++
+
 
     game.leave = () ->
       socket.emit 'leave', 
         user: game.user
         mapId: game.mapId
 
+    _leaveListener = (mapId, user) ->
+      socket.on 'leave', (data) ->
+
+        if data.user != game.user
+          game.trigger 'player leave', data.user
+
+    game.on 'player leave', (user) ->
+      if players[user]
+        do players[user].sprite.kill
+        delete players[user]
+      else
+        do game.hero.sprite.kill
 
     game.message = (message) ->
       socket.emit 'message',
@@ -169,45 +262,39 @@ app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
         x: data.x
         y: data.y
 
-    _shootListener = (user) ->
-      socket.on 'shoot', (data) ->
-        if data.user != game.user
-          game.trigger 'shoot', data
-
-    _leaveListener = (mapId, user) ->
-      socket.on 'leave', (data) ->
-
-        if data.user != game.user
-          game.trigger 'player leave', data.user
-  
-
-    _joinListener = (user) ->
-      socket.on game.mapId, (data) ->
-        if data.user != game.user
-          game.trigger('player joined', data)
-        else
-          game.trigger('i joined', data)
-
-  
     _moveListener = (user) ->
       socket.on 'move', (data) ->
         if data.user != game.user
           game.trigger('move', data)
 
+    _messageListener = ->
+      socket.on 'message', (data) ->
+        game.addChat(data)
 
-
-    # Initialize message module
-    # messages(game, socket, $)
 
     _enemyListener = () ->
       socket.on 'move enemies', (data) ->
         game.trigger 'move enemies', data
 
+    game.on 'move enemies', (data) ->
+      nums = data.nums
+      for enemy,i in game.enemies
+        enemy.setDirection nums[i].dir
+        if nums[i].passive
+          do enemy.clearDirection
+
+    # Initialize message module
+    # messages(game, socket, $)
+
+
     _leaveListener mapId, game.user
     _moveListener game.user
     _shootListener game.user
+    do _damageEnemyListener
     do _enemyListener
+    do _messageListener
     do _derenderEnemyListener
+    do _levelUpListener
 
     # actions = events(actions)
     # window.actions = actions

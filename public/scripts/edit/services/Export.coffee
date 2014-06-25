@@ -1,4 +1,4 @@
-app.factory('Export', ['$rootScope', 'SERVER_URL', 'SAVE_SCREEN', ($rootScope, SERVER_URL, SAVE_SCREEN) ->
+app.factory('Export', ['$rootScope', 'SERVER_URL', 'GET_SCREEN', ($rootScope, SERVER_URL, GET_SCREEN) ->
   Export = {}
   Editor = undefined
   
@@ -107,7 +107,7 @@ app.factory('Export', ['$rootScope', 'SERVER_URL', 'SAVE_SCREEN', ($rootScope, S
       anchor.href = "data:application/json;charset=UTF-8;," + encodeURIComponent(output)
     console.log "posting"
     $.ajax
-      url: "#{SERVER_URL}/#{SAVE_SCREEN}/#{Editor.cached._id}"
+      url: "#{SERVER_URL}#{GET_SCREEN}/#{Editor.cached._id}"
       data:
         map: output
 

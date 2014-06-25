@@ -7,7 +7,7 @@ app.controller('EditCtrl', ['Editor', '$rootScope', '$http', '$stateParams', 'SE
     # var mapId = location.pathname.split("/")[2];
     # $("#load").click();
     # mapId = location.pathname.split("/")[2]
-    url = "#{SERVER_URL}/#{GET_SCREEN}/#{$stateParams.screenId}"
+    url = "#{SERVER_URL}#{GET_SCREEN}/#{$stateParams.screenId}"
     $http(
       method: 'GET'
       url: url
