@@ -51,20 +51,24 @@
         });
       };
       Map.create = function(triggerEnter) {
-        var layer, map, tileset, _i, _j, _len, _len1, _ref, _ref1;
+        var layer, layerInfo, map, tileset, _i, _j, _len, _len1, _ref, _ref1;
         map = Map.game.add.tilemap('map');
         _ref = Map.mapData.tilesets;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           tileset = _ref[_i];
           map.addTilesetImage(tileset.name);
         }
+        console.log(Map.mapData.layers);
         _ref1 = Map.mapData.layers;
         for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-          layer = _ref1[_j];
-          layer = map.createLayer(layer.name);
+          layerInfo = _ref1[_j];
+          layer = map.createLayer(layerInfo.name);
+          layer.name = layerInfo.name;
+          console.log(layerInfo.name, layer.name);
           Map.layers.push(layer);
           layer.resizeWorld();
           if (layer.name === 'collision') {
+            console.log('setting collision between', layer);
             map.setCollisionBetween(1, 1000, true, layer);
           }
         }
