@@ -11,14 +11,22 @@ define( ->
     arrowSpeed = 600
     numArrows = 50
     numArrowsShot = 1
+    heartRemoved = false
+    segments = 80
 
     damage: ->
       @sprite.animations.play 'damage_down', 15, false
       @meta.health--
+      heartRemoved = false if (@meta.health <= segments)
+      if (@meta.health <= segments and not heartRemoved)
+        do @game.hearts.children.pop
+        segments -= 20
+        heartRemoved = true
+      
       @render()
       
     render: ->
-      @game.debug.text("health: #{@meta.health}", 20, 30, fontStyle)
+      # @game.debug.text("health: #{@meta.health}", 20, 30, fontStyle)
 
     constructor: (@game, @phaser, @meta) ->
       @sprite = null

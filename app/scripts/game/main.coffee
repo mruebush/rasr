@@ -71,6 +71,8 @@ require [
     game.map = map
     socket rootUrl, game, players, $, Phaser
     game.load.spritesheet 'kaboom', 'images/explosion.png', 64, 64, 23
+    game.load.image 'lifebar', 'images/lifebar.png'
+    game.load.image 'heart', 'images/heart.png'
     do hero.preload
     map.preload null, initialMap
 
@@ -81,6 +83,22 @@ require [
     game.hero = hero
 
   create = ->
+    game.lifebar = game.add.sprite(0, 0, 'lifebar')
+    game.lifebar.fixedToCamera = true
+    game.lifebar.alpha = 0.8
+
+    game.hearts = do game.add.group
+    initPos = 95
+    offset = 28
+    y = 13
+    game.hearts.add(game.add.sprite(initPos, y, 'heart'))
+    game.hearts.add(game.add.sprite(initPos + offset, y, 'heart'))
+    game.hearts.add(game.add.sprite(initPos + offset * 2, y, 'heart'))
+    game.hearts.add(game.add.sprite(initPos + offset * 3, y, 'heart'))
+    game.hearts.add(game.add.sprite(initPos + offset * 4, y, 'heart'))
+    game.hearts.fixedToCamera = true
+    game.hearts.alpha = 0.8
+
     do map.create
     do hero.create
     game.hero = hero
@@ -98,6 +116,8 @@ require [
       game.layerRendering.add(hero.arrows)
       game.layerRendering.add(explosions)
       game.layerRendering.add(map.layers[3])
+      game.layerRendering.add(game.lifebar)
+      game.layerRendering.add(game.hearts)
       map.collisionLayer = undefined;
       for layer in map.layers
         map.collisionLayer = layer if layer.name == 'collision'
@@ -110,6 +130,8 @@ require [
     game.layerRendering.add(hero.arrows)
     game.layerRendering.add(explosions)
     game.layerRendering.add(map.layers[3])
+    game.layerRendering.add(game.lifebar)
+    game.layerRendering.add(game.hearts)
 
     console.log "Joining #{game.mapId} on #{hero.sprite.x},#{hero.sprite.y}"
 
