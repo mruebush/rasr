@@ -41,14 +41,18 @@ app.service 'Map', (MapAPI) ->
     Map.create = (triggerEnter) ->
       map = Map.game.add.tilemap('map')
       for tileset in Map.mapData.tilesets
-          map.addTilesetImage(tileset.name)
-
-      for layer in Map.mapData.layers
-        layer = map.createLayer(layer.name)
+        map.addTilesetImage(tileset.name)
+      console.log(Map.mapData.layers)
+      for layerInfo in Map.mapData.layers
+        layer = map.createLayer(layerInfo.name)
+        layer.name = layerInfo.name
+        console.log(layerInfo.name, layer.name)
         Map.layers.push(layer)
         layer.resizeWorld()
         # collide on everything, set on from 1 to 1000 for now
-        map.setCollisionBetween(1, 1000, true, layer) if layer.name is 'collision'
+        if layer.name is 'collision'
+          console.log('setting collision between', layer)
+          map.setCollisionBetween(1, 1000, true, layer) 
 
       Map.game._createCtrls(Map.mapData)
       Map.trigger 'finishLoad'

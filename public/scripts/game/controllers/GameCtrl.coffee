@@ -56,6 +56,7 @@ app.controller 'GameCtrl', ['$scope', 'User', 'Auth', 'Map', 'Hero', 'Enemy', 'P
           preload: preload
           create: create
           update: update
+          render: render
         )
         game.rootUrl = rootUrl
         game.enemies = []
@@ -83,7 +84,12 @@ app.controller 'GameCtrl', ['$scope', 'User', 'Auth', 'Map', 'Hero', 'Enemy', 'P
     # window.hero = hero
     map = Events(Map(game, Phaser, mapId))
     game.user = user
-    game.map = map
+    map.on 'finishLoad', =>
+      hero.arrow.arrows.destroy()
+      hero.createArrows()
+      createExplosions()
+      app.isLoaded = true
+      renderMap()
     Socket SERVER_URL, game, players, Phaser
 
     game.load.spritesheet 'kaboom', 'assets/explosion.png', 64, 64, 23
@@ -115,21 +121,9 @@ app.controller 'GameCtrl', ['$scope', 'User', 'Auth', 'Map', 'Hero', 'Enemy', 'P
     game.hearts.fixedToCamera = true
     game.hearts.alpha = 0.8
 
-    map.create()
     hero.create()
     game.hero = hero
-    # createExplosions()
-    # render()
-
-    map.on 'finishLoad', =>
-      hero.arrow.arrows.destroy()
-      hero.createArrows()
-      createExplosions()
-      app.isLoaded = true
-      render()
-
-    console.log "Joining #{game.mapId} on #{hero.sprite.x},#{hero.sprite.y}"
-
+    
     enemies = []
     enemyPositions = {}
 
@@ -152,9 +146,8 @@ app.controller 'GameCtrl', ['$scope', 'User', 'Auth', 'Map', 'Hero', 'Enemy', 'P
     game.trigger 'login'
     game.stage.disableVisibilityChange = true
 
-  render = ->
+  renderMap = ->
     game.layerRendering = game.add.group()
-    debugger;
     game.layerRendering.add(map.layers[0])
     game.layerRendering.add(map.layers[1])
     game.layerRendering.add(map.layers[2])
@@ -165,10 +158,22 @@ app.controller 'GameCtrl', ['$scope', 'User', 'Auth', 'Map', 'Hero', 'Enemy', 'P
     game.layerRendering.add(game.lifebar)
     game.layerRendering.add(game.hearts)
     # hero.sprite.bringToTop();
+    console.log(map.layers)
     for layer in map.layers
       if layer.name = 'collision'
         console.log('collision layer!!!', layer)
         map.collisionLayer = layer 
+
+  render = ->
+    # debugger;
+    debug = true
+    if debug
+      map.collisionLayer.debug = true
+      game.debug.body(hero.sprite)
+      for enemy in game.enemies
+        if enemy.alive
+          game.debug.body(enemy.sprite)
+
 
 
   update = ->
