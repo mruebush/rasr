@@ -1,7 +1,7 @@
 (function() {
   var Auth;
 
-  app.factory("Auth", Auth = function($location, $rootScope, Session, User, $cookieStore) {
+  app.factory("Auth", Auth = function($location, $rootScope, Session, User, $window) {
     $rootScope.currentUser = $cookieStore.get("user") || null;
     if ($rootScope.currentUser) {
       window.userData = Object.freeze({
@@ -21,15 +21,16 @@
           cb = angular.noop;
         }
         return Session.save({
+          name: user.name,
           email: user.email,
           password: user.password
         }, function(user) {
           console.log("troll", user);
-          $rootScope.currentUser = user;
+          $window.localStorage.token = user.token;
           window.userData = Object.freeze(user);
-          console.log($cookieStore.get("user"), $cookieStore);
           return cb();
         }, function(err) {
+          delete $window.localStorage.token;
           return cb(err);
         }).$promise;
       },

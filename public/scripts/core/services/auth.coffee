@@ -1,6 +1,6 @@
-app.factory "Auth", Auth = ($location, $rootScope, Session, User, $cookieStore) ->
+app.factory "Auth", Auth = ($location, $rootScope, Session, User, $window) ->
   
-  # Get currentUser from cookie
+  # Get currentUser from jwt
   $rootScope.currentUser = $cookieStore.get("user") or null
   window.userData = Object.freeze(name: $rootScope.currentUser.name)  if $rootScope.currentUser
   # $cookieStore.remove "user"
@@ -13,15 +13,18 @@ app.factory "Auth", Auth = ($location, $rootScope, Session, User, $cookieStore) 
   ###
   login: (user, cb = angular.noop) ->
     Session.save(
+      name: user.name
       email: user.email
       password: user.password
     , (user) ->
       console.log "troll", user
-      $rootScope.currentUser = user
+      $window.localStorage.token = user.token;
+      # $rootScope.currentUser = user
       window.userData = Object.freeze(user)
-      console.log($cookieStore.get("user"), $cookieStore);
       cb()
     , (err) ->
+      # Erase the token if the user fails to log in
+      delete $window.localStorage.token;
       cb err
     ).$promise
 
