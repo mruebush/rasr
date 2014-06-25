@@ -45,6 +45,18 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
       if players[data.user]
         players[data.user].move data
 
+    game.gameOver = () ->
+      
+      socket.emit 'gameOver', 
+        user: game.user
+
+    _gameOverListener = () ->
+
+      socket.on 'gameOver', (data) ->
+        console.log "#{data.user} was slain"
+
+    do _gameOverListener
+
     game.enemyMoving = (data) ->
       data.room = game.mapId
       socket.emit 'enemyMoving', data

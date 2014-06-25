@@ -16,6 +16,11 @@ define( ->
       @sprite.animations.play 'damage_down', 15, false
       @meta.health--
       @render()
+      if @meta.health <= 0
+        console.log "hero takes lethal damage"
+        do @sprite.kill
+        do @game.gameOver
+        # do @game.destroy
       
     render: ->
       @game.debug.text("health: #{@meta.health}", 20, 30, fontStyle)
