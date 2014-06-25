@@ -53,13 +53,13 @@ app.service 'Map', (MapAPI) ->
         Map.layers.push(layer)
         layer.resizeWorld()
 
+      Map.game._createCtrls(Map.mapData)
       Map.trigger 'finishLoad'
 
     Map.reloadMap = (loader, direction) ->
       # url = "#{Map.game.rootUrl}/move/#{direction}/#{Map.mapId}"
       MapAPI.moveMap().get {direction: direction, mapId: Map.mapId}, (mapData) ->
         Map._loadAssets.call(Map, mapData, loader)
-        Map.game._createCtrls(mapData)
         Map.game.mapData = mapData
         Map.game.trigger "enterMap"
 

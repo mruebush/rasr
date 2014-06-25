@@ -5,10 +5,11 @@ app.controller 'GameCtrl', ['$scope', 'User', 'Auth', 'Map', 'Hero', 'Enemy', 'P
   $scope.currentUser = window.userData || {name: "test"}
   $scope.chats = []
   $scope.sendChat = ->
-    $scope.chats.push(
+    chat = 
       user: $scope.currentUser.name
       message: $scope.chatToSend
-    )
+    game.message chat
+    $scope.chats.push chat
     $scope.chatToSend = ''
     do $scope.chats.shift while $scope.chats.length > 100
 
@@ -93,6 +94,7 @@ app.controller 'GameCtrl', ['$scope', 'User', 'Auth', 'Map', 'Hero', 'Enemy', 'P
 
     window.game = game
     game.hero = hero
+    game._createCtrls = _createCtrls
 
   create = ->
     map.create()
@@ -110,18 +112,6 @@ app.controller 'GameCtrl', ['$scope', 'User', 'Auth', 'Map', 'Hero', 'Enemy', 'P
 
     console.log "Joining #{game.mapId} on #{hero.sprite.x},#{hero.sprite.y}"
 
-    game._createCtrls = (data) ->
-      $scope.mapId = map.mapId
-      borders = 
-        upScreen: data.upScreen
-        rightScreen: data.rightScreen
-        downScreen: data.downScreen
-        leftScreen: data.leftScreen
-
-      for border, value of borders
-        borderDirection = border.split('Screen')[0]
-        $scope.borders[borderDirection] = !!value
-        map.game.physics.arcade.checkCollision[borderDirection] = !value
 
     enemies = []
     enemyPositions = {}
@@ -189,6 +179,21 @@ app.controller 'GameCtrl', ['$scope', 'User', 'Auth', 'Map', 'Hero', 'Enemy', 'P
     explosionAnimation = explosions.getFirstExists(false)
     explosionAnimation.reset(@sprite.x, @sprite.y)
     explosionAnimation.play('kaboom', 30, false, true)
+
+  _createCtrls = (data) ->
+    $scope.mapId = map.mapId
+    borders = 
+      upScreen: data.upScreen
+      rightScreen: data.rightScreen
+      downScreen: data.downScreen
+      leftScreen: data.leftScreen
+
+    $scope.$apply ->
+      for border, value of borders
+        borderDirection = border.split('Screen')[0]
+        $scope.borders[borderDirection] = !!value
+        map.game.physics.arcade.checkCollision[borderDirection] = !value  
+    
 
   do initialize
 
