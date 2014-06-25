@@ -2,7 +2,7 @@
 
 app.controller 'GameCtrl', ['$scope', 'User', 'Auth', 'Map', 'Hero', 'Enemy', 'Player', 'Events', 'Socket', 'PlayerAPI', 'MapAPI', 'SERVER_URL'
  ($scope, User, Auth, Map, Hero, Enemy, Player, Events, Socket, PlayerAPI, MapAPI, SERVER_URL) ->
-  $scope.currentUser = window.userData || {name: "test"}
+  $scope.currentUser = window.userData;
   $scope.chats = []
   $scope.sendChat = ->
     chat = 

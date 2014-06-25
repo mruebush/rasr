@@ -8,6 +8,9 @@
       Player.meta = meta;
       Player.sprite = null;
       Player.user = null;
+      Player.animateShoot = function(dir) {
+        return Player.sprite.animations.play("attack_" + dir, 15, false);
+      };
       Player.preload = function() {
         Player.game.load.atlasXML("player", "assets/player.png", "assets/player.xml");
         return Player.game.load.image('arrow', 'assets/bullet.png');

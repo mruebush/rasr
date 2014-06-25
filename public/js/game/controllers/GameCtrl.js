@@ -3,9 +3,7 @@
   app.controller('GameCtrl', [
     '$scope', 'User', 'Auth', 'Map', 'Hero', 'Enemy', 'Player', 'Events', 'Socket', 'PlayerAPI', 'MapAPI', 'SERVER_URL', function($scope, User, Auth, Map, Hero, Enemy, Player, Events, Socket, PlayerAPI, MapAPI, SERVER_URL) {
       var addChat, app, arrowHurt, create, createExplosions, downScreen, explosion, explosions, game, hero, hurtHero, init, initialMap, initialize, leftScreen, map, mapId, players, png, preload, render, renderMap, rightScreen, rootUrl, tileCollision, upScreen, update, user, _createCtrls;
-      $scope.currentUser = window.userData || {
-        name: "test"
-      };
+      $scope.currentUser = window.userData;
       $scope.chats = [];
       $scope.sendChat = function() {
         var chat;
