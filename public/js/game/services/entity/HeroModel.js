@@ -8,7 +8,7 @@
   };
 
   app.factory('Hero', function(Arrow) {
-    var Hero, arrowIndex, arrowSpeed, expText, fireRate, healthText, manaText, nextFire, numArrows, numArrowsShot;
+    var Hero, arrowIndex, arrowSpeed, expText, fireRate, healthText, heartRemoved, heartSegment, manaText, nextFire, numArrows, numArrowsShot, segments;
     expText = null;
     healthText = null;
     manaText = null;
@@ -18,6 +18,9 @@
     arrowSpeed = 600;
     numArrows = 50;
     numArrowsShot = 5;
+    heartRemoved = false;
+    segments = 80;
+    heartSegment = 20;
     Hero = {};
     return function(game, phaser, meta) {
       Hero.game = game;
@@ -36,14 +39,18 @@
       Hero.damage = function() {
         Hero.sprite.animations.play('damage_down', 15, false);
         Hero.meta.health--;
-        Hero.render();
+        if (this.meta.health <= segments) {
+          heartRemoved = false;
+        }
+        if (this.meta.health <= segments && !heartRemoved) {
+          Hero.game.hearts.children.pop();
+          segments -= 20;
+          heartRemoved = true;
+        }
         if (this.meta.health <= 0) {
           console.log("Hero takes lethal damage");
-          return this.game.gameOver();
+          return Hero.game.gameOver();
         }
-      };
-      Hero.render = function() {
-        return Hero.game.debug.text("health: " + Hero.meta.health, 20, 30, fontStyle);
       };
       Hero.createArrows = function() {
         return Hero.arrow = Arrow(Hero.game);
@@ -53,14 +60,10 @@
         return Hero.game.load.image("arrow", "assets/bullet.png");
       };
       Hero.create = function() {
-        var mana;
         Hero.sprite = Hero.game.add.sprite(Hero.meta.x, Hero.meta.y, "player");
         Hero.game.physics.enable(Hero.sprite, Hero.phaser.Physics.ARCADE);
         Hero.sprite.body.collideWorldBounds = true;
-        Hero.sprite.body.bounce.set(1);
-        expText = Hero.game.add.text(20, 10, "exp: " + Hero.meta.exp, fontStyle);
-        Hero.render();
-        mana = Hero.game.add.text(20, 50, "mana: " + Hero.meta.mana, fontStyle);
+        Hero.sprite.body.setSize(Hero.sprite.body.halfWidth, -Hero.sprite.body.sourceHeight / 3, Hero.sprite.body.sourceWidth / 4, Hero.sprite.body.sourceHeight);
         Hero.sprite.animations.add("down", Phaser.Animation.generateFrameNames('player_walk_down', 0, 11, '.png', 4), 30, false);
         Hero.sprite.animations.add("left", Phaser.Animation.generateFrameNames('player_walk_left', 0, 11, '.png', 4), 30, false);
         Hero.sprite.animations.add("right", Phaser.Animation.generateFrameNames('player_walk_right', 0, 11, '.png', 4), 30, false);

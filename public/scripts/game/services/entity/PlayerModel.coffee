@@ -1,96 +1,52 @@
-app.service 'Player', ->
-  return (@game, @phaser, @meta) ->
-    @sprite = null
-    @user = null
+app.factory 'Player', ->
+  Player = {}
 
-    @preload = ->
-      @game.load.atlasXML "player", "images/player.png", "images/player.xml"
-      @game.load.image 'arrow', 'images/bullet.png'
+  return (game, phaser, meta) ->
+    Player.game = game
+    Player.phaser = phaser
+    Player.meta = meta
+    Player.sprite = null
+    Player.user = null
 
-    @create = ->
-      @sprite = @game.add.sprite(@meta.x, @meta.y, "player")
-      @game.physics.enable(@sprite, @phaser.Physics.ARCADE)
-      @sprite.body.collideWorldBounds = true
-      @sprite.body.bounce.set(1)
+    Player.preload = ->
+      Player.game.load.atlasXML "player", "assets/player.png", "assets/player.xml"
+      Player.game.load.image 'arrow', 'assets/bullet.png'
 
-      @sprite.animations.add("down", Phaser.Animation.generateFrameNames('player_walk_down', 0, 11, '.png', 4), 30, false)
-      @sprite.animations.add("left", Phaser.Animation.generateFrameNames('player_walk_left', 0, 11, '.png', 4), 30, false)
-      @sprite.animations.add("right", Phaser.Animation.generateFrameNames('player_walk_right', 0, 11, '.png', 4), 30, false)
-      @sprite.animations.add("up", Phaser.Animation.generateFrameNames('player_walk_up', 0, 11, '.png', 4), 30, false)
+    Player.create = ->
+      Player.sprite = Player.game.add.sprite(Player.meta.x, Player.meta.y, "player")
+      Player.game.physics.enable(Player.sprite, Player.phaser.Physics.ARCADE)
+      Player.sprite.body.collideWorldBounds = true
+      Player.sprite.body.bounce.set(1)
 
-      @sprite.animations.add("attack_down", Phaser.Animation.generateFrameNames('player_attack_down', 0, 4, '.png', 4), 15, false)
-      @sprite.animations.add("attack_left", Phaser.Animation.generateFrameNames('player_attack_left', 0, 4, '.png', 4), 15, false)
-      @sprite.animations.add("attack_right", Phaser.Animation.generateFrameNames('player_attack_right', 0, 4, '.png', 4), 15, false)
-      @sprite.animations.add("attack_up", Phaser.Animation.generateFrameNames('player_attack_up', 0, 4, '.png', 4), 15, false)
+      Player.sprite.animations.add("down", Phaser.Animation.generateFrameNames('player_walk_down', 0, 11, '.png', 4), 30, false)
+      Player.sprite.animations.add("left", Phaser.Animation.generateFrameNames('player_walk_left', 0, 11, '.png', 4), 30, false)
+      Player.sprite.animations.add("right", Phaser.Animation.generateFrameNames('player_walk_right', 0, 11, '.png', 4), 30, false)
+      Player.sprite.animations.add("up", Phaser.Animation.generateFrameNames('player_walk_up', 0, 11, '.png', 4), 30, false)
 
-    @move = (data) ->
+      Player.sprite.animations.add("attack_down", Phaser.Animation.generateFrameNames('player_attack_down', 0, 4, '.png', 4), 15, false)
+      Player.sprite.animations.add("attack_left", Phaser.Animation.generateFrameNames('player_attack_left', 0, 4, '.png', 4), 15, false)
+      Player.sprite.animations.add("attack_right", Phaser.Animation.generateFrameNames('player_attack_right', 0, 4, '.png', 4), 15, false)
+      Player.sprite.animations.add("attack_up", Phaser.Animation.generateFrameNames('player_attack_up', 0, 4, '.png', 4), 15, false)
+
+    Player.move = (data) ->
 
       dir = data.dir
-      @sprite.y = data.y
-      @sprite.x = data.x
+      Player.sprite.y = data.y
+      Player.sprite.x = data.x
 
       if dir is 'up'
-        @sprite.animations.play "up", 5, false
+        Player.sprite.animations.play "up", 5, false
       else if dir is 'down'
-        @sprite.animations.play "down", 5, false
+        Player.sprite.animations.play "down", 5, false
       if dir is 'left'
-        @sprite.animations.play "left", 5, false
+        Player.sprite.animations.play "left", 5, false
       else if dir is 'right'
-        @sprite.animations.play "right", 5, false
+        Player.sprite.animations.play "right", 5, false
 
-      do @update
+      do Player.update
       
-    @update = ->
-      @sprite.bringToTop()
+    Player.update = ->
+      Player.sprite.bringToTop()
       return
 
-
-# fontStyle = { font: "20px Arial", fill: "#ffffff", align: "left" }
-
-# class Player
-
-#   constructor: (@game, @phaser, @meta) ->
-#     @sprite = null
-#     @user = null
-
-#   preload: ->
-#     @game.load.atlasXML "player", "images/player.png", "images/player.xml"
-#     @game.load.image 'arrow', 'images/bullet.png'
-
-#   create: ->
-#     @sprite = @game.add.sprite(@meta.x, @meta.y, "player")
-#     @game.physics.enable(@sprite, @phaser.Physics.ARCADE)
-#     @sprite.body.collideWorldBounds = true
-#     @sprite.body.bounce.set(1)
-
-#     @sprite.animations.add("down", Phaser.Animation.generateFrameNames('player_walk_down', 0, 11, '.png', 4), 30, false)
-#     @sprite.animations.add("left", Phaser.Animation.generateFrameNames('player_walk_left', 0, 11, '.png', 4), 30, false)
-#     @sprite.animations.add("right", Phaser.Animation.generateFrameNames('player_walk_right', 0, 11, '.png', 4), 30, false)
-#     @sprite.animations.add("up", Phaser.Animation.generateFrameNames('player_walk_up', 0, 11, '.png', 4), 30, false)
-
-#     @sprite.animations.add("attack_down", Phaser.Animation.generateFrameNames('player_attack_down', 0, 4, '.png', 4), 15, false)
-#     @sprite.animations.add("attack_left", Phaser.Animation.generateFrameNames('player_attack_left', 0, 4, '.png', 4), 15, false)
-#     @sprite.animations.add("attack_right", Phaser.Animation.generateFrameNames('player_attack_right', 0, 4, '.png', 4), 15, false)
-#     @sprite.animations.add("attack_up", Phaser.Animation.generateFrameNames('player_attack_up', 0, 4, '.png', 4), 15, false)
-
-
-#   move: (data) ->
-
-#     dir = data.dir
-#     @sprite.y = data.y
-#     @sprite.x = data.x
-
-#     if dir is 'up'
-#       @sprite.animations.play "up", 5, false
-#     else if dir is 'down'
-#       @sprite.animations.play "down", 5, false
-#     if dir is 'left'
-#       @sprite.animations.play "left", 5, false
-#     else if dir is 'right'
-#       @sprite.animations.play "right", 5, false
-
-#     do @update
-    
-#   update: ->
-#     @sprite.bringToTop()
-#     return
+    return Player
