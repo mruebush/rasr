@@ -1,6 +1,8 @@
 define(['events','player','enemy','messages'], (events, Player, Enemy, messages) ->
   return (rootUrl, game, players, $, Phaser) ->
-    socket = io.connect()
+    socket = io.connect(undefined, 
+      'sync disconnect on unload': true
+    )
     window.socket = socket
     window.players = players
 
@@ -44,6 +46,18 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
     game.on 'move', (data) ->
       if players[data.user]
         players[data.user].move data
+
+    game.gameOver = () ->
+      console.log "trigger game.gameOver"
+      socket.emit 'gameOver', 
+        user: game.user
+        room: game.mapId
+
+    _gameOverListener = () ->
+      socket.on 'gameOver', (data) ->
+        game.trigger 'player leave', data.user
+
+    do _gameOverListener
 
     game.enemyMoving = (data) ->
       data.room = game.mapId
@@ -112,7 +126,7 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
         x: enemy.sprite.x
         y: enemy.sprite.y
 
-    game.shoot = (user, mapId, x, y, angle, num) ->
+    game.shoot = (user, mapId, x, y, angle, num, dir) ->
       socket.emit 'shoot',
         user: user
         mapId: mapId
@@ -120,6 +134,7 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
         y: y
         angle: angle
         num: num
+        dir: dir
 
     _shootListener = (user) ->
       socket.on 'shoot', (data) ->
@@ -128,6 +143,8 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
 
     game.on 'shoot', (data) ->
       game.hero.renderMissiles data.x, data.y, data.angle, data.num
+      players[data.user].animateShoot data.dir
+
     
     game.logout = (x, y) ->
       socket.emit 'logout',
@@ -224,8 +241,11 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
           game.trigger 'player leave', data.user
 
     game.on 'player leave', (user) ->
-      players[user].sprite.kill()
-      delete players[user]
+      if players[user]
+        do players[user].sprite.kill
+        delete players[user]
+      else
+        do game.hero.sprite.kill
 
     game.message = (message) ->
       socket.emit 'message',
