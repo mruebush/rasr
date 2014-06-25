@@ -154,7 +154,6 @@ app.controller 'GameCtrl', ['$scope', 'User', 'Auth', 'Map', 'Hero', 'Enemy', 'P
 
   render = ->
     game.layerRendering = game.add.group()
-    debugger;
     game.layerRendering.add(map.layers[0])
     game.layerRendering.add(map.layers[1])
     game.layerRendering.add(map.layers[2])

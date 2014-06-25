@@ -7,6 +7,8 @@ app.factory 'Player', ->
     Player.meta = meta
     Player.sprite = null
     Player.user = null
+    Player.animateShoot = (dir) ->
+      Player.sprite.animations.play "attack_#{dir}", 15, false
 
     Player.preload = ->
       Player.game.load.atlasXML "player", "assets/player.png", "assets/player.xml"

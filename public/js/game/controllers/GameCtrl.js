@@ -149,7 +149,6 @@
       render = function() {
         var layer, _i, _len, _ref, _results;
         game.layerRendering = game.add.group();
-        debugger;
         game.layerRendering.add(map.layers[0]);
         game.layerRendering.add(map.layers[1]);
         game.layerRendering.add(map.layers[2]);
