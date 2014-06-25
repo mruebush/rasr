@@ -194,9 +194,10 @@ app.controller 'GameCtrl', ['$scope', 'User', 'Auth', 'Map', 'Hero', 'Enemy', 'P
       explosionAnimation.play('kaboom', 30, false, true)
 
   addChat = (chat) ->
-    $scope.chats.push chat
-    $scope.chatToSend = ''
-    do $scope.chats.shift while $scope.chats.length > 100
+    $scope.$apply ->
+      $scope.chats.push chat
+      $scope.chatToSend = ''
+      do $scope.chats.shift while $scope.chats.length > 100
 
 
   _createCtrls = (data) ->

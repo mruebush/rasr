@@ -219,14 +219,16 @@
         }
       };
       addChat = function(chat) {
-        var _results;
-        $scope.chats.push(chat);
-        $scope.chatToSend = '';
-        _results = [];
-        while ($scope.chats.length > 100) {
-          _results.push($scope.chats.shift());
-        }
-        return _results;
+        return $scope.$apply(function() {
+          var _results;
+          $scope.chats.push(chat);
+          $scope.chatToSend = '';
+          _results = [];
+          while ($scope.chats.length > 100) {
+            _results.push($scope.chats.shift());
+          }
+          return _results;
+        });
       };
       _createCtrls = function(data) {
         var borders;
