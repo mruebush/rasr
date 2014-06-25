@@ -40,10 +40,10 @@
         </div>
       </div>
       <div class="controls">
-        <button class='btn btn-danger up createables hidden'>Create new screen above</button>
-        <button class='btn btn-danger left createables hidden'>Create new screen to the left</button>
-        <button class='btn btn-danger right createables hidden'>Create new screen to the right</button>
-        <button class='btn btn-danger down createables hidden'>Create new screen below</button>
+        <button class="btn btn-danger up createables" ng-show="{{ borders.up }}" ng-click="makeMap(up)">Create new screen above</button>
+        <button class="btn btn-danger left createables" ng-show="{{ borders.left }}" ng-click="makeMap(left)">Create new screen to the left</button>
+        <button class="btn btn-danger right createables" ng-show="{{ borders.right }}" ng-click="makeMap(right)">Create new screen to the right</button>
+        <button class="btn btn-danger down createables" ng-show="{{ borders.down }}" ng-click="makeMap(down)">Create new screen below</button>
         <a id="map-id" class="btn btn-danger" href="/edit/{{ mapId }}">Edit map here</a>
         
       </div>
