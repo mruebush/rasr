@@ -164,8 +164,7 @@ app.controller 'GameCtrl', ['$scope', 'User', 'Auth', 'Map', 'Hero', 'Enemy', 'P
         map.collisionLayer = layer 
 
   render = ->
-    # debugger;
-    debug = true
+    debug = false
     if debug
       map.collisionLayer.debug = true
       game.debug.body(hero.sprite)

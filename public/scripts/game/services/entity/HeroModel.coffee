@@ -9,7 +9,7 @@ app.factory 'Hero', (Arrow) ->
   arrowIndex = 0
   arrowSpeed = 600
   numArrows = 50
-  numArrowsShot = 5
+  numArrowsShot = 1
   heartRemoved = false
   segments = 80
   heartSegment = 20
@@ -140,7 +140,8 @@ app.factory 'Hero', (Arrow) ->
       for i in [0...num]
         arrow = Hero.arrow.arrows.children[arrowIndex]
         arrow.reset(x, y)
-        thisAngle = angle + (i - 2) * 0.2
+        # thisAngle = angle + (i - 2) * 0.2
+        thisAngle = angle
         arrow.rotation = Hero.game.physics.arcade.moveToXY(
           arrow, 
           x + Math.sin(thisAngle), 
@@ -162,7 +163,7 @@ app.factory 'Hero', (Arrow) ->
           baseAngle = -Math.PI/2
 
         Hero.game.shoot Hero.game.user, Hero.game.mapId, Hero.sprite.x, Hero.sprite.y, baseAngle, numArrowsShot, @directionFacing
-        Hero.renderMissiles Hero.sprite.x, Hero.sprite.y, baseAngle, numArrowsShot
+        Hero.renderMissiles Hero.sprite.x, Hero.sprite.y + 60, baseAngle, numArrowsShot
         nextFire = Hero.game.time.now + fireRate;
 
     Hero._setControls = ->
