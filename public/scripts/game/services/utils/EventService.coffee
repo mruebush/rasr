@@ -17,3 +17,5 @@ app.factory 'Events', ->
           callback.apply null, data
           i++
       return
+
+    return obj
