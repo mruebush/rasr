@@ -14,11 +14,14 @@ app.controller('EditCtrl', ['Editor', '$rootScope', '$http', '$stateParams', 'SE
     ).success (data, status, headers, config) ->
       Editor.initialize data
       load data
-      setTimeout ->
+      #FIX THIS HACK
+      $rootScope.$on 'editorReady', ->
         Editor.Import.process JSON.stringify(data), "json"
-        return
-      , 2000
 
+      # setTimeout ->
+      #   Editor.Import.process JSON.stringify(data), "json"
+      #   return
+      # , 2000
     return
 
   load = (data) ->

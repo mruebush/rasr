@@ -1,10 +1,10 @@
 app.service 'Enemy', ->
-  Enemy = {}
 
   return (game, phaser, meta) ->
+    Enemy = {}
     Enemy.game = game
     Enemy.phaser = phaser
-    Enemy.meta = meta
+    # Enemy.meta = meta
 
     Enemy.sprite = null
     Enemy.direction = null

@@ -9,7 +9,9 @@ app.constant "SERVER_URL", "http://localhost:3000"
 app.constant "GET_SCREEN", "/api/screen" # api/screen/:screenId
 app.constant "MOVE_SCREEN", "/api/screen/move" # api/screen/move/:direction/:currentScreenId
 app.constant "MAKE_SCREEN", "/api/screen/make" # api/screen/move/:direction/:currentScreenId
+app.constant "GAME_SCREEN", "/game"
 app.constant "GET_JWT", "/auth" #/auth
+
 
 app.factory 'authInterceptor', ($rootScope, $q, $locationProvider, $window) ->
   return {

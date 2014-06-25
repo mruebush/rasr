@@ -12,6 +12,8 @@
 
   app.constant("MAKE_SCREEN", "/api/screen/make");
 
+  app.constant("GAME_SCREEN", "/game");
+
   app.constant("GET_JWT", "/auth");
 
   app.factory('authInterceptor', function($rootScope, $q, $locationProvider, $window) {

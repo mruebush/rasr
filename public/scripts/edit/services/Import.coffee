@@ -4,9 +4,7 @@ app.factory('Import', ['$rootScope', ($rootScope) ->
   Editor = undefined
   
   # ======================== 
-  
   # ====== INITIALIZE ====== 
-  
   # ======================== 
   Import.initialize = ->
     Editor = $rootScope.Editor
@@ -15,9 +13,7 @@ app.factory('Import', ['$rootScope', ($rootScope) ->
 
   
   # ==================== 
-  
   # ====== EVENTS ====== 
-  
   # ==================== 
   Import.events =
     "change input[name=file_import]": (e) ->
@@ -42,9 +38,7 @@ app.factory('Import', ['$rootScope', ($rootScope) ->
 
   
   # ===================== 
-  
   # ====== PROCESS ====== 
-  
   # ===================== 
   Import.process = (data, type) ->
     if type is "json"

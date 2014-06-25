@@ -2,6 +2,8 @@ app.factory('Tilesets', ['TilesetView', '$rootScope', (TilesetView, $rootScope) 
   Tilesets = {}
   Tilesets.collection = {}
   Editor = undefined
+  count = 0
+  tilesetCount = 0
   
   # ======================== 
   
@@ -12,6 +14,7 @@ app.factory('Tilesets', ['TilesetView', '$rootScope', (TilesetView, $rootScope) 
     # Editor = require("editor")
     Editor = $rootScope.Editor
     @view = TilesetView.initialize()
+    tilesetCount = data.tilesets.length
     for key of data.tilesets
       tileset = data.tilesets[key]
       Editor.Tilesets.add
@@ -91,6 +94,9 @@ app.factory('Tilesets', ['TilesetView', '$rootScope', (TilesetView, $rootScope) 
       # Update custom scrollbars and grid
       Editor.$("#tileset").jScrollPane()
       Editor.Canvas.updateGrid()
+      count++
+      if (count is tilesetCount)
+        $rootScope.$broadcast('editorReady')
       return
     ), false
     return
