@@ -60,7 +60,7 @@ app.service 'Map', (MapAPI) ->
       MapAPI.moveMap().get {direction: direction, mapId: Map.mapId}, (mapData) ->
         Map._loadAssets.call(Map, mapData, loader, true)
         Map.game.mapData = mapData
-        Map.game.trigger "enterMap"
+        # Map.game.trigger "enterMap"
 
     Map.reload = (direction) ->
       layer.destroy() for layer in Map.layers
