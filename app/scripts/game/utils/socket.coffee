@@ -46,14 +46,14 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
         players[data.user].move data
 
     game.gameOver = () ->
-      
+      console.log "trigger game.gameOver"
       socket.emit 'gameOver', 
         user: game.user
+        room: game.mapId
 
     _gameOverListener = () ->
-
       socket.on 'gameOver', (data) ->
-        console.log "#{data.user} was slain"
+        game.trigger 'player leave', data.user
 
     do _gameOverListener
 
@@ -236,8 +236,11 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
           game.trigger 'player leave', data.user
 
     game.on 'player leave', (user) ->
-      players[user].sprite.kill()
-      delete players[user]
+      if players[user]
+        do players[user].sprite.kill
+        delete players[user]
+      else
+        do game.hero.sprite.kill
 
     game.message = (message) ->
       socket.emit 'message',

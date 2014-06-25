@@ -18,7 +18,7 @@ define( ->
       @render()
       if @meta.health <= 0
         console.log "hero takes lethal damage"
-        do @sprite.kill
+        # do @sprite.kill
         do @game.gameOver
         # do @game.destroy
       
