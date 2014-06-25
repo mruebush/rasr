@@ -8,4 +8,7 @@ dist
 /public/scripts/game/**/*.js
 /public/js
 
+public/js/game/controllers/GameCtrl.js
+public/js/game/services/map/MapModel.js
+
 .DS_Store
