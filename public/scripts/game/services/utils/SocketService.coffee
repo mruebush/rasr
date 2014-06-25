@@ -1,6 +1,6 @@
-app.service 'Socket', (Player, Enemy, Messages) ->
+app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
   return (rootUrl, game, players, Phaser) ->
-    socket = io.connect()
+    socket = io.connect(SERVER_URL)
     window.socket = socket
 
     mapId = game.mapId
