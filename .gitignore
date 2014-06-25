@@ -6,5 +6,6 @@ heroku
 /views
 dist
 /public/scripts/game/**/*.js
+/public/js
 
 .DS_Store
