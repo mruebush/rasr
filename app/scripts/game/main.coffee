@@ -130,6 +130,7 @@ require [
       positions: enemyPositions
 
     game.trigger 'login'
+    game.stage.disableVisibilityChange = true
 
   update = ->
     if app.isLoaded
@@ -198,6 +199,7 @@ require [
         create: create
         update: update
       )
+
       game.rootUrl = rootUrl
       game.enemies = []
       game = events(game)
