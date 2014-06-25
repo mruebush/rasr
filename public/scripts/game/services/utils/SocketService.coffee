@@ -78,8 +78,8 @@ app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
     do _enemyMovingListener
 
 
-    game.on 'levelUp', (data) ->
-      game.hero.speed += data.speed;
+    game.on 'levelUp', () ->
+      do game.hero.levelUp
 
     _levelUpListener = () ->
       socket.on 'levelUp', (data) ->

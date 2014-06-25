@@ -12,21 +12,32 @@ app.factory 'Hero', (Arrow) ->
   heartSegment = 20
   Hero = {}
 
-  fireRateCalc = (level) ->
-    400 + 0.2 * (level - 1)
-
-  numArrowsCalc = (level) ->
-    1 + 0.2 * (level - 1)
-
-  arrowSpeedCalc = (level) ->
-    600 + 0.1 * (level - 1)
 
   return (game, phaser, meta) ->
+
+    Hero.levelUp = () ->
+      @speed += do @speedCalc
+      @fireRate = do @fireRateCalc
+      @numArrows = do @numArrowsCalc
+      @arrowSpeed = do @arrowSpeedCalc
+
+    Hero.speedCalc = () ->
+      # Math.floor(10 * Math.log(@level));
+      150 + Math.floor(10 * Math.log(@level))
+
+    Hero.fireRateCalc = () ->
+      400 + 0.5 * (@level - 1)
+
+    Hero.numArrowsCalc = () ->
+      1 + 0.2 * (@level - 1)
+
+    Hero.arrowSpeedCalc = () ->
+      600 + 0.4 * (@level - 1)
+
     Hero.game = game 
     Hero.phaser = phaser
     Hero.meta = meta
     Hero.sprite = null
-    Hero.speed = meta.speed
     Hero.startOnScreenPos = 10
     Hero.png = meta.png
     Hero.level = meta.level
@@ -38,9 +49,10 @@ app.factory 'Hero', (Arrow) ->
     Hero.spaceBar = null
     Hero.directionFacing = 'down'
 
-    Hero.fireRate = fireRateCalc Hero.level
-    Hero.numArrowsShot = numArrowsCalc Hero.level
-    Hero.arrowSpeed = arrowSpeedCalc Hero.level
+    Hero.speed = do Hero.speedCalc
+    Hero.fireRate = do Hero.fireRateCalc
+    Hero.numArrowsShot = do Hero.numArrowsCalc
+    Hero.arrowSpeed = do Hero.arrowSpeedCalc
 
     Hero.damage = ->
       Hero.sprite.animations.play 'damage_down', 15, false
