@@ -17,7 +17,6 @@ app.controller 'GameCtrl', ['$scope', 'User', 'Auth', 'Map', 'Hero', 'Enemy', 'P
     left: true
 
   $scope.makeMap = (direction) ->
-    console.log(direction)
     MapAPI.makeMap().get({direction: direction, mapId: mapId})
 
   app = Events({})
@@ -51,7 +50,6 @@ app.controller 'GameCtrl', ['$scope', 'User', 'Auth', 'Map', 'Hero', 'Enemy', 'P
 
       MapAPI.getMap().get {mapId: mapId}, (mapData) ->
         initialMap = mapData
-        console.log(mapData)
         game = new Phaser.Game(800, 600, Phaser.AUTO, "game-canvas",
           preload: preload
           create: create
@@ -127,6 +125,8 @@ app.controller 'GameCtrl', ['$scope', 'User', 'Auth', 'Map', 'Hero', 'Enemy', 'P
     enemies = []
     enemyPositions = {}
 
+    console.log initialMap.enemies
+
     for enemyId of initialMap.enemies
       enemies.push 
         id: enemyId
@@ -161,7 +161,6 @@ app.controller 'GameCtrl', ['$scope', 'User', 'Auth', 'Map', 'Hero', 'Enemy', 'P
     console.log(map.layers)
     for layer in map.layers
       if layer.name = 'collision'
-        console.log('collision layer!!!', layer)
         map.collisionLayer = layer 
 
   render = ->
