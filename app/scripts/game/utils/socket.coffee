@@ -1,6 +1,6 @@
 define(['events','player','enemy','messages'], (events, Player, Enemy, messages) ->
   return (rootUrl, game, players, $, Phaser) ->
-    socket = io.connect(void 0, 
+    socket = io.connect(undefined, 
       'sync disconnect on unload': true
     )
     window.socket = socket
@@ -126,7 +126,7 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
         x: enemy.sprite.x
         y: enemy.sprite.y
 
-    game.shoot = (user, mapId, x, y, angle, num) ->
+    game.shoot = (user, mapId, x, y, angle, num, dir) ->
       socket.emit 'shoot',
         user: user
         mapId: mapId
@@ -134,6 +134,7 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
         y: y
         angle: angle
         num: num
+        dir: dir
 
     _shootListener = (user) ->
       socket.on 'shoot', (data) ->
@@ -142,6 +143,8 @@ define(['events','player','enemy','messages'], (events, Player, Enemy, messages)
 
     game.on 'shoot', (data) ->
       game.hero.renderMissiles data.x, data.y, data.angle, data.num
+      players[data.user].animateShoot data.dir
+
     
     game.logout = (x, y) ->
       socket.emit 'logout',

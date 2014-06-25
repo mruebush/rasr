@@ -7,6 +7,9 @@ define( ->
     constructor: (@game, @phaser, @meta) ->
       @sprite = null
       @user = null
+      @animateShoot = (dir) ->
+        @sprite.animations.play "attack_#{dir}", 15, false
+
 
     preload: ->
       @game.load.atlasXML "player", "images/player.png", "images/player.xml"
@@ -27,7 +30,6 @@ define( ->
       @sprite.animations.add("attack_left", Phaser.Animation.generateFrameNames('player_attack_left', 0, 4, '.png', 4), 15, false)
       @sprite.animations.add("attack_right", Phaser.Animation.generateFrameNames('player_attack_right', 0, 4, '.png', 4), 15, false)
       @sprite.animations.add("attack_up", Phaser.Animation.generateFrameNames('player_attack_up', 0, 4, '.png', 4), 15, false)
-
 
     move: (data) ->
 
