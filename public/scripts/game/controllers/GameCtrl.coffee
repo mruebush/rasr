@@ -42,7 +42,7 @@ app.controller 'GameCtrl', ['$scope', 'User', 'Auth', 'Map', 'Hero', 'Enemy', 'P
       mapId = playerInfo.mapId
       init.x = playerInfo.x
       init.y = playerInfo.y
-      init.xp = playerInfo.xp
+      init.level = playerInfo.level
       init.speed = playerInfo.speed
       init.png = playerInfo.png || 'roshan'
 
@@ -78,6 +78,7 @@ app.controller 'GameCtrl', ['$scope', 'User', 'Auth', 'Map', 'Hero', 'Enemy', 'P
       y: init.y
       png: init.png
       speed: init.speed
+      level: init.level
     }))
     # window.hero = hero
     map = Events(Map(game, Phaser, mapId))

@@ -4,25 +4,32 @@ app.factory 'Hero', (Arrow) ->
   expText = null
   healthText = null
   manaText = null
-  fireRate = 400
   nextFire = 0
   arrowIndex = 0
-  arrowSpeed = 600
   numArrows = 50
-  numArrowsShot = 1
   heartRemoved = false
   segments = 80
   heartSegment = 20
   Hero = {}
 
+  fireRateCalc = (level) ->
+    400 + 0.2 * (level - 1)
+
+  numArrowsCalc = (level) ->
+    1 + 0.2 * (level - 1)
+
+  arrowSpeedCalc = (level) ->
+    600 + 0.1 * (level - 1)
+
   return (game, phaser, meta) ->
-    Hero.game = game
+    Hero.game = game 
     Hero.phaser = phaser
     Hero.meta = meta
     Hero.sprite = null
     Hero.speed = meta.speed
     Hero.startOnScreenPos = 10
     Hero.png = meta.png
+    Hero.level = meta.level
 
     Hero.upKey = null
     Hero.downKey = null
@@ -30,6 +37,10 @@ app.factory 'Hero', (Arrow) ->
     Hero.rightKey = null
     Hero.spaceBar = null
     Hero.directionFacing = 'down'
+
+    Hero.fireRate = fireRateCalc Hero.level
+    Hero.numArrowsShot = numArrowsCalc Hero.level
+    Hero.arrowSpeed = arrowSpeedCalc Hero.level
 
     Hero.damage = ->
       Hero.sprite.animations.play 'damage_down', 15, false
@@ -140,13 +151,13 @@ app.factory 'Hero', (Arrow) ->
       for i in [0...num]
         arrow = Hero.arrow.arrows.children[arrowIndex]
         arrow.reset(x, y)
-        # thisAngle = angle + (i - 2) * 0.2
-        thisAngle = angle
+        thisAngle = angle + (i - 2) * 0.2
+        # thisAngle = angle
         arrow.rotation = Hero.game.physics.arcade.moveToXY(
           arrow, 
           x + Math.sin(thisAngle), 
           y + Math.cos(thisAngle), 
-          arrowSpeed
+          Hero.arrowSpeed
           )
         arrowIndex = (arrowIndex + 1) % numArrows
 
@@ -162,9 +173,9 @@ app.factory 'Hero', (Arrow) ->
         else if Hero.directionFacing is 'left'
           baseAngle = -Math.PI/2
 
-        Hero.game.shoot Hero.game.user, Hero.game.mapId, Hero.sprite.x, Hero.sprite.y, baseAngle, numArrowsShot, @directionFacing
-        Hero.renderMissiles Hero.sprite.x, Hero.sprite.y + 60, baseAngle, numArrowsShot
-        nextFire = Hero.game.time.now + fireRate;
+        Hero.game.shoot Hero.game.user, Hero.game.mapId, Hero.sprite.x, Hero.sprite.y, baseAngle, Hero.numArrowsShot, @directionFacing
+        Hero.renderMissiles Hero.sprite.x, Hero.sprite.y + 60, baseAngle, Hero.numArrowsShot
+        nextFire = Hero.game.time.now + Hero.fireRate;
 
     Hero._setControls = ->
       Hero.upKey = Hero.game.input.keyboard.addKey(Phaser.Keyboard.UP)
