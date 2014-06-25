@@ -208,10 +208,13 @@ app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
       data.enemies = data.enemies || []
       game.enemies = []
 
+      console.log data.enemies
+
       for enemyType of data.enemies
         type = data.enemies[enemyType]
         num = 0
         for i,creature of type
+          console.log num
           enemy = new Enemy game, Phaser,
             rank: 1
             health: creature.health
