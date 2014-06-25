@@ -131,6 +131,8 @@ app.controller 'GameCtrl', ['$scope', 'User', 'Auth', 'Map', 'Hero', 'Enemy', 'P
     enemies = []
     enemyPositions = {}
 
+    console.log initialMap.enemies
+
     for enemyId of initialMap.enemies
       enemies.push 
         id: enemyId
