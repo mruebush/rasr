@@ -1,0 +1,51 @@
+<div class="container game">
+  <div class="row">
+    <div class="col-md-8">
+      
+      <div id="game-container">
+
+        <div>
+          <div class="labels-game">
+            <div class="left-label">
+            </div>
+            <div id="game-canvas">
+            </div>
+            <div class="right-label">
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    
+    <div class="col-md-4">
+      <div class="chatbox">
+        <div class="header">
+          Chat with your fella comrades
+        </div>
+        <div class="messages">
+          <div ng-repeat="chat in chats">{{ chat.user }}: {{ chat.message }}</div>
+        </div>
+        <div class="footer">
+          <div class="form-group">
+            <form id="sendMessage" ng-submit="sendChat()">
+              <div class="input-group">
+                <input type="text" class="form-control chatToSend" ng-model="chatToSend" placeholder"Chat with your fella' playa's">
+              <span class="input-group-btn">
+                <button class="btn btn-primary" type="submit">send</button>
+              </span>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="controls">
+        <button class="btn btn-danger up createables" ng-show="!borders.up" ng-click="makeMap('up')">Create new screen above</button>
+        <button class="btn btn-danger left createables" ng-show="!borders.left" ng-click="makeMap('left')">Create new screen to the left</button>
+        <button class="btn btn-danger right createables" ng-show="!borders.right" ng-click="makeMap('right')">Create new screen to the right</button>
+        <button class="btn btn-danger down createables" ng-show="!borders.down" ng-click="makeMap('down')">Create new screen below</button>
+        <a id="map-id" class="btn btn-danger" href="/edit/{{ mapId }}">Edit map here</a>
+      </div>
+    </div>
+
+</div>
