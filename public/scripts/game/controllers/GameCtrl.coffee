@@ -5,6 +5,7 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
   $scope.currentUser = $window.userData;
   $scope.chats = []
   $scope.sendChat = ->
+    $scope.glued = true
     chat = 
       user: $scope.currentUser.name
       message: $scope.chatToSend
@@ -15,6 +16,8 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
     right: true
     down: true
     left: true
+
+  $scope.glued = true
 
   $scope.makeMap = (direction) ->
     MapAPI.makeMap().get({direction: direction, mapId: mapId})
@@ -50,7 +53,7 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
 
       MapAPI.getMap().get {mapId: mapId}, (mapData) ->
         initialMap = mapData
-        game = new Phaser.Game(800, 600, Phaser.AUTO, "game-canvas",
+        $scope.game = game = new Phaser.Game(800, 600, Phaser.AUTO, "game-canvas",
           preload: preload
           create: create
           update: update
