@@ -1,3 +1,11 @@
 "use strict"
-app.factory "Session", ($resource, SERVER_URL, GET_JWT) ->
-  $resource "#{SERVER_URL}#{GET_JWT}"
+
+"use strict"
+app.factory "Session", ($resource, SERVER_URL, LOGIN, SIGNUP) ->
+  return {
+    login: ->
+      $resource "#{SERVER_URL}#{LOGIN}",
+
+    signup: ->
+      $resource "#{SERVER_URL}#{SIGNUP}",
+  }
