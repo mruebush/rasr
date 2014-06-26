@@ -19,7 +19,6 @@ app.factory "Auth", Auth = ($location, $rootScope, Session, User, $window) ->
       email: user.email
       password: user.password
     , (user) ->
-      console.log "troll", user
       $window.localStorage.token = user.token
       $window.localStorage.currentUser = user.name
       $window.userData = Object.freeze(

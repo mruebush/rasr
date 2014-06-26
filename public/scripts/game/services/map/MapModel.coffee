@@ -21,7 +21,6 @@ app.service 'Map', (MapAPI) ->
       if !data
         MapAPI.moveMap().get {direction: direction, mapId: Map.mapId}, (mapData) ->
           Map._loadAssets.call(Map, mapData, callback)
-          console.log "Triggering enterMap"
       else
         Map._loadAssets.call(Map, data, callback)
 
@@ -42,11 +41,9 @@ app.service 'Map', (MapAPI) ->
       map = Map.game.add.tilemap('map')
       for tileset in Map.mapData.tilesets
         map.addTilesetImage(tileset.name)
-      console.log(Map.mapData.layers)
       for layerInfo in Map.mapData.layers
         layer = map.createLayer(layerInfo.name)
         layer.name = layerInfo.name
-        console.log(layerInfo.name, layer.name)
         Map.layers.push(layer)
         layer.resizeWorld()
         if layer.name is 'collision'

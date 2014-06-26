@@ -184,7 +184,6 @@ app.factory('Canvas', ['$rootScope', ($rootScope) ->
           tilesetXCoord = Math.round Math.abs(bgx / tw) + x
           tilesetYCoord = Math.round Math.abs(bgy / th) + y
           # Set/update the tileset information
-          console.log(tilesetXCoord, '.', tilesetYCoord)
           $div.attr "data-coords-tileset",  tilesetXCoord + "." + tilesetYCoord
           $div.css "background-position", (bgx - (x * tw)) + "px" + " " + (bgy - (y * th)) + "px"
           

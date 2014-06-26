@@ -27,7 +27,6 @@
           email: user.email,
           password: user.password
         }, function(user) {
-          console.log("troll", user);
           $window.localStorage.token = user.token;
           $window.localStorage.currentUser = user.name;
           $window.userData = Object.freeze({
