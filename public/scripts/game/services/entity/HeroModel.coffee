@@ -22,8 +22,7 @@ app.factory 'Hero', (Arrow) ->
       @arrowSpeed = do @arrowSpeedCalc
 
     Hero.speedCalc = () ->
-      # Math.floor(10 * Math.log(@level));
-      150 + Math.floor(10 * Math.log(@level))
+      170 + Math.floor(15 * Math.log(@level))
 
     Hero.fireRateCalc = () ->
       400 + 0.5 * (@level - 1)
