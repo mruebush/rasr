@@ -35,7 +35,7 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
   user = $scope.currentUser.name
   init = {}
   explosions = null
-  debugCollisions = false
+  debugCollisions = true
   
   # MAKE INITIAL AJAX CALL FOR PLAYER INFO
   initialize = ->
@@ -176,7 +176,6 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
       game.physics.arcade.collide(hero.sprite, map.collisionLayer)
       game.physics.arcade.collide(hero.arrow.arrows, map.collisionLayer, tileCollision)
       game.physics.arcade.collide(hero.arrow.arrows, hero.sprite, arrowHurt, null, hero)
-      # game.physics.arcade.collide(hero.arrow.arrows, player.sprite, arrowHurt, null, player)
       for enemy in game.enemies
         if enemy.alive
           hero.sprite.facing = hero.facing
