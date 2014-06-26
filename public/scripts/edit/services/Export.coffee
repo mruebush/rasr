@@ -95,12 +95,10 @@ app.factory('Export', ['$rootScope', 'SERVER_URL', 'GET_SCREEN', 'GAME_SCREEN', 
       output = JSON.stringify(output)
       anchor.href = "data:application/json;charset=UTF-8;," + encodeURIComponent(output)
 
-    console.log 'saving'
     $http.put("#{SERVER_URL}#{GET_SCREEN}/#{Editor.cached._id}", { map: output })
       .success ->
-        console.log('saved!')
         # location.href = "#{location.origin}#{GAME_SCREEN}"
-        # $state.go('game')
+        $state.go('game')
 
     return
 

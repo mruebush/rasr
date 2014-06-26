@@ -84,9 +84,7 @@ app.factory('Editor', ['Utils', 'Menubar', 'Tools', 'Canvas', 'Tilesets', 'Layer
 
   
   # ============================= 
-  
   # ====== REGISTER EVENTS ====== 
-  
   # ============================= 
   Editor.registerEvents = ->
     
