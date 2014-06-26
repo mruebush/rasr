@@ -21,7 +21,6 @@ app.service 'Map', (MapAPI) ->
       if !data
         MapAPI.moveMap().get {direction: direction, mapId: Map.mapId}, (mapData) ->
           Map._loadAssets.call(Map, mapData, callback)
-          console.log "Triggering enterMap"
       else
         Map._loadAssets.call(Map, data, callback)
 
@@ -42,16 +41,16 @@ app.service 'Map', (MapAPI) ->
       map = Map.game.add.tilemap('map')
       for tileset in Map.mapData.tilesets
         map.addTilesetImage(tileset.name)
-      console.log(Map.mapData.layers)
+      
       for layerInfo in Map.mapData.layers
         layer = map.createLayer(layerInfo.name)
         layer.name = layerInfo.name
-        console.log(layerInfo.name, layer.name)
+        
         Map.layers.push(layer)
         layer.resizeWorld()
         # collide on everything, set on from 1 to 1000 for now
         if layer.name is 'collision'
-          console.log('setting collision between', layer)
+          
           map.setCollisionBetween(1, 1000, true, layer) 
 
       Map.game._createCtrls(Map.mapData)
