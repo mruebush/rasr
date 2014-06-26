@@ -17,7 +17,7 @@ app.factory 'Player', ->
     Player.create = ->
       Player.sprite = Player.game.add.sprite(Player.meta.x, Player.meta.y, "player")
       Player.game.physics.enable(Player.sprite, Player.phaser.Physics.ARCADE)
-      Player.sprite.body.collideW orldBounds = true
+      Player.sprite.body.collideWorldBounds = true
       Player.sprite.body.bounce.set(1)
 
       Player.sprite.animations.add("down", Phaser.Animation.generateFrameNames('player_walk_down', 0, 11, '.png', 4), 30, false)
