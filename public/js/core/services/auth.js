@@ -22,7 +22,7 @@
         if (cb == null) {
           cb = angular.noop;
         }
-        return Session.save({
+        return Session.login().save({
           name: user.name,
           email: user.email,
           password: user.password
@@ -36,6 +36,7 @@
         }, function(err) {
           delete $window.localStorage.token;
           delete $window.localStorage.currentUser;
+          delete $window.userData;
           return cb(err);
         }).$promise;
       },
@@ -45,6 +46,7 @@
         }
         delete $window.localStorage.token;
         delete $window.localStorage.currentUser;
+        delete $window.userData;
         return cb().$promise;
       },
       /*
@@ -59,8 +61,12 @@
         if (cb == null) {
           cb = angular.noop;
         }
-        return User.save(user, function(user) {
-          $rootScope.currentUser = user;
+        return Session.signup().save(user, function(user) {
+          $window.localStorage.token = user.token;
+          $window.localStorage.currentUser = user.name;
+          $window.userData = Object.freeze({
+            name: user.name
+          });
           return cb(user);
         }, function(err) {
           return cb(err);

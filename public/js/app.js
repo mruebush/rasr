@@ -14,6 +14,8 @@
 
   app.constant("GAME_SCREEN", "/game");
 
-  app.constant("GET_JWT", "/auth");
+  app.constant("LOGIN", "/auth/login");
+
+  app.constant("SIGNUP", "/auth/signup");
 
 }).call(this);

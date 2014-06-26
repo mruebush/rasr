@@ -14,7 +14,7 @@ app.factory "Auth", Auth = ($location, $rootScope, Session, User, $window) ->
   return {Promise}
   ###
   login: (user, cb = angular.noop) ->
-    Session.save(
+    Session.login().save(
       name: user.name
       email: user.email
       password: user.password
@@ -29,6 +29,7 @@ app.factory "Auth", Auth = ($location, $rootScope, Session, User, $window) ->
       # Erase the token if the user fails to log in
       delete $window.localStorage.token
       delete $window.localStorage.currentUser
+      delete $window.userData
       cb err
     ).$promise
 
@@ -36,6 +37,7 @@ app.factory "Auth", Auth = ($location, $rootScope, Session, User, $window) ->
   logout: (cb = angular.noop) ->
     delete $window.localStorage.token
     delete $window.localStorage.currentUser
+    delete $window.userData
     return cb().$promise
 
   ###
@@ -46,8 +48,12 @@ app.factory "Auth", Auth = ($location, $rootScope, Session, User, $window) ->
   return {Promise}
   ###
   createUser: (user, cb = angular.noop) ->
-    User.save(user, (user) ->
-      $rootScope.currentUser = user
+    Session.signup().save(user, (user) ->
+      $window.localStorage.token = user.token
+      $window.localStorage.currentUser = user.name
+      $window.userData = Object.freeze(
+        name:user.name
+      )
       cb user
     , (err) ->
       cb err
