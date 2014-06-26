@@ -97,7 +97,6 @@ app.factory('Import', ['$rootScope', ($rootScope) ->
       tilesetId = undefined
       data.tilesets.forEach (v, i) ->
         
-        # debugger;
         if v.name is layer.tileset
           tilesetId = i
           false
@@ -107,6 +106,7 @@ app.factory('Import', ['$rootScope', ($rootScope) ->
         data.canvas =
           width: 1280
           height: 768
+
       w = Math.round(data.canvas.width / tileset.tilewidth)
       tw = tileset.tilewidth
       th = tileset.tileheight
@@ -116,25 +116,29 @@ app.factory('Import', ['$rootScope', ($rootScope) ->
       className = "ts_" + tileset.name.replace(/[^a-zA-Z]/g, "_")
       Editor.$(".layer[data-name=" + layer.name + "]").addClass className
       Editor.$(".layer[data-name=" + layer.name + "]").attr "data-tileset", tileset.name
+      console.log('layers rendering: ', layer.data.length)
+
       layer.data.forEach (coords, i) ->
-        return true  if coords is -1
+        return true  if coords is -1 or coords is 0
         temp = coords
         coords = (Math.max(0, coords % tilesXCount - 1)) + "." + Math.floor(coords / tilesXCount)
-        debugger  if coords is "-1.0"
-        coords = coords.toString()
+        # coords = coords.toString()
         coords += ".0"  if coords.length is 1
         x = i % w
         y = ~~(i / w)
+
         bgpos = coords.split(".")
         $div = Editor.$("<div>").css(
           position: "absolute"
           left: x * tw
           top: y * th
         ).attr("data-coords", x + "." + y)
+        # if coords is '0.2'
         $div.attr "data-coords-tileset", coords
         $div.css "background-position", (-(bgpos[0] * tw)) + "px" + " " + (-(bgpos[1] * th)) + "px"
-        Editor.$(".layer." + className).append $div
+        Editor.$(".layer." + className + "[data-name='#{layer.name}']").append $div
         return
+
 
       return
 
