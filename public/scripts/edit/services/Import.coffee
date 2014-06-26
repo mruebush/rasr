@@ -116,7 +116,6 @@ app.factory('Import', ['$rootScope', ($rootScope) ->
       className = "ts_" + tileset.name.replace(/[^a-zA-Z]/g, "_")
       Editor.$(".layer[data-name=" + layer.name + "]").addClass className
       Editor.$(".layer[data-name=" + layer.name + "]").attr "data-tileset", tileset.name
-      console.log('layers rendering: ', layer.data.length)
 
       layer.data.forEach (coords, i) ->
         return true  if coords is -1 or coords is 0

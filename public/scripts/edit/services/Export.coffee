@@ -98,6 +98,7 @@ app.factory('Export', ['$rootScope', 'SERVER_URL', 'GET_SCREEN', 'GAME_SCREEN', 
     $http.put("#{SERVER_URL}#{GET_SCREEN}/#{Editor.cached._id}", { map: output })
       .success ->
         # location.href = "#{location.origin}#{GAME_SCREEN}"
+        $('#dialog').dialog('close')
         $state.go('game')
 
     return
