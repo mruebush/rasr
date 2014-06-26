@@ -64,7 +64,6 @@ app.factory 'Hero', (Arrow) ->
         heartRemoved = true
 
       if @meta.health <= 0
-        console.log "Hero takes lethal damage"
         do Hero.game.gameOver
 
     Hero.createArrows = ->

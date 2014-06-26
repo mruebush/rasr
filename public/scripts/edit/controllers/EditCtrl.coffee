@@ -3,6 +3,7 @@ app.controller('EditCtrl', ['Editor', '$rootScope', '$http', '$stateParams', 'SE
   $rootScope.Editor = Editor
   Editor = $rootScope.Editor
   Editor.$ = $
+  console.log 'testingg'
   $(document).ready ->
     # var mapId = location.pathname.split("/")[2];
     # $("#load").click();
