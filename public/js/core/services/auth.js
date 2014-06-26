@@ -2,11 +2,13 @@
   var Auth;
 
   app.factory("Auth", Auth = function($location, $rootScope, Session, User, $window) {
-    $rootScope.currentUser = $cookieStore.get("user") || null;
-    if ($rootScope.currentUser) {
-      window.userData = Object.freeze({
-        name: $rootScope.currentUser.name
+    if ($window.localStorage.currentUser) {
+      $window.userData = Object.freeze({
+        name: $window.localStorage.currentUser
       });
+      $rootScope.userData = {
+        name: $window.localStorage.currentUser
+      };
     }
     return {
       /*
@@ -27,30 +29,24 @@
         }, function(user) {
           console.log("troll", user);
           $window.localStorage.token = user.token;
-          window.userData = Object.freeze(user);
+          $window.localStorage.currentUser = user.name;
+          $window.userData = Object.freeze({
+            name: user.name
+          });
           return cb();
         }, function(err) {
           delete $window.localStorage.token;
+          delete $window.localStorage.currentUser;
           return cb(err);
         }).$promise;
       },
-      /*
-      Unauthenticate user
-      
-      param  {Function} callback - optional
-      return {Promise}
-      */
-
       logout: function(cb) {
         if (cb == null) {
           cb = angular.noop;
         }
-        return Session["delete"](function() {
-          $rootScope.currentUser = null;
-          return cb();
-        }, function(err) {
-          return cb(err);
-        }).$promise;
+        delete $window.localStorage.token;
+        delete $window.localStorage.currentUser;
+        return cb().$promise;
       },
       /*
       Create a new user
@@ -94,12 +90,11 @@
         }).$promise;
       },
       /*
-      Gets all available info on authenticated user
-      return {Object} user
+      Gets name of authenticated user
       */
 
       currentUser: function() {
-        return User.get();
+        return $window.localStorage.currentUser;
       },
       /*
       Simple check to see if a user is logged in
@@ -108,7 +103,7 @@
 
       isLoggedIn: function() {
         var user;
-        user = $rootScope.currentUser;
+        user = $window.localStorage.currentUser;
         return !!user;
       }
     };
