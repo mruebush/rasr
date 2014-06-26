@@ -12,3 +12,9 @@ app.factory "User", ($resource, SERVER_URL) ->
       method: "GET"
       params:
         id: "me"
+
+    save:
+      method: "POST"
+      params:
+        id: "signup"
+  ,

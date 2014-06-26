@@ -1,8 +1,8 @@
 'use strict'
 
-app.controller 'GameCtrl', ['$scope', 'User', 'Auth', 'Map', 'Hero', 'Enemy', 'Player', 'Events', 'Socket', 'PlayerAPI', 'MapAPI', 'SERVER_URL'
- ($scope, User, Auth, Map, Hero, Enemy, Player, Events, Socket, PlayerAPI, MapAPI, SERVER_URL) ->
-  $scope.currentUser = window.userData;
+app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 'Enemy', 'Player', 'Events', 'Socket', 'PlayerAPI', 'MapAPI', 'SERVER_URL'
+ ($scope, $window, User, Auth, Map, Hero, Enemy, Player, Events, Socket, PlayerAPI, MapAPI, SERVER_URL) ->
+  $scope.currentUser = $window.userData;
   $scope.chats = []
   $scope.sendChat = ->
     chat = 
@@ -54,7 +54,6 @@ app.controller 'GameCtrl', ['$scope', 'User', 'Auth', 'Map', 'Hero', 'Enemy', 'P
           preload: preload
           create: create
           update: update
-          render: render
         )
         game.rootUrl = rootUrl
         game.enemies = []
@@ -163,17 +162,6 @@ app.controller 'GameCtrl', ['$scope', 'User', 'Auth', 'Map', 'Hero', 'Enemy', 'P
     for layer in map.layers
       if layer.name = 'collision'
         map.collisionLayer = layer 
-
-  render = ->
-    debug = false
-    if debug
-      map.collisionLayer.debug = true
-      game.debug.body(hero.sprite)
-      for enemy in game.enemies
-        if enemy.alive
-          game.debug.body(enemy.sprite)
-
-
 
   update = ->
     if app.isLoaded
