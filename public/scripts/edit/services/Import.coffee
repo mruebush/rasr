@@ -89,6 +89,7 @@ app.factory('Import', ['$rootScope', ($rootScope) ->
 
     return  if error
     Editor.Tilesets.set data.tilesets[0].name
+    count = 0
     data.layers.forEach (layer) ->
       Editor.Layers.add layer.name
       layer.tileset = getDefaultTileset(data)  unless layer.tileset
@@ -116,6 +117,8 @@ app.factory('Import', ['$rootScope', ($rootScope) ->
       className = "ts_" + tileset.name.replace(/[^a-zA-Z]/g, "_")
       Editor.$(".layer[data-name=" + layer.name + "]").addClass className
       Editor.$(".layer[data-name=" + layer.name + "]").attr "data-tileset", tileset.name
+      console.log('layers rendering: ', layer.data.length)
+
       layer.data.forEach (coords, i) ->
         return true  if coords is -1
         temp = coords
@@ -131,10 +134,14 @@ app.factory('Import', ['$rootScope', ($rootScope) ->
           left: x * tw
           top: y * th
         ).attr("data-coords", x + "." + y)
+        if(x is 3 and y is 3)
+          count++
         $div.attr "data-coords-tileset", coords
         $div.css "background-position", (-(bgpos[0] * tw)) + "px" + " " + (-(bgpos[1] * th)) + "px"
-        Editor.$(".layer." + className).append $div
+        Editor.$(".layer." + className + "[data-name='#{layer.name}']").append $div
         return
+
+      console.log('count: ', count)
 
       return
 

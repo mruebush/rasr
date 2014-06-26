@@ -1,4 +1,4 @@
-	@import "font-awesome";
+@import "font-awesome";
 @import "jquery-ui";
 @import "jquery.jscrollpane";
 
@@ -252,7 +252,7 @@ a span { padding-right: 2px; }
 	image-rendering: -o-crisp-edges;
 	image-rendering:-webkit-optimize-contrast;
 	-ms-interpolation-mode:nearest-neighbor;
-	display: none;
+	// display: none;
 }
 
 #canvas.nogrid {

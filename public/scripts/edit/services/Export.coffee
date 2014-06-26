@@ -8,7 +8,6 @@ app.factory('Export', ['$rootScope', 'SERVER_URL', 'GET_SCREEN', 'GAME_SCREEN', 
   Export.initialize = ->
     Editor = $rootScope.Editor
     return
-
   
   # ==================== 
   # ====== EVENTS ====== 
@@ -16,7 +15,6 @@ app.factory('Export', ['$rootScope', 'SERVER_URL', 'GET_SCREEN', 'GAME_SCREEN', 
   Export.events = "click #export": (e) ->
     Export.process e
     return
-
   
   # ===================== 
   # ====== PROCESS ====== 
@@ -66,7 +64,8 @@ app.factory('Export', ['$rootScope', 'SERVER_URL', 'GET_SCREEN', 'GAME_SCREEN', 
             temp = coords
             coords.push "0"  if coords.length is 1
             coords = (tilesXCount) * (parseInt(coords[1], 10)) + parseInt(coords[0], 10) + 1
-            console.log "type: ", typeof coords
+            if(coords > 4000)
+              debugger
             layer.data.push coords
             x++
           y++
@@ -97,7 +96,7 @@ app.factory('Export', ['$rootScope', 'SERVER_URL', 'GET_SCREEN', 'GAME_SCREEN', 
       _.extend output, Editor.cached
       output = JSON.stringify(output)
       anchor.href = "data:application/json;charset=UTF-8;," + encodeURIComponent(output)
-    console.log "posting"
+
     $.ajax
       url: "#{SERVER_URL}#{GET_SCREEN}/#{Editor.cached._id}"
       data:
@@ -106,12 +105,12 @@ app.factory('Export', ['$rootScope', 'SERVER_URL', 'GET_SCREEN', 'GAME_SCREEN', 
       type: "PUT"
       success: ->
         # location.href = "#{location.origin}#{GAME_SCREEN}"
-        $state.go('game')
+        # $state.go('game')
         return
 
       error: (err) ->
-        location.href = "#{location.origin}#{GAME_SCREEN}"
-        $state.go('game')
+        # location.href = "#{location.origin}#{GAME_SCREEN}"
+        # $state.go('game')
         return
 
     return

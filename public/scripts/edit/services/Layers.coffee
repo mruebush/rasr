@@ -19,10 +19,6 @@ app.factory('Layers', ['$rootScope', ($rootScope) ->
       update: @sortByIndex
       containment: "#layers > div"
 
-    
-    # Add predefined layers
-    @add "background"
-    @add "world"
     return
 
   

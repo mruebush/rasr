@@ -11,7 +11,6 @@ app.factory('Canvas', ['$rootScope', ($rootScope) ->
   # ======================== 
   Canvas.initialize = ->
     Editor = $rootScope.Editor
-    # Editor = require("editor")
     Editor.$("#canvas").draggable
       mouseButton: 1
       cursor: "move"
@@ -27,9 +26,7 @@ app.factory('Canvas', ['$rootScope', ($rootScope) ->
 
   
   # ==================== 
-  
   # ====== EVENTS ====== 
-  
   # ==================== 
   
   # Selection movement
