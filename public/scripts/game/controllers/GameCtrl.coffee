@@ -50,7 +50,9 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
 
       MapAPI.getMap().get {mapId: mapId}, (mapData) ->
         initialMap = mapData
-        game = new Phaser.Game(800, 600, Phaser.AUTO, "game-canvas",
+        canvasWidth = $('#game-canvas').width()
+
+        game = new Phaser.Game(canvasWidth, 600, Phaser.AUTO, "game-canvas",
           preload: preload
           create: create
           update: update
@@ -63,7 +65,6 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
 
 
   preload = ->
-
     game.load.atlasXML "enemy", "assets/enemy.png", "assets/enemy.xml"
     hero = Events(Hero(game, Phaser, {
       exp: 150
@@ -124,7 +125,6 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
     
     enemies = []
     enemyPositions = {}
-
 
     for enemyId of initialMap.enemies
       enemies.push 
@@ -210,7 +210,6 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
       $scope.chatToSend = ''
       do $scope.chats.shift while $scope.chats.length > 100
 
-
   _createCtrls = (data) ->
     $scope.mapId = map.mapId
     borders = 
@@ -219,14 +218,11 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
       downScreen: data.downScreen
       leftScreen: data.leftScreen
 
-    $scope.$apply ->
-      for border, value of borders
-        borderDirection = border.split('Screen')[0]
-        $scope.borders[borderDirection] = !!value
-        map.game.physics.arcade.checkCollision[borderDirection] = !value  
+    for border, value of borders
+      borderDirection = border.split('Screen')[0]
+      $scope.borders[borderDirection] = !!value
+      map.game.physics.arcade.checkCollision[borderDirection] = !value  
     
-
   do initialize
-
 
 ]

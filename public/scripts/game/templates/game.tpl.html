@@ -1,16 +1,17 @@
 <div class="container game">
   <div class="row">
-    <div class="col-md-8">
+    <div class="col-md-9">
       
       <div id="game-container">
         <button class="btn btn-danger up createables" ng-hide="borders.up" ng-click="makeMap('up')">Create new screen above</button>
         <div id="game-canvas"></div>
+        <button class="btn btn-danger right createables" ng-hide="borders.right" ng-click="makeMap('right')">Create new screen to the right</button>
         <button class="btn btn-danger down createables" ng-hide="borders.down" ng-click="makeMap('down')">Create new screen below</button>
       </div>
 
     </div>
     
-    <div class="col-md-4">
+    <div class="col-md-3">
       <div class="chatbox">
         <div class="messages">
           <div ng-repeat="chat in chats">{{ chat.user }}: {{ chat.message }}</div>
@@ -30,9 +31,7 @@
       </div>
       <div class="controls">
         <button class="btn btn-danger left createables" ng-hide="borders.left" ng-click="makeMap('left')">Create new screen to the left</button>
-        <button class="btn btn-danger right createables" ng-hide="borders.right" ng-click="makeMap('right')">Create new screen to the right</button>
         <a id="map-id" class="btn btn-danger" href="/edit/{{ mapId }}">Edit map here</a>
-        {{ borders }}
       </div>
     </div>
 

@@ -129,9 +129,10 @@ body {
 }
 
 .messages {
-  height: 100px;
+  height: 400px;
   width: 100%;
-  overflow: scroll
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 /*.message {
@@ -194,12 +195,15 @@ canvas {
 }
 
 canvas {
-  margin: 5px auto;
 }
 
-.up, .down {
+.up, .down, .left, .right {
   text-align: center;
-  margin: 8px auto;
+  margin: 0;
+  width: 50%;
+}
+.right, .left {
+  float: right;
 }
 
 .game-canvas {
