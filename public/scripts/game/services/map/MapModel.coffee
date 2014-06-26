@@ -49,10 +49,11 @@ app.service 'Map', (MapAPI) ->
         console.log(layerInfo.name, layer.name)
         Map.layers.push(layer)
         layer.resizeWorld()
-        # collide on everything, set on from 1 to 1000 for now
         if layer.name is 'collision'
-          console.log('setting collision between', layer)
-          map.setCollisionBetween(1, 1000, true, layer) 
+          collisions = []
+          for id in layerInfo.data
+            collisions.push id if id
+          map.setCollision(_.uniq(collisions), true, layer) 
 
       Map.game._createCtrls(Map.mapData)
       Map.trigger 'finishLoad'
