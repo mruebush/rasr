@@ -21,11 +21,3 @@ app.config ($stateProvider, $locationProvider, $httpProvider, $urlRouterProvider
     templateUrl: "/js/core/templates/settings.tpl.html"
     controller: "SettingsCtrl"
     authenticate: true
-
-
-
-# .state('edit', {
-#   url: '/edit/:mapId',
-#   templateUrl: '/js/core/templates/edit',
-#   authenticate: true
-# })

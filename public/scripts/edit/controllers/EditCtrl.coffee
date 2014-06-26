@@ -3,25 +3,19 @@ app.controller('EditCtrl', ['Editor', '$rootScope', '$http', '$stateParams', 'SE
   $rootScope.Editor = Editor
   Editor = $rootScope.Editor
   Editor.$ = $
-  $(document).ready ->
-    # var mapId = location.pathname.split("/")[2];
-    # $("#load").click();
-    # mapId = location.pathname.split("/")[2]
-    url = "#{SERVER_URL}#{GET_SCREEN}/#{$stateParams.screenId}"
-    $http(
-      method: 'GET'
-      url: url
-    ).success (data, status, headers, config) ->
-      Editor.initialize data
-      load data
-      #FIX THIS HACK
-      $rootScope.$on 'editorReady', ->
-        Editor.Import.process JSON.stringify(data), "json"
+  url = "#{SERVER_URL}#{GET_SCREEN}/#{$stateParams.screenId}"
+  $http(
+    method: 'GET'
+    url: url
+  ).success (data, status, headers, config) ->
+    Editor.initialize data
+    load data
+    console.log 'loaded data'
+    $rootScope.$on 'editorReady', ->
+      console.log 'editorReady'
+      Editor.Import.process JSON.stringify(data), "json"
+        
 
-      # setTimeout ->
-      #   Editor.Import.process JSON.stringify(data), "json"
-      #   return
-      # , 2000
     return
 
   load = (data) ->

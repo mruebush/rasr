@@ -2,7 +2,7 @@ app.factory('Tilesets', ['TilesetView', '$rootScope', (TilesetView, $rootScope) 
   Tilesets = {}
   Tilesets.collection = {}
   Editor = undefined
-  count = 0
+  count = undefined 
   tilesetCount = 0
   
   # ======================== 
@@ -12,6 +12,7 @@ app.factory('Tilesets', ['TilesetView', '$rootScope', (TilesetView, $rootScope) 
   # ======================== 
   Tilesets.initialize = (data) ->
     # Editor = require("editor")
+    count = 0
     Editor = $rootScope.Editor
     @view = TilesetView.initialize()
     tilesetCount = data.tilesets.length
