@@ -23,7 +23,7 @@
         <div class="header">
           Chat with your fella comrades
         </div>
-        <div class="messages">
+        <div scroll-glue ng-model="glued" class="messages">
           <div ng-repeat="chat in chats">{{ chat.user }}: {{ chat.message }}</div>
         </div>
         <div class="footer">
