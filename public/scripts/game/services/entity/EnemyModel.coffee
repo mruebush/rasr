@@ -4,8 +4,6 @@ app.service 'Enemy', ->
     Enemy = {}
     Enemy.game = game
     Enemy.phaser = phaser
-    # Enemy.meta = meta
-
     Enemy.sprite = null
     Enemy.direction = null
     Enemy.speed = meta.speed
