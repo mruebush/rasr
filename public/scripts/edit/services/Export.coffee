@@ -64,8 +64,6 @@ app.factory('Export', ['$rootScope', 'SERVER_URL', 'GET_SCREEN', 'GAME_SCREEN', 
             temp = coords
             coords.push "0"  if coords.length is 1
             coords = (tilesXCount) * (parseInt(coords[1], 10)) + parseInt(coords[0], 10) + 1
-            if(coords > 4000)
-              debugger
             layer.data.push coords
             x++
           y++

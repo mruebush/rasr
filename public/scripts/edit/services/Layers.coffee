@@ -199,7 +199,7 @@ app.factory('Layers', ['$rootScope', ($rootScope) ->
   # ============================== 
   Layers.openContextmenu = (e) ->
     Layers.contextTarget = $(e.currentTarget).parent()
-    Editor.$.get "/partials/edit/cm_layer.html", (data) ->
+    Editor.$.get "/js/edit/templates/cm_layer.tpl.html", (data) ->
       Editor.$("body").append data
       Editor.$("#contextmenu").css "left", e.pageX
       Editor.$("#contextmenu").css "top", e.pageY

@@ -32,7 +32,6 @@ app.factory('TilesetView', ['$rootScope', ($rootScope) ->
   
   # Todo disallow mixing different tilesizes
   TilesetView.add = (e) ->
-    debugger
     data =
       tilewidth: +Editor.$("#dialog input[name=tile_width]").val()
       tileheight: +Editor.$("#dialog input[name=tile_height]").val()

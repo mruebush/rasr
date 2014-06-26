@@ -89,7 +89,6 @@ app.factory('Import', ['$rootScope', ($rootScope) ->
 
     return  if error
     Editor.Tilesets.set data.tilesets[0].name
-    count = 0
     data.layers.forEach (layer) ->
       Editor.Layers.add layer.name
       layer.tileset = getDefaultTileset(data)  unless layer.tileset
@@ -108,6 +107,7 @@ app.factory('Import', ['$rootScope', ($rootScope) ->
         data.canvas =
           width: 1280
           height: 768
+
       w = Math.round(data.canvas.width / tileset.tilewidth)
       tw = tileset.tilewidth
       th = tileset.tileheight
@@ -123,25 +123,26 @@ app.factory('Import', ['$rootScope', ($rootScope) ->
         return true  if coords is -1
         temp = coords
         coords = (Math.max(0, coords % tilesXCount - 1)) + "." + Math.floor(coords / tilesXCount)
-        debugger  if coords is "-1.0"
-        coords = coords.toString()
+        # coords = coords.toString()
         coords += ".0"  if coords.length is 1
         x = i % w
         y = ~~(i / w)
+
+        debugger if(temp is '0.1')
+
         bgpos = coords.split(".")
         $div = Editor.$("<div>").css(
           position: "absolute"
           left: x * tw
           top: y * th
         ).attr("data-coords", x + "." + y)
-        if(x is 3 and y is 3)
-          count++
+        # if coords is '0.2'
+          # debugger
         $div.attr "data-coords-tileset", coords
         $div.css "background-position", (-(bgpos[0] * tw)) + "px" + " " + (-(bgpos[1] * th)) + "px"
         Editor.$(".layer." + className + "[data-name='#{layer.name}']").append $div
         return
 
-      console.log('count: ', count)
 
       return
 
