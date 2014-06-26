@@ -1,10 +1,12 @@
 app.factory "Auth", Auth = ($location, $rootScope, Session, User, $window) ->
   
   # Get currentUser from jwt
-  $rootScope.currentUser = $cookieStore.get("user") or null
-  window.userData = Object.freeze(name: $rootScope.currentUser.name)  if $rootScope.currentUser
-  # $cookieStore.remove "user"
-  
+  if $window.localStorage.currentUser
+    $window.userData = Object.freeze(
+      name: $window.localStorage.currentUser
+    )
+    $rootScope.userData = 
+      name: $window.localStorage.currentUser
   ###
   Authenticate user
   param  {Object}   user     - login info
@@ -18,33 +20,25 @@ app.factory "Auth", Auth = ($location, $rootScope, Session, User, $window) ->
       password: user.password
     , (user) ->
       console.log "troll", user
-      $window.localStorage.token = user.token;
-      # $rootScope.currentUser = user
-      window.userData = Object.freeze(user)
+      $window.localStorage.token = user.token
+      $window.localStorage.currentUser = user.name
+      $window.userData = Object.freeze(
+        name:user.name
+      )
       cb()
     , (err) ->
       # Erase the token if the user fails to log in
-      delete $window.localStorage.token;
+      delete $window.localStorage.token
+      delete $window.localStorage.currentUser
       cb err
     ).$promise
 
-  
-  ###
-  Unauthenticate user
-  
-  param  {Function} callback - optional
-  return {Promise}
-  ###
-  
+  # DELETE JWT
   logout: (cb = angular.noop) ->
-  
-    return Session.delete( ->
-            $rootScope.currentUser = null;
-            return cb();
-          , (err) ->
-            return cb(err);
-          ).$promise;
-  
+    delete $window.localStorage.token
+    delete $window.localStorage.currentUser
+    return cb().$promise
+
   ###
   Create a new user
   
@@ -81,11 +75,10 @@ app.factory "Auth", Auth = ($location, $rootScope, Session, User, $window) ->
 
   
   ###
-  Gets all available info on authenticated user
-  return {Object} user
+  Gets name of authenticated user
   ###
   currentUser: ->
-    User.get()
+    $window.localStorage.currentUser
 
   
   ###
@@ -93,5 +86,5 @@ app.factory "Auth", Auth = ($location, $rootScope, Session, User, $window) ->
   return {Boolean}
   ###
   isLoggedIn: ->
-    user = $rootScope.currentUser
+    user = $window.localStorage.currentUser
     !!user
