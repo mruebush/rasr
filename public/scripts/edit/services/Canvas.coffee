@@ -11,7 +11,6 @@ app.factory('Canvas', ['$rootScope', ($rootScope) ->
   # ======================== 
   Canvas.initialize = ->
     Editor = $rootScope.Editor
-    # Editor = require("editor")
     Editor.$("#canvas").draggable
       mouseButton: 1
       cursor: "move"
@@ -27,9 +26,7 @@ app.factory('Canvas', ['$rootScope', ($rootScope) ->
 
   
   # ==================== 
-  
   # ====== EVENTS ====== 
-  
   # ==================== 
   
   # Selection movement
@@ -184,9 +181,10 @@ app.factory('Canvas', ['$rootScope', ($rootScope) ->
             left: pos_x * tw
             top: pos_y * th
           ).attr("data-coords", coords))
-          
+          tilesetXCoord = Math.round Math.abs(bgx / tw) + x
+          tilesetYCoord = Math.round Math.abs(bgy / th) + y
           # Set/update the tileset information
-          $div.attr "data-coords-tileset", (Math.abs(bgx / tw) + x) + "." + (Math.abs(bgy / th) + y)
+          $div.attr "data-coords-tileset",  tilesetXCoord + "." + tilesetYCoord
           $div.css "background-position", (bgx - (x * tw)) + "px" + " " + (bgy - (y * th)) + "px"
           
           # Append the tile if it didn't on that coordinate

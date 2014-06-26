@@ -133,7 +133,6 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
     enemies = []
     enemyPositions = {}
 
-    console.log initialMap.enemies
 
     for enemyId of initialMap.enemies
       enemies.push 
@@ -165,7 +164,6 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
     game.layerRendering.add(map.layers[3])
     game.layerRendering.add(game.lifebar)
     game.layerRendering.add(game.hearts)
-    console.log(map.layers)
     for layer in map.layers
       if layer.name = 'collision'
         map.collisionLayer = layer 

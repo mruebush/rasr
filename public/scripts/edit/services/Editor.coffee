@@ -3,7 +3,6 @@ app.factory('Editor', ['Utils', 'Menubar', 'Tools', 'Canvas', 'Tilesets', 'Layer
   # events = require("events")
   Editor = {}
   args = arguments
-  # debugger
   argNames = [
     "Utils"
     "Menubar"
@@ -85,9 +84,7 @@ app.factory('Editor', ['Utils', 'Menubar', 'Tools', 'Canvas', 'Tilesets', 'Layer
 
   
   # ============================= 
-  
   # ====== REGISTER EVENTS ====== 
-  
   # ============================= 
   Editor.registerEvents = ->
     
