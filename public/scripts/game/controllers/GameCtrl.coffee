@@ -35,6 +35,7 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
   user = $scope.currentUser.name
   init = {}
   explosions = null
+  debugCollisions = false
   
   # MAKE INITIAL AJAX CALL FOR PLAYER INFO
   initialize = ->
@@ -44,22 +45,29 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
       init.y = playerInfo.y
       init.level = playerInfo.level
       init.speed = playerInfo.speed
-      init.png = playerInfo.png || 'roshan'
+      init.png = playerInfo.png
 
       $scope.mapId = mapId
 
       MapAPI.getMap().get {mapId: mapId}, (mapData) ->
         initialMap = mapData
-        game = new Phaser.Game(800, 600, Phaser.AUTO, "game-canvas",
+        game = new Phaser.Game(800, 600, Phaser.CANVAS, "game-canvas",
           preload: preload
           create: create
           update: update
+          render: render
         )
         game.rootUrl = rootUrl
         game.enemies = []
         game = Events(game)
         game.realWidth = 20 * 64
         game.realHeight = 12 * 64
+
+  render = ->
+    if debugCollisions
+      game.debug.body(game.hero.sprite) if debugCollisions
+      for enemy in game.enemies
+        game.debug.body(enemy.sprite) if debugCollisions and enemy.alive
 
 
   preload = ->
@@ -79,7 +87,6 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
       speed: init.speed
       level: init.level
     }))
-    # window.hero = hero
     map = Events(Map(game, Phaser, mapId))
     game.user = user
     map.on 'finishLoad', =>
@@ -121,6 +128,7 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
 
     hero.create()
     game.hero = hero
+    game.hero
     
     enemies = []
     enemyPositions = {}
@@ -157,11 +165,11 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
     game.layerRendering.add(map.layers[3])
     game.layerRendering.add(game.lifebar)
     game.layerRendering.add(game.hearts)
-    # hero.sprite.bringToTop();
     console.log(map.layers)
     for layer in map.layers
       if layer.name = 'collision'
         map.collisionLayer = layer 
+        map.collisionLayer.debug = debugCollisions
 
   update = ->
     if app.isLoaded
