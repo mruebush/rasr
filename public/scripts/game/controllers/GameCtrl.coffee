@@ -206,10 +206,10 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
 
   addChat = (chat) ->
     $scope.$apply ->
-      $scope.timestamp = moment(new Date()).unix()
       $scope.chats.push chat
       $scope.chatToSend = ''
       do $scope.chats.shift while $scope.chats.length > 100
+    $('.timestamp').last().attr('data-livestamp', moment(new Date()).unix())
 
 
   _createCtrls = (data) ->
