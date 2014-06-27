@@ -101,13 +101,35 @@ module.exports = function (grunt) {
           ]
         }
       }
+    },
+    ngmin: {
+      dist: {
+        files: [{
+          expand: true,
+          cwd: 'public/js',
+          src: 'concat.js',
+          dest: 'public/js'
+        }]
+      }
+    },
+    uglify: {
+      dist: {
+        files: {
+          'public/js/rasr.min.js': [
+            'public/js/concat.js'
+          ]
+        }
+      }
     }
 
   });
 
   grunt.registerTask('build',[
+    'clean:dist',
     'coffee',
-    'concat'
+    'concat',
+    'ngmin',
+    'uglify'
   ]);
 
   // grunt.registerTask('build', [
