@@ -29,10 +29,8 @@ app.directive('onFocusDisableHero', ->
     restrict: 'A',
     link: (scope, element, attrs) ->
       element.bind 'focus', ->
-        console.log 'disable that'
         scope.game.input.keyboard.disabled = true
       element.bind 'blur', ->
-        console.log 're-enable that'
         scope.game.input.keyboard.disabled = false
   }
 )
