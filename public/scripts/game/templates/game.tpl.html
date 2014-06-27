@@ -24,7 +24,9 @@
           Chat with your fella comrades
         </div>
         <div class="messages">
-          <div ng-repeat="chat in chats">{{ chat.user }}: {{ chat.message }}</div>
+          <div ng-repeat="chat in chats">
+
+          {{ chat.user }} [<span data-livestamp="{{ timestamp }}"></span>]: {{ chat.message }}</div>
         </div>
         <div class="footer">
           <div class="form-group">

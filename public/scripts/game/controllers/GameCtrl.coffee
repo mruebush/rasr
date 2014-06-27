@@ -215,6 +215,7 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
   addChat = (chat) ->
     $scope.$apply ->
       $scope.chats.push chat
+      $scope.timestamp = moment(new Date()).unix()
       $scope.chatToSend = ''
       do $scope.chats.shift while $scope.chats.length > 100
 
