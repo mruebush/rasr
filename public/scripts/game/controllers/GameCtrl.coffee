@@ -33,7 +33,6 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
   png = null
   rootUrl = ''
   user = $scope.currentUser.name
-  init = {}
   explosions = null
   debugCollisions = true
   
@@ -41,12 +40,6 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
   initialize = ->
     PlayerAPI.get (playerInfo) ->
       mapId = playerInfo.mapId
-      init.x = playerInfo.x
-      init.y = playerInfo.y
-      init.level = playerInfo.level
-      init.speed = playerInfo.speed
-      init.png = playerInfo.png
-
       $scope.mapId = mapId
 
       MapAPI.getMap().get {mapId: mapId}, (mapData) ->
@@ -58,6 +51,7 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
           update: update
           render: render
         )
+        $scope.hero = hero = Events(Hero(game, Phaser, playerInfo))
         game.rootUrl = rootUrl
         game.enemies = []
         game = Events(game)
@@ -73,20 +67,6 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
 
   preload = ->
     game.load.atlasXML "enemy", "assets/enemy.png", "assets/enemy.xml"
-    hero = Events(Hero(game, Phaser, {
-      exp: 150
-      health: 100
-      mana: 100
-      str: 10
-      dex: 10
-      int: 10
-      luk: 10
-      x: init.x
-      y: init.y
-      png: init.png
-      speed: init.speed
-      level: init.level
-    }))
     map = Events(Map(game, Phaser, mapId))
     game.user = user
     map.on 'finishLoad', =>

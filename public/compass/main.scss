@@ -11,8 +11,6 @@ $icon-font-path: "/bower_components/bootstrap-sass-official/vendor/assets/fonts/
 
 /* Space out content a bit */
 body {
-    padding-top: 20px;
-    padding-bottom: 20px;
     background: url('/assets/background.jpg');
 }
 
@@ -24,11 +22,19 @@ body {
 }
 
 .game {
-  max-width: 1170px;
+  width: 100%;
+  max-width: 1300px;
   border-radius: 10px;
   padding-top: 10px;
   padding-bottom: 10px;
   background: white;
+  position: absolute;
+  margin: auto;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 700px;
 }
 
 .controls {
@@ -129,10 +135,16 @@ body {
 }
 
 .messages {
-  height: 400px;
+  height: 250px;
   width: 100%;
   overflow-y: scroll;
   overflow-x: hidden;
+}
+
+.stats {
+  height: 250px;
+  width: 100%;
+
 }
 
 /*.message {
@@ -202,10 +214,14 @@ canvas {
   margin: 0;
   width: 50%;
 }
-.right, .left {
+.right {
   float: right;
 }
+.left {
+  float: left;
+}
 
-.game-canvas {
+#game-canvas {
+  clear: both;
 
 }

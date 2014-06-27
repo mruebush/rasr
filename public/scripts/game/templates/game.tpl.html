@@ -3,6 +3,7 @@
     <div class="col-md-9">
       
       <div id="game-container">
+        <button class="btn btn-danger left createables" ng-hide="borders.left" ng-click="makeMap('left')">Create new screen to the left</button>
         <button class="btn btn-danger up createables" ng-hide="borders.up" ng-click="makeMap('up')">Create new screen above</button>
         <div id="game-canvas"></div>
         <button class="btn btn-danger right createables" ng-hide="borders.right" ng-click="makeMap('right')">Create new screen to the right</button>
@@ -16,21 +17,21 @@
         <div class="messages">
           <div ng-repeat="chat in chats">{{ chat.user }}: {{ chat.message }}</div>
         </div>
-        <div class="footer">
-          <div class="form-group">
-            <form id="sendMessage">
-              <div class="input-group">
-                <input type="text" class="form-control chatToSend" placeholder"Chat with your fella' playa's">
-              <span class="input-group-btn">
-                <button class="btn btn-primary" type="submit">send</button>
-              </span>
-              </div>
-            </form>
-          </div>
+        <div class="form-group">
+          <form id="sendMessage">
+            <div class="input-group">
+              <input type="text" class="form-control chatToSend" placeholder"Chat with your fella' playa's">
+            <span class="input-group-btn">
+              <button class="btn btn-primary" type="submit">send</button>
+            </span>
+            </div>
+          </form>
         </div>
       </div>
+
+      <div ui-view=""></div>
+      
       <div class="controls">
-        <button class="btn btn-danger left createables" ng-hide="borders.left" ng-click="makeMap('left')">Create new screen to the left</button>
         <a id="map-id" class="btn btn-danger" href="/edit/{{ mapId }}">Edit map here</a>
       </div>
     </div>

@@ -12,7 +12,6 @@ app.factory 'Hero', (Arrow) ->
   heartSegment = 20
   Hero = {}
 
-
   return (game, phaser, meta) ->
 
     Hero.levelUp = () ->
