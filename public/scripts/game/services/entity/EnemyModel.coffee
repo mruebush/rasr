@@ -1,11 +1,9 @@
 app.service 'Enemy', ->
-  Enemy = {}
 
   return (game, phaser, meta) ->
+    Enemy = {}
     Enemy.game = game
     Enemy.phaser = phaser
-    Enemy.meta = meta
-
     Enemy.sprite = null
     Enemy.direction = null
     Enemy.speed = meta.speed
@@ -64,8 +62,8 @@ app.service 'Enemy', ->
       Enemy.game.physics.enable(Enemy.sprite, Enemy.phaser.Physics.ARCADE)
       Enemy.sprite.body.immovable = true
       Enemy.sprite.body.collideWorldBounds = true
-      Enemy.sprite.body.setSize(Enemy.sprite.body.sourceWidth, Enemy.sprite.body.halfHeight, 0, Enemy.sprite.body.halfHeight)
-      # Enemy.sprite.anchor.setTo(.3, .5)
+      Enemy.sprite.body.setSize(Enemy.sprite.body.sourceWidth, Enemy.sprite.body.halfHeight, 0, Enemy.sprite.body.height / 3)
+      Enemy.sprite.anchor.setTo(.3, .5)
       Enemy.sprite.animations.add("down", Phaser.Animation.generateFrameNames('enemy_move_down', 0, 10, '.png', 4), 30, false)
       Enemy.sprite.animations.add("left", Phaser.Animation.generateFrameNames('enemy_move_left', 0, 10, '.png', 4), 30, false)
       Enemy.sprite.animations.add("right", Phaser.Animation.generateFrameNames('enemy_move_right', 0, 10, '.png', 4), 30, false)

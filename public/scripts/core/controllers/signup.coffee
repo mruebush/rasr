@@ -2,7 +2,6 @@
 app.controller "SignupCtrl", ($scope, Auth, $location) ->
   $scope.user = {}
   $scope.errors = {}
-  console.log "submit stuff"
   $scope.register = (form) ->
     $scope.submitted = true
     if form.$valid

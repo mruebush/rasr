@@ -8,4 +8,8 @@ dist
 /public/scripts/game/**/*.js
 /public/js
 
+public/js
+public/styles
+
+
 .DS_Store

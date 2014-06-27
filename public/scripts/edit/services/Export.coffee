@@ -1,34 +1,24 @@
-app.factory('Export', ['$rootScope', 'SERVER_URL', 'GET_SCREEN', ($rootScope, SERVER_URL, GET_SCREEN) ->
+app.factory('Export', ['$rootScope', 'SERVER_URL', 'GET_SCREEN', 'GAME_SCREEN', '$state', '$http', ($rootScope, SERVER_URL, GET_SCREEN, GAME_SCREEN, $state, $http) ->
   Export = {}
   Editor = undefined
   
   # ======================== 
-  
   # ====== INITIALIZE ====== 
-  
   # ======================== 
   Export.initialize = ->
     Editor = $rootScope.Editor
     return
-
   
   # ==================== 
-  
   # ====== EVENTS ====== 
-  
   # ==================== 
   Export.events = "click #export": (e) ->
     Export.process e
     return
-
   
   # ===================== 
-  
   # ====== PROCESS ====== 
-  
   # ===================== 
-  
-  # TODO comment this
   Export.process = ->
     type = "JSON"
     include_base64 = Editor.$("select[name=include_base64]").val() is "yes"
@@ -69,12 +59,11 @@ app.factory('Export', ['$rootScope', 'SERVER_URL', 'GET_SCREEN', ($rootScope, SE
           x = 0
           while x < w
             query = Editor.$(this).find("div[data-coords='" + x + "." + y + "']")
-            coords = (if query.length then parseFloat(query.attr("data-coords-tileset"), 10) else -1)
-            coords = coords.toString().split(".")
+            coords = if query.length then query.attr('data-coords-tileset').split(".") else -1
+            # coords = (if query.length then parseFloat(query.attr("data-coords-tileset"), 10) else -1)
             temp = coords
             coords.push "0"  if coords.length is 1
             coords = (tilesXCount) * (parseInt(coords[1], 10)) + parseInt(coords[0], 10) + 1
-            console.log "type: ", typeof coords
             layer.data.push coords
             x++
           y++
@@ -105,21 +94,12 @@ app.factory('Export', ['$rootScope', 'SERVER_URL', 'GET_SCREEN', ($rootScope, SE
       _.extend output, Editor.cached
       output = JSON.stringify(output)
       anchor.href = "data:application/json;charset=UTF-8;," + encodeURIComponent(output)
-    console.log "posting"
-    $.ajax
-      url: "#{SERVER_URL}#{GET_SCREEN}/#{Editor.cached._id}"
-      data:
-        map: output
 
-      dataType: "json"
-      type: "PUT"
-      success: ->
-        location.href = location.origin + "/play"
-        return
-
-      error: (err) ->
-        location.href = location.origin + "/play"
-        return
+    $http.put("#{SERVER_URL}#{GET_SCREEN}/#{Editor.cached._id}", { map: output })
+      .success ->
+        # location.href = "#{location.origin}#{GAME_SCREEN}"
+        $('#dialog').dialog('close')
+        $state.go('game')
 
     return
 

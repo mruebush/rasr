@@ -12,6 +12,10 @@
 
   app.constant("MAKE_SCREEN", "/api/screen/make");
 
-  app.constant("GET_SESSION", "/api/session");
+  app.constant("GAME_SCREEN", "/game");
+
+  app.constant("LOGIN", "/auth/login");
+
+  app.constant("SIGNUP", "/auth/signup");
 
 }).call(this);

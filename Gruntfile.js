@@ -92,12 +92,43 @@ module.exports = function (grunt) {
           src: '**'
         }]
       }
+    },
+    concat: {
+      dist: {
+        files: {
+          'public/js/concat.js' : [
+            'public/js/**/*.js'
+          ]
+        }
+      }
+    },
+    ngmin: {
+      dist: {
+        files: [{
+          expand: true,
+          cwd: 'public/js',
+          src: 'concat.js',
+          dest: 'public/js'
+        }]
+      }
+    },
+    uglify: {
+      dist: {
+        files: {
+          'public/js/rasr.min.js': [
+            'public/js/concat.js'
+          ]
+        }
+      }
     }
+
   });
 
-  grunt.registerTask('build', [
+  grunt.registerTask('build',[
     'clean:dist',
     'coffee',
-    'compass'
+    'concat',
+    'ngmin',
+    'uglify'
   ]);
 };

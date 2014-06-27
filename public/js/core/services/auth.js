@@ -1,12 +1,14 @@
 (function() {
   var Auth;
 
-  app.factory("Auth", Auth = function($location, $rootScope, Session, User, $cookieStore) {
-    $rootScope.currentUser = $cookieStore.get("user") || null;
-    if ($rootScope.currentUser) {
-      window.userData = Object.freeze({
-        name: $rootScope.currentUser.name
+  app.factory("Auth", Auth = function($location, $rootScope, Session, User, $window) {
+    if ($window.localStorage.currentUser) {
+      $window.userData = Object.freeze({
+        name: $window.localStorage.currentUser
       });
+      $rootScope.userData = {
+        name: $window.localStorage.currentUser
+      };
     }
     return {
       /*
@@ -20,36 +22,32 @@
         if (cb == null) {
           cb = angular.noop;
         }
-        return Session.save({
+        return Session.login().save({
+          name: user.name,
           email: user.email,
           password: user.password
         }, function(user) {
-          console.log("troll", user);
-          $rootScope.currentUser = user;
-          window.userData = Object.freeze(user);
-          console.log($cookieStore.get("user"), $cookieStore);
+          $window.localStorage.token = user.token;
+          $window.localStorage.currentUser = user.name;
+          $window.userData = Object.freeze({
+            name: user.name
+          });
           return cb();
         }, function(err) {
+          delete $window.localStorage.token;
+          delete $window.localStorage.currentUser;
+          delete $window.userData;
           return cb(err);
         }).$promise;
       },
-      /*
-      Unauthenticate user
-      
-      param  {Function} callback - optional
-      return {Promise}
-      */
-
       logout: function(cb) {
         if (cb == null) {
           cb = angular.noop;
         }
-        return Session["delete"](function() {
-          $rootScope.currentUser = null;
-          return cb();
-        }, function(err) {
-          return cb(err);
-        }).$promise;
+        delete $window.localStorage.token;
+        delete $window.localStorage.currentUser;
+        delete $window.userData;
+        return cb().$promise;
       },
       /*
       Create a new user
@@ -63,8 +61,12 @@
         if (cb == null) {
           cb = angular.noop;
         }
-        return User.save(user, function(user) {
-          $rootScope.currentUser = user;
+        return Session.signup().save(user, function(user) {
+          $window.localStorage.token = user.token;
+          $window.localStorage.currentUser = user.name;
+          $window.userData = Object.freeze({
+            name: user.name
+          });
           return cb(user);
         }, function(err) {
           return cb(err);
@@ -93,12 +95,11 @@
         }).$promise;
       },
       /*
-      Gets all available info on authenticated user
-      return {Object} user
+      Gets name of authenticated user
       */
 
       currentUser: function() {
-        return User.get();
+        return $window.localStorage.currentUser;
       },
       /*
       Simple check to see if a user is logged in
@@ -107,7 +108,7 @@
 
       isLoggedIn: function() {
         var user;
-        user = $rootScope.currentUser;
+        user = $window.localStorage.currentUser;
         return !!user;
       }
     };

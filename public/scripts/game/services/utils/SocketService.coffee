@@ -13,9 +13,6 @@ app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
       socket.emit 'login', game.user
 
     game.on 'enterMap', () ->
-
-      console.log 'trigger enterMap'
-
       game.enemyData = game.mapData.enemies || []
 
       enemies = []
@@ -49,7 +46,6 @@ app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
         players[data.user].move data
 
     game.gameOver = () ->
-      console.log "trigger game.gameOver"
       socket.emit 'gameOver', 
         user: game.user
         room: game.mapId
@@ -78,8 +74,8 @@ app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
     do _enemyMovingListener
 
 
-    game.on 'levelUp', (data) ->
-      game.hero.speed += data.speed;
+    game.on 'levelUp', () ->
+      do game.hero.levelUp
 
     _levelUpListener = () ->
       socket.on 'levelUp', (data) ->
@@ -117,7 +113,8 @@ app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
         game.trigger 'damageEnemy', data
 
     game.on 'damageEnemy', (data) ->
-      game.enemies[data.serverId].health--
+      if game.enemies[data.serverId]
+        game.enemies[data.serverId].health--
 
     game.stopEnemy = (enemy) ->
       socket.emit 'stopEnemy', 
@@ -180,7 +177,6 @@ app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
           game.trigger('i joined', data)
 
     game.on 'player joined', (data) ->
-      console.log 'trigger player joined'
       player = new Player(game, Phaser,
         x: data.x
         y: data.y
@@ -200,13 +196,13 @@ app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
         do player.preload
         do player.create
         players[player.user] = player
-        console.log player
 
       for enemy in game.enemies
         do enemy.derender
 
       data.enemies = data.enemies || []
       game.enemies = []
+
 
       for enemyType of data.enemies
         type = data.enemies[enemyType]

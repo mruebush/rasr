@@ -115,9 +115,7 @@ app.service('Menubar', ['$rootScope', ($rootScope) ->
 
   
   # ============================= 
-  
   # ====== CANVAS SETTINGS ====== 
-  
   # ============================= 
   Menubar.canvasSettings = (e) ->
     name = Editor.$(e.currentTarget).attr("name")
@@ -131,9 +129,7 @@ app.service('Menubar', ['$rootScope', ($rootScope) ->
 
   
   # =============================== 
-  
   # ====== VIEWPORT SETTINGS ====== 
-  
   # =============================== 
   Menubar.viewportSettings = (e) ->
     name = Editor.$(e.currentTarget).attr("name")
