@@ -131,10 +131,4 @@ module.exports = function (grunt) {
     'ngmin',
     'uglify'
   ]);
-
-  // grunt.registerTask('build', [
-  //   'clean:dist',
-  //   'coffee',
-  //   'compass'
-  // ]);
 };
