@@ -20,7 +20,9 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
   $scope.glued = true
 
   $scope.makeMap = (direction) ->
-    MapAPI.makeMap().get({direction: direction, mapId: mapId})
+    $scope.borders[direction] = true
+    map.game.physics.arcade.checkCollision[direction] = false
+    MapAPI.makeMap().get({direction: direction, mapId: map.mapId})
 
   app = Events({})
   window.game = game = null
@@ -47,9 +49,7 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
       init.y = playerInfo.y
       init.level = playerInfo.level
       init.speed = playerInfo.speed
-      init.png = playerInfo.png || 'roshan'
-
-      $scope.mapId = mapId
+      init.png = playerInfo.png
 
       MapAPI.getMap().get {mapId: mapId}, (mapData) ->
         initialMap = mapData
@@ -63,7 +63,6 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
         game = Events(game)
         game.realWidth = 20 * 64
         game.realHeight = 12 * 64
-
 
   preload = ->
 
@@ -82,7 +81,6 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
       speed: init.speed
       level: init.level
     }))
-    # window.hero = hero
     map = Events(Map(game, Phaser, mapId))
     game.user = user
     map.on 'finishLoad', =>
@@ -124,6 +122,7 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
 
     hero.create()
     game.hero = hero
+    game.hero
     
     enemies = []
     enemyPositions = {}
@@ -159,7 +158,6 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
     game.layerRendering.add(map.layers[3])
     game.layerRendering.add(game.lifebar)
     game.layerRendering.add(game.hearts)
-    # hero.sprite.bringToTop();
     for layer in map.layers
       if layer.name = 'collision'
         map.collisionLayer = layer 
@@ -171,7 +169,6 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
       game.physics.arcade.collide(hero.sprite, map.collisionLayer)
       game.physics.arcade.collide(hero.arrow.arrows, map.collisionLayer, tileCollision)
       game.physics.arcade.collide(hero.arrow.arrows, hero.sprite, arrowHurt, null, hero)
-      # game.physics.arcade.collide(hero.arrow.arrows, player.sprite, arrowHurt, null, player)
       for enemy in game.enemies
         if enemy.alive
           hero.sprite.facing = hero.facing
@@ -215,19 +212,14 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
 
 
   _createCtrls = (data) ->
-    $scope.mapId = map.mapId
-    borders = 
-      upScreen: data.upScreen
-      rightScreen: data.rightScreen
-      downScreen: data.downScreen
-      leftScreen: data.leftScreen
-
     $scope.$apply ->
-      for border, value of borders
-        borderDirection = border.split('Screen')[0]
-        $scope.borders[borderDirection] = !!value
-        map.game.physics.arcade.checkCollision[borderDirection] = !value  
-    
+      $scope.borders = 
+        up: !!data.upScreen
+        right: !!data.rightScreen
+        down: !!data.downScreen
+        left: !!data.leftScreen
+      for border, value of $scope.borders
+        map.game.physics.arcade.checkCollision[border] = !value
 
   do initialize
 
