@@ -92,12 +92,27 @@ module.exports = function (grunt) {
           src: '**'
         }]
       }
+    },
+    concat: {
+      dist: {
+        files: {
+          'public/js/concat.js' : [
+            'public/js/**/*.js'
+          ]
+        }
+      }
     }
+
   });
 
-  grunt.registerTask('build', [
-    'clean:dist',
+  grunt.registerTask('build',[
     'coffee',
-    'compass'
+    'concat'
   ]);
+
+  // grunt.registerTask('build', [
+  //   'clean:dist',
+  //   'coffee',
+  //   'compass'
+  // ]);
 };
