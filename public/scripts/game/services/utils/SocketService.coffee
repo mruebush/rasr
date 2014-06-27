@@ -13,8 +13,6 @@ app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
       socket.emit 'login', game.user
 
     game.on 'enterMap', () ->
-
-
       game.enemyData = game.mapData.enemies || []
 
       enemies = []
