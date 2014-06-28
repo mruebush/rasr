@@ -18,8 +18,11 @@ app.factory 'Hero', (Arrow) ->
     Hero.levelUp = () ->
       @speed += do @speedCalc
       @fireRate = do @fireRateCalc
-      @numArrows = do @numArrowsCalc
+      @numArrowsShot = do @numArrowsCalc
       @arrowSpeed = do @arrowSpeedCalc
+      Hero.game.shoot Hero.game.user, Hero.game.mapId, Hero.sprite.x, Hero.sprite.y, 0, 32, @directionFacing
+      Hero.renderMissiles Hero.sprite.x, Hero.sprite.y + 60, 0, 32
+
 
     Hero.speedCalc = () ->
       170 + Math.floor(15 * Math.log(@level))
@@ -158,10 +161,12 @@ app.factory 'Hero', (Arrow) ->
       return
 
     Hero.renderMissiles = (x, y, angle, num) ->
+      initialAngle = angle + (num - 1) * 0.1
       for i in [0...num]
         arrow = Hero.arrow.arrows.children[arrowIndex]
         arrow.reset(x, y)
-        thisAngle = angle + (i - 2) * 0.2
+        # shoot straight
+        thisAngle = initialAngle - i * 0.2
         # thisAngle = angle
         arrow.rotation = Hero.game.physics.arcade.moveToXY(
           arrow, 
