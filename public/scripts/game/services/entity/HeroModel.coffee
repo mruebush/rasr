@@ -12,7 +12,6 @@ app.factory 'Hero', (Arrow) ->
   heartSegment = 20
   Hero = {}
 
-
   return (game, phaser, meta) ->
 
     Hero.levelUp = () ->
@@ -40,6 +39,8 @@ app.factory 'Hero', (Arrow) ->
     Hero.startOnScreenPos = 10
     Hero.png = meta.png
     Hero.level = meta.level
+    Hero.dmg = meta.dmg
+    Hero.xp = meta.xp
 
     Hero.upKey = null
     Hero.downKey = null

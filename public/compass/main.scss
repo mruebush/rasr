@@ -11,8 +11,6 @@ $icon-font-path: "/bower_components/bootstrap-sass-official/vendor/assets/fonts/
 
 /* Space out content a bit */
 body {
-    padding-top: 20px;
-    padding-bottom: 20px;
     background: url('/assets/background.jpg');
 }
 
@@ -24,11 +22,19 @@ body {
 }
 
 .game {
-  max-width: 1170px;
+  width: 100%;
+  max-width: 1300px;
   border-radius: 10px;
   padding-top: 10px;
   padding-bottom: 10px;
   background: white;
+  position: absolute;
+  margin: auto;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 700px;
 }
 
 .controls {
@@ -129,9 +135,44 @@ body {
 }
 
 .messages {
+  height: 250px;
+  width: 100%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.stats {
   height: 200px;
   width: 100%;
-  overflow: scroll
+  border: 1px solid #eee;
+  background-color: white;
+  .stats-item {
+    margin-bottom: 2px;
+    .meta {
+      color: white;
+      display: block;
+      float: left;
+      width: 75px;
+      font-size: 12px;
+      padding: 2px 5px;
+      background-color: rgb(206, 69, 140);
+      border-radius: 2px;
+      text-shadow:
+        -1px -1px 0 #000,
+        1px -1px 0 #000,
+        -1px 1px 0 #000,
+        1px 1px 0 #000;  
+    }
+    .description {
+      width: 200px;
+      display: inline-block;
+      padding-left: 4px;
+      color: rgb(61, 61, 65);
+      margin-left: 5px;
+      margin-top: 1px;
+      background-color: #efdfce;
+    }
+  }
 }
 
 /*.message {
@@ -194,14 +235,21 @@ canvas {
 }
 
 canvas {
-  margin: 5px auto;
 }
 
-.up, .down {
+.up, .down, .left, .right {
   text-align: center;
-  margin: 8px auto;
+  margin: 0;
+  width: 50%;
+}
+.right {
+  float: right;
+}
+.left {
+  float: left;
 }
 
-.game-canvas {
+#game-canvas {
+  clear: both;
 
 }
