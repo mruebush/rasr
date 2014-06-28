@@ -46,7 +46,14 @@ div.col-md-9 {
 
 }
 
-button.btn.btn-default.btn-sm {
+div.tooltip.fade.right.in {
+  position: absolute;
+  left: 5.7% !important;
+  top: 91% !important;
+  width: 100px;
+}
+
+button.btn.btn-default.btn-sm, a.right {
   position: absolute;
   top: 91%;
   border: 0px;
