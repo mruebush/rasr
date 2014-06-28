@@ -1,5 +1,3 @@
-fontStyle = { font: "20px Arial", fill: "#ffffff", align: "left" }
-
 app.factory 'Hero', (Arrow) ->
   expText = null
   healthText = null
@@ -14,22 +12,30 @@ app.factory 'Hero', (Arrow) ->
 
   return (game, phaser, meta) ->
 
-    Hero.levelUp = () ->
+    Hero.levelUp = ->
+      @level++
       @speed += do @speedCalc
       @fireRate = do @fireRateCalc
-      @numArrows = do @numArrowsCalc
+      @numArrowsShot = do @numArrowsCalc
       @arrowSpeed = do @arrowSpeedCalc
+      @game.shoot Hero.game.user, Hero.game.mapId, Hero.sprite.x, Hero.sprite.y, 0, 32, @directionFacing
+      @renderMissiles Hero.sprite.x, Hero.sprite.y + 60, 0, 32, 350
 
-    Hero.speedCalc = () ->
+    Hero.addXP = (data) ->
+      do @levelUp if data.user.levelUp
+      @xp = data.user.xp
+      @game.digest
+
+    Hero.speedCalc = ->
       170 + Math.floor(15 * Math.log(@level))
 
-    Hero.fireRateCalc = () ->
+    Hero.fireRateCalc = ->
       400 + 0.5 * (@level - 1)
 
-    Hero.numArrowsCalc = () ->
+    Hero.numArrowsCalc = ->
       1 + 0.2 * (@level - 1)
 
-    Hero.arrowSpeedCalc = () ->
+    Hero.arrowSpeedCalc = ->
       600 + 0.4 * (@level - 1)
 
     Hero.game = game 
@@ -158,17 +164,19 @@ app.factory 'Hero', (Arrow) ->
 
       return
 
-    Hero.renderMissiles = (x, y, angle, num) ->
+    Hero.renderMissiles = (x, y, angle, num, speed = Hero.arrowSpeed) ->
+      initialAngle = angle + (num - 1) * 0.1
       for i in [0...num]
         arrow = Hero.arrow.arrows.children[arrowIndex]
         arrow.reset(x, y)
-        thisAngle = angle + (i - 2) * 0.2
+        # shoot straight
+        thisAngle = initialAngle - i * 0.2
         # thisAngle = angle
         arrow.rotation = Hero.game.physics.arcade.moveToXY(
           arrow, 
           x + Math.sin(thisAngle), 
           y + Math.cos(thisAngle), 
-          Hero.arrowSpeed
+          speed
           )
         arrowIndex = (arrowIndex + 1) % numArrows
 
