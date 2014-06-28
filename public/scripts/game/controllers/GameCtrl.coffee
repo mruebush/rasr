@@ -64,10 +64,9 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
 
   preload = ->
     game.load.atlasXML "enemy", "assets/enemy.png", "assets/enemy.xml"
-    map = Events(Map(game, Phaser, mapId))
+    $scope.map = map = Events(Map(game, Phaser, mapId))
     game.user = user
     map.on 'finishLoad', ->
-      $scope.mapId = map.mapId
       hero.arrow.arrows.destroy()
       hero.createArrows()
       createExplosions()
@@ -89,6 +88,7 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
     game.hero = hero
     game._createCtrls = _createCtrls
     game.addChat = addChat
+    game.digest = digest
 
   create = ->
     game.lifebar = game.add.sprite(0, 0, 'lifebar')
@@ -203,6 +203,9 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
         left: !!data.leftScreen
       for border, value of $scope.borders
         map.game.physics.arcade.checkCollision[border] = !value
+
+  digest = ->
+    $scope.$apply
 
   do initialize
 
