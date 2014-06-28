@@ -5,7 +5,6 @@ app.directive('scrollGlue', ->
     link: (scope, element, attrs, ctrls) ->
       el = element[0]
       ngModel = ctrls[0]
-      console.log(scope.chats, el, ngModel)
 
       scrollToBottom = ->
         el.scrollTop = el.scrollHeight
