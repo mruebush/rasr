@@ -40,7 +40,6 @@ app.factory('TilesetView', ['$rootScope', ($rootScope) ->
 
     hex = data.alpha.match(/^#?(([0-9a-fA-F]{3}){1,2})$/)
     type = undefined
-    data = undefined
     
     # Parse HEX to rgb
     if hex and hex[1]
@@ -153,6 +152,7 @@ app.factory('TilesetView', ['$rootScope', ($rootScope) ->
   # task is passed to the model's add method
   TilesetView.process = (e, data) ->
     data.image = (if e then e.target.result else TilesetView.tmp)
+    Editor.cached.tilesetsToSave.push { data }
     Editor.Tilesets.add data
     Editor.$("#dialog").dialog "close"
     return

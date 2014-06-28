@@ -1,4 +1,4 @@
-app.factory('Export', ['$rootScope', 'SERVER_URL', 'GET_SCREEN', 'GAME_SCREEN', '$state', '$http', ($rootScope, SERVER_URL, GET_SCREEN, GAME_SCREEN, $state, $http) ->
+app.factory('Export', ['$rootScope', 'SERVER_URL', 'GET_SCREEN', 'GAME_SCREEN', 'SAVE_TILESET', '$state', '$http', ($rootScope, SERVER_URL, GET_SCREEN, GAME_SCREEN, SAVE_TILESET, $state, $http) ->
   Export = {}
   Editor = undefined
   
@@ -97,9 +97,14 @@ app.factory('Export', ['$rootScope', 'SERVER_URL', 'GET_SCREEN', 'GAME_SCREEN', 
 
     $http.put("#{SERVER_URL}#{GET_SCREEN}/#{Editor.cached._id}", { map: output })
       .success ->
+        for key, set of Editor.cached.tilesetsToSave
+          $http.post("#{SAVE_TILESET}", set)
         # location.href = "#{location.origin}#{GAME_SCREEN}"
+        # $http.post("/tilesets/save", {
+          # name: 
+          # })
         $('#dialog').dialog('close')
-        $state.go('game')
+        # $state.go('game')
 
     return
 
