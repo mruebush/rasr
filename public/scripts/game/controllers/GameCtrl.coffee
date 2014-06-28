@@ -53,6 +53,7 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
 
       MapAPI.getMap().get {mapId: mapId}, (mapData) ->
         initialMap = mapData
+        $scope.mapId = mapData._id
         $scope.game = game = new Phaser.Game(800, 600, Phaser.AUTO, "game-canvas",
           preload: preload
           create: create
@@ -83,7 +84,8 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
     }))
     map = Events(Map(game, Phaser, mapId))
     game.user = user
-    map.on 'finishLoad', =>
+    map.on 'finishLoad', ->
+      $scope.mapId = map.mapId
       hero.arrow.arrows.destroy()
       hero.createArrows()
       createExplosions()
