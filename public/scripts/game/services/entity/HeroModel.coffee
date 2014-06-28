@@ -40,6 +40,7 @@ app.factory 'Hero', (Arrow) ->
     Hero.startOnScreenPos = 10
     Hero.png = meta.png
     Hero.level = meta.level
+    Hero.dmg = meta.dmg
     Hero.xp = meta.xp
 
     Hero.upKey = null
