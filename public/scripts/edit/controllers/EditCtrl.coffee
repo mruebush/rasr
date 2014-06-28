@@ -10,7 +10,6 @@ app.controller('EditCtrl', ['Editor', '$rootScope', '$http', '$stateParams', 'SE
   ).success (data, status, headers, config) ->
     Editor.initialize data
     load data
-    console.log 'loaded data'
     $rootScope.$on 'editorReady', ->
       console.log 'editorReady'
       Editor.Import.process JSON.stringify(data), "json"

@@ -38,27 +38,24 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
   png = null
   rootUrl = ''
   user = $scope.currentUser.name
-  init = {}
   explosions = null
   
   # MAKE INITIAL AJAX CALL FOR PLAYER INFO
   initialize = ->
     PlayerAPI.get (playerInfo) ->
       mapId = playerInfo.mapId
-      init.x = playerInfo.x
-      init.y = playerInfo.y
-      init.level = playerInfo.level
-      init.speed = playerInfo.speed
-      init.png = playerInfo.png
+      $scope.mapId = mapId
 
       MapAPI.getMap().get {mapId: mapId}, (mapData) ->
         initialMap = mapData
         $scope.mapId = mapData._id
-        $scope.game = game = new Phaser.Game(800, 600, Phaser.AUTO, "game-canvas",
+        canvasWidth = $('#game-canvas').width()
+        game = new Phaser.Game(canvasWidth, 600, Phaser.AUTO, "game-canvas",
           preload: preload
           create: create
           update: update
         )
+        $scope.hero = hero = Events(Hero(game, Phaser, playerInfo))
         game.rootUrl = rootUrl
         game.enemies = []
         game = Events(game)
@@ -66,22 +63,7 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
         game.realHeight = 12 * 64
 
   preload = ->
-
     game.load.atlasXML "enemy", "assets/enemy.png", "assets/enemy.xml"
-    hero = Events(Hero(game, Phaser, {
-      exp: 150
-      health: 100
-      mana: 100
-      str: 10
-      dex: 10
-      int: 10
-      luk: 10
-      x: init.x
-      y: init.y
-      png: init.png
-      speed: init.speed
-      level: init.level
-    }))
     map = Events(Map(game, Phaser, mapId))
     game.user = user
     map.on 'finishLoad', ->
@@ -128,7 +110,6 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
     
     enemies = []
     enemyPositions = {}
-
 
     for enemyId of initialMap.enemies
       enemies.push 
@@ -213,7 +194,6 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
       do $scope.chats.shift while $scope.chats.length > 100
     $('.timestamp').last().attr('data-livestamp', moment(new Date()).unix())
 
-
   _createCtrls = (data) ->
     $scope.$apply ->
       $scope.borders = 
@@ -225,6 +205,5 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
         map.game.physics.arcade.checkCollision[border] = !value
 
   do initialize
-
 
 ]
