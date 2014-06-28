@@ -35,6 +35,20 @@ body {
 
 }
 
+button.btn.btn-default.btn-sm {
+  position: fixed;
+  top: 596px;
+  border: 0px;
+  background: rgba(218,255,211,0.3);
+  left: 122px;
+}
+
+span.glyphicon.glyphicon-globe {
+  font-size: 1.8em;
+  position: relative;
+  top: 3px;
+}
+
 .landing {
   position: fixed;
   width: 400px;
