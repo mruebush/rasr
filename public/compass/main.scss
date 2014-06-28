@@ -144,7 +144,35 @@ body {
 .stats {
   height: 250px;
   width: 100%;
-
+  border: 1px solid #eee;
+  background-color: white;
+  .stats-item {
+    margin-bottom: 2px;
+    .meta {
+      color: white;
+      display: block;
+      float: left;
+      width: 75px;
+      font-size: 12px;
+      padding: 2px 5px;
+      background-color: rgb(206, 69, 140);
+      border-radius: 2px;
+      text-shadow:
+        -1px -1px 0 #000,
+        1px -1px 0 #000,
+        -1px 1px 0 #000,
+        1px 1px 0 #000;  
+    }
+    .description {
+      width: 200px;
+      display: inline-block;
+      padding-left: 4px;
+      color: rgb(61, 61, 65);
+      margin-left: 5px;
+      margin-top: 1px;
+      background-color: #efdfce;
+    }
+  }
 }
 
 /*.message {
