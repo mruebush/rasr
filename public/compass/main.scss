@@ -34,7 +34,12 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  height: 700px;
+  height: 621px;
+}
+
+div.col-md-9 {
+  position: absolute;
+  top: 1.5%;
 }
 
 .controls {
@@ -43,7 +48,7 @@ body {
 
 button.btn.btn-default.btn-sm {
   position: absolute;
-  top: 81%;
+  top: 91%;
   border: 0px;
   background: rgba(250,250,250,0.3);
   left: 1.7%;
