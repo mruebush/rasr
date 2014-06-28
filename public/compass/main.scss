@@ -43,10 +43,10 @@ body {
 
 button.btn.btn-default.btn-sm {
   position: absolute;
-  top: 85%;
+  top: 81%;
   border: 0px;
-  background: rgba(218,255,211,0.3);
-  left: 5%;
+  background: rgba(250,250,250,0.3);
+  left: 1.7%;
 }
 
 span.glyphicon.glyphicon-globe {
@@ -140,7 +140,7 @@ div.input-group {
   left: 5%;
   position: absolute;
   width: 291px;
-  
+
 }
 
 .chatbox {
@@ -173,6 +173,7 @@ div.input-group {
     margin-bottom: 2px;
     .meta {
       color: white;
+      text-align: center;
       display: block;
       float: left;
       width: 75px;
@@ -188,6 +189,7 @@ div.input-group {
     }
     .description {
       width: 210px;
+      text-align: center;
       border-radius: 2px;
       display: inline-block;
       padding-left: 4px;
@@ -197,6 +199,12 @@ div.input-group {
       background-color: rgba(255,210,180,0.75);
     }
   }
+}
+
+div.sidebar {
+  position: absolute;
+  left: 73%;
+  width: 27%
 }
 
 /*.message {
