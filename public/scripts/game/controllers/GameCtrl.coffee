@@ -5,6 +5,7 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
   $scope.currentUser = $window.userData;
   $scope.chats = []
   $scope.sendChat = ->
+    $scope.glued = true
     chat = 
       user: $scope.currentUser.name
       message: $scope.chatToSend
@@ -16,8 +17,12 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
     down: true
     left: true
 
+  $scope.glued = true
+
   $scope.makeMap = (direction) ->
-    MapAPI.makeMap().get({direction: direction, mapId: mapId})
+    $scope.borders[direction] = true
+    map.game.physics.arcade.checkCollision[direction] = false
+    MapAPI.makeMap().get({direction: direction, mapId: map.mapId})
 
   app = Events({})
   window.game = game = null
@@ -34,7 +39,6 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
   rootUrl = ''
   user = $scope.currentUser.name
   explosions = null
-  debugCollisions = true
   
   # MAKE INITIAL AJAX CALL FOR PLAYER INFO
   initialize = ->
@@ -49,7 +53,6 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
           preload: preload
           create: create
           update: update
-          render: render
         )
         $scope.hero = hero = Events(Hero(game, Phaser, playerInfo))
         game.rootUrl = rootUrl
@@ -57,13 +60,6 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
         game = Events(game)
         game.realWidth = 20 * 64
         game.realHeight = 12 * 64
-
-  render = ->
-    if debugCollisions
-      game.debug.body(game.hero.sprite) if debugCollisions
-      for enemy in game.enemies
-        game.debug.body(enemy.sprite) if debugCollisions and enemy.alive
-
 
   preload = ->
     game.load.atlasXML "enemy", "assets/enemy.png", "assets/enemy.xml"
@@ -146,7 +142,6 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
     for layer in map.layers
       if layer.name = 'collision'
         map.collisionLayer = layer 
-        map.collisionLayer.debug = debugCollisions
 
   update = ->
     if app.isLoaded
@@ -195,20 +190,18 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
       $scope.chats.push chat
       $scope.chatToSend = ''
       do $scope.chats.shift while $scope.chats.length > 100
+    $('.timestamp').last().attr('data-livestamp', moment(new Date()).unix())
 
   _createCtrls = (data) ->
-    $scope.mapId = map.mapId
-    borders = 
-      upScreen: data.upScreen
-      rightScreen: data.rightScreen
-      downScreen: data.downScreen
-      leftScreen: data.leftScreen
+    $scope.$apply ->
+      $scope.borders = 
+        up: !!data.upScreen
+        right: !!data.rightScreen
+        down: !!data.downScreen
+        left: !!data.leftScreen
+      for border, value of $scope.borders
+        map.game.physics.arcade.checkCollision[border] = !value
 
-    for border, value of borders
-      borderDirection = border.split('Screen')[0]
-      $scope.borders[borderDirection] = !!value
-      map.game.physics.arcade.checkCollision[borderDirection] = !value  
-    
   do initialize
 
 ]

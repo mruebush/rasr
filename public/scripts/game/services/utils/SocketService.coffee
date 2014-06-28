@@ -13,8 +13,6 @@ app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
       socket.emit 'login', game.user
 
     game.on 'enterMap', () ->
-
-
       game.enemyData = game.mapData.enemies || []
 
       enemies = []
@@ -115,7 +113,8 @@ app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
         game.trigger 'damageEnemy', data
 
     game.on 'damageEnemy', (data) ->
-      game.enemies[data.serverId].health--
+      if game.enemies[data.serverId]
+        game.enemies[data.serverId].health--
 
     game.stopEnemy = (enemy) ->
       socket.emit 'stopEnemy', 

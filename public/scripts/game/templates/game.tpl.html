@@ -14,8 +14,8 @@
     
     <div class="col-md-3">
       <div class="chatbox">
-        <div class="messages">
-          <div ng-repeat="chat in chats">{{ chat.user }}: {{ chat.message }}</div>
+        <div scroll-glue ng-model="glued" class="messages">
+          <div ng-repeat="chat in chats">{{ chat.user }} [<span class='timestamp'></span>]: {{ chat.message }}</div>
         </div>
         <div class="form-group">
           <form id="sendMessage">
