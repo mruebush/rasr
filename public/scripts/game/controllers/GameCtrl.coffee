@@ -41,6 +41,7 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
     PlayerAPI.get (playerInfo) ->
       mapId = playerInfo.mapId
       $scope.mapId = mapId
+      debugger
 
       MapAPI.getMap().get {mapId: mapId}, (mapData) ->
         initialMap = mapData
