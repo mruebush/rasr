@@ -42,11 +42,11 @@ body {
 }
 
 button.btn.btn-default.btn-sm {
-  position: fixed;
-  top: 596px;
+  position: absolute;
+  top: 85%;
   border: 0px;
   background: rgba(218,255,211,0.3);
-  left: 122px;
+  left: 5%;
 }
 
 span.glyphicon.glyphicon-globe {
@@ -59,7 +59,7 @@ span.glyphicon.glyphicon-globe {
   position: fixed;
   width: 400px;
   height: 400px;
-  background: white;
+  background: rgba(250,250,250,0.9);
   border-radius: 10px;
   top:0;right:0;bottom:0;left:0;
   margin:auto;
