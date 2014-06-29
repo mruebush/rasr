@@ -39,7 +39,7 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
   rootUrl = ''
   user = $scope.currentUser.name
   explosions = null
-  collisionsDebug = true
+  collisionsDebug = false
   
   # MAKE INITIAL AJAX CALL FOR PLAYER INFO
   initialize = ->
