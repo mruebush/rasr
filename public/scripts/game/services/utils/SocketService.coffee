@@ -60,27 +60,13 @@ app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
       data.room = game.mapId
       socket.emit 'enemyMoving', data
 
-    _enemyMovingListener = () ->
-      socket.on 'enemyMoving', (data) ->
-        game.trigger 'enemyMoving', data
+    game.on 'addXP', (data) ->
+      game.hero.addXP data
 
-    game.on 'enemyMoving', (data) ->
-      
-      enemy = game.enemies[data.serverId]
-      
-      if enemy
-        enemy.setDirection data.dir
-
-    do _enemyMovingListener
-
-
-    game.on 'levelUp', () ->
-      do game.hero.levelUp
-
-    _levelUpListener = () ->
-      socket.on 'levelUp', (data) ->
-        if data.user == game.user
-          game.trigger 'levelUp', data
+    _addXPListener = () ->
+      socket.on 'addXP', (data) ->
+        if data.user.username is game.user
+          game.trigger 'addXP', data
 
     game.killEnemy = (enemy) ->
       socket.emit 'enemyDies', 
@@ -272,6 +258,15 @@ app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
       socket.on 'move enemies', (data) ->
         game.trigger 'move enemies', data
 
+
+    _enemyMovingListener = () ->
+      socket.on 'enemyMoving', (data) ->
+        game.trigger 'enemyMoving', data
+
+    game.on 'enemyMoving', (data) ->
+      enemy = game.enemies[data.serverId]
+      enemy.setDirection data.dir if enemy
+
     game.on 'move enemies', (data) ->
       nums = data.nums
       for enemy,i in game.enemies
@@ -290,7 +285,8 @@ app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
     do _enemyListener
     do _messageListener
     do _derenderEnemyListener
-    do _levelUpListener
+    do _addXPListener
+    do _enemyMovingListener
 
     # actions = events(actions)
     # window.actions = actions
