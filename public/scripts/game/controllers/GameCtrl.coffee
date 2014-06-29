@@ -164,7 +164,6 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
       game.physics.arcade.collide(hero.arrow.arrows, hero.sprite, arrowHurt, null, hero)
       for enemy in game.enemies
         if enemy.alive
-          hero.sprite.facing = hero.facing
           game.physics.arcade.collide(hero.sprite, enemy.sprite, hurtHero, null, hero)
           game.physics.arcade.collide(hero.arrow.arrows, enemy.sprite, arrowHurt, null, enemy)
           game.physics.arcade.collide(enemy.sprite, map.collisionLayer)
@@ -215,7 +214,7 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
         map.game.physics.arcade.checkCollision[border] = !value
 
   digest = ->
-    $scope.$apply
+    do $scope.$apply
 
   do initialize
 

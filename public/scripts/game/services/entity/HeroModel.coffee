@@ -24,7 +24,7 @@ app.factory 'Hero', (Arrow) ->
     Hero.addXP = (data) ->
       do @levelUp if data.user.levelUp
       @xp = data.user.xp
-      @game.digest
+      do @game.digest
 
     Hero.speedCalc = ->
       170 + Math.floor(15 * Math.log(@level))
