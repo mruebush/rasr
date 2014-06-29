@@ -39,6 +39,7 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
   rootUrl = ''
   user = $scope.currentUser.name
   explosions = null
+  collisionsDebug = true
   
   # MAKE INITIAL AJAX CALL FOR PLAYER INFO
   initialize = ->
@@ -50,10 +51,11 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
         initialMap = mapData
         $scope.mapId = mapData._id
         canvasWidth = $('#game-canvas').width()
-        game = new Phaser.Game(canvasWidth, 600, Phaser.AUTO, "game-canvas",
+        game = new Phaser.Game(canvasWidth, 600, Phaser.CANVAS, "game-canvas",
           preload: preload
           create: create
           update: update
+          render : render
         )
         $scope.hero = hero = Events(Hero(game, Phaser, playerInfo))
         game.rootUrl = rootUrl
@@ -61,6 +63,13 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
         game = Events(game)
         game.realWidth = 20 * 64
         game.realHeight = 12 * 64
+
+  render = ->
+    if collisionsDebug
+      game.debug.body(hero.sprite)
+      for enemy in game.enemies
+        if enemy.alive
+          game.debug.body(enemy.sprite)
 
   preload = ->
     game.load.atlasXML "enemy", "assets/enemy.png", "assets/enemy.xml"
@@ -142,8 +151,9 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
     game.layerRendering.add(game.lifebar)
     game.layerRendering.add(game.hearts)
     for layer in map.layers
-      if layer.name = 'collision'
+      if layer.name == 'collision'
         map.collisionLayer = layer 
+        map.collisionLayer.debug = collisionsDebug
 
   update = ->
     if app.isLoaded
