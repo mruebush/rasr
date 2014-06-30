@@ -13,3 +13,4 @@ app.constant "MAKE_SCREEN", "/api/screen/make" # api/screen/move/:direction/:cur
 app.constant "GAME_SCREEN", "/game"
 app.constant "LOGIN", "/auth/login" #/auth
 app.constant "SIGNUP", "/auth/signup" #/auth
+app.constant "SAVE_TILESET", "/tileset/save"

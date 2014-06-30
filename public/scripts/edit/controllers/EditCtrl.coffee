@@ -30,6 +30,7 @@ app.controller('EditCtrl', ['Editor', '$rootScope', '$http', '$stateParams', 'SE
     cached.version = data.version
     cached.width = data.width
     cached.height = data.height
+    cached.tilesetsToSave = []
     Editor.cached = cached
     return
 
