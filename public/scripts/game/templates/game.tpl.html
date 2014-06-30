@@ -14,7 +14,7 @@
         <div class="stats-item"><span class="meta">LEVEL </span><span class="description"> {{ hero.level }}</span></div>
         <div class="stats-item"><span class="meta">XP </span><span class="description"> {{ hero.xp }}  ({{ hero.xpToGo - hero.xp }}  to level-up) </span></div>
         <div class="stats-item"><span class="meta">SPEED </span><span class="description"> {{ hero.speed }}</span></div>
-        <div class="stats-item"><span class="meta">DMG </span><span class="description"> {{ hero.dmg }}</span></div>
+        <div class="stats-item"><span class="meta">FIREBALLS </span><span class="description"> {{ hero.numArrowsShot }}</span></div>
       </div>
       <div class="chatbox">
         <div scroll-glue ng-model="glued" class="messages">

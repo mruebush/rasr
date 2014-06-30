@@ -62,7 +62,7 @@ app.factory 'Hero', (Arrow) ->
 
     Hero.speed = do Hero.speedCalc
     Hero.fireRate = do Hero.fireRateCalc
-    Hero.numArrowsShot = do Hero.numArrowsCalc
+    Hero.numArrowsShot = Math.ceil(do Hero.numArrowsCalc)
     Hero.arrowSpeed = do Hero.arrowSpeedCalc
 
     Hero.damage = ->
