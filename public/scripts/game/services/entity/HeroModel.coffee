@@ -9,6 +9,10 @@ app.factory 'Hero', (Arrow) ->
   segments = 80
   heartSegment = 20
   Hero = {}
+  collisionHeight = null
+  collisionHeightOffset = null
+  collisionWidth = null
+  collisionWidthOffset = null
 
   return (game, phaser, meta) ->
 
@@ -91,12 +95,13 @@ app.factory 'Hero', (Arrow) ->
       Hero.game.physics.enable(Hero.sprite, Hero.phaser.Physics.ARCADE)
       Hero.sprite.body.collideWorldBounds = true
 
-      Hero.sprite.animations.add("down", Phaser.Animation.generateFrameNames('player_walk_down', 0, 11, '.png', 4), 30, false)
-      Hero.sprite.animations.add("left", Phaser.Animation.generateFrameNames('player_walk_left', 0, 11, '.png', 4), 30, false)
-      Hero.sprite.animations.add("right", Phaser.Animation.generateFrameNames('player_walk_right', 0, 11, '.png', 4), 30, false)
-      Hero.sprite.animations.add("up", Phaser.Animation.generateFrameNames('player_walk_up', 0, 11, '.png', 4), 30, false)
+      collisionHeight = Hero.sprite.body.sourceHeight * 0.65
+      collisionHeightOffset = Hero.sprite.body.sourceHeight * 0.25
+      collisionWidth = Hero.sprite.body.sourceWidth * 0.75
+      collisionWidthOffset = Hero.sprite.body.sourceWidth * 0.125
 
-      Hero.sprite.animations.add("attack_down", Phaser.Animation.generateFrameNames('player_attack_down', 0, 4, '.png', 4), 15, false)
+      Hero.sprite.body.setSize(collisionWidth, collisionHeight, collisionWidthOffset, collisionHeightOffset)
+
       Hero.sprite.animations.add("attack_up", Phaser.Animation.generateFrameNames('player_attack_up', 0, 4, '.png', 4), 15, false)
       Hero.sprite.animations.add("attack_left", Phaser.Animation.generateFrameNames('player_attack_left', 0, 4, '.png', 4), 15, false)
       Hero.sprite.animations.add("attack_right", Phaser.Animation.generateFrameNames('player_attack_right', 0, 4, '.png', 4), 15, false)
@@ -119,19 +124,19 @@ app.factory 'Hero', (Arrow) ->
       Hero.sprite.body.velocity.x = 0
       Hero.sprite.body.velocity.y = 0
 
-      if Hero.sprite.x < 0
+      if Hero.sprite.x < 0 - collisionWidthOffset
         Hero.sprite.x = (Hero.game.realWidth) - Hero.startOnScreenPos
         Hero.game.trigger('changeMap', 'left')
 
-      if Hero.sprite.x > Hero.game.realWidth
+      if Hero.sprite.x > Hero.game.realWidth + collisionWidthOffset
         Hero.sprite.x = Hero.startOnScreenPos
         Hero.game.trigger('changeMap', 'right')
 
-      if Hero.sprite.y < 0
+      if Hero.sprite.y < 0 - collisionHeightOffset
         Hero.sprite.y = Hero.game.realHeight - Hero.startOnScreenPos
         Hero.game.trigger('changeMap', 'up')
 
-      if Hero.sprite.y > Hero.game.realHeight
+      if Hero.sprite.y > Hero.game.realHeight + collisionHeightOffset
         Hero.sprite.y = Hero.startOnScreenPos
         Hero.game.trigger('changeMap', 'down')
 
