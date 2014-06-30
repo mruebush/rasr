@@ -19,10 +19,10 @@ app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
       enemyPositions = {}
 
       for enemyId of game.enemyData
-          enemies.push 
-            id: enemyId
-            count: game.enemyData[enemyId].count
-          enemyPositions[enemyId] = game.enemyData[enemyId].positions
+        enemies.push 
+          id: enemyId
+          count: game.enemyData[enemyId].count
+        enemyPositions[enemyId] = game.enemyData[enemyId].positions
 
       game.enemyPositions = enemyPositions
 
@@ -265,10 +265,9 @@ app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
 
     game.on 'move enemies', (data) ->
       nums = data.nums
-      aliveEnemies = []
 
       for enemy, i in game.enemies
-        if enemy.alive
+        if enemy and enemy.alive
           enemy.setDirection nums[i].dir
           if nums[i].passive
             do enemy.clearDirection
