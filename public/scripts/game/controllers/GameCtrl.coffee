@@ -25,7 +25,7 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
     MapAPI.makeMap().get({direction: direction, mapId: map.mapId})
 
   app = Events({})
-  window.game = game = null
+  window.game = $scope.game = game = null
   hero = null
   map = null
   players = {}
@@ -51,7 +51,7 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
         initialMap = mapData
         $scope.mapId = mapData._id
         canvasWidth = $('#game-canvas').width()
-        game = new Phaser.Game(canvasWidth, 600, Phaser.CANVAS, "game-canvas",
+        $scope.game = game = new Phaser.Game(canvasWidth, 600, Phaser.CANVAS, "game-canvas",
           preload: preload
           create: create
           update: update
@@ -164,6 +164,9 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
       game.physics.arcade.collide(hero.arrow.arrows, hero.sprite, arrowHurt, null, hero)
       for enemy in game.enemies
         if enemy and enemy.alive
+          game.layerRendering.addAt(enemy.sprite, 4)
+
+          hero.sprite.facing = hero.facing
           game.physics.arcade.collide(hero.sprite, enemy.sprite, hurtHero, null, hero)
           game.physics.arcade.collide(hero.arrow.arrows, enemy.sprite, arrowHurt, null, enemy)
           game.physics.arcade.collide(enemy.sprite, map.collisionLayer)
