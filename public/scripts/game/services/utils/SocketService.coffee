@@ -5,7 +5,7 @@ app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
     )
 
     window.socket = socket
-    window.players = players
+    window.players = game.players
 
     mapId = game.mapId
 
@@ -40,14 +40,12 @@ app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
     game.on 'changeMap', (direction) ->
       game.leave game.mapId, game.user
       socket.removeListener game.mapId
-      for key,player of players
+      for key,player of game.players
         do player.sprite.kill
 
-      players = {}
+      game.players = {}
 
-    game.on 'move', (data) ->
-      if players[data.user]
-        players[data.user].move data
+
 
     game.gameOver = () ->
       socket.emit 'gameOver', 
@@ -146,15 +144,16 @@ app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
 
     game.on 'shoot', (data) ->
       game.hero.renderMissiles data.x, data.y, data.angle, data.num
-      players[data.user].animateShoot data.dir
+      if game.players[data.user]
+        game.players[data.user].animateShoot data.dir
 
     
-    game.logout = (x, y) ->
+    game.logout = () ->
       socket.emit 'logout',
         user: game.user
         mapId: game.mapId
-        x: x
-        y: y
+        x: game.hero.sprite.x
+        y: game.hero.sprite.y
 
     game.join = (data) ->
       x = data.x
@@ -187,7 +186,7 @@ app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
       player.user = data.user
       do player.preload
       do player.create
-      players[player.user] = player
+      game.players[player.user] = player
 
     heroJoined = (data) ->
       for other in data.others
@@ -198,10 +197,10 @@ app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
         player.user = other.user
         do player.preload
         do player.create
-        players[player.user] = player
+        game.players[player.user] = player
 
       for enemy in game.enemies
-        do enemy.derender
+        if enemy then do enemy.derender
 
       data.enemies = data.enemies || []
       game.enemies = []
@@ -225,17 +224,22 @@ app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
           game.trigger 'player leave', data.user
 
     game.on 'player leave', (user) ->
-      if players[user]
-        do players[user].sprite.kill
-        delete players[user]
-      else
-        do game.hero.sprite.kill
+      if game.players[user]
+        do game.players[user].sprite.kill
+        delete game.players[user]
+      # else
+      #   do game.hero.sprite.kill
 
     game.message = (message) ->
       socket.emit 'message',
         user: game.user
         message: message
         # room: game.mapId
+
+    game.on 'move', (data) ->
+      if game.players[data.user]
+        # console.log "#{data.user} moved to #{data.x},#{data.y}"
+        game.players[data.user].move data
 
     game.move = (data) ->
       socket.emit 'move',

@@ -6,6 +6,10 @@ app.factory 'Hero', (Arrow) ->
   segments = 80
   heartSegment = 20
   Hero = {}
+  collisionHeight = null
+  collisionHeightOffset = null
+  collisionWidth = null
+  collisionWidthOffset = null
 
   return (game, phaser, meta) ->
 
@@ -20,8 +24,16 @@ app.factory 'Hero', (Arrow) ->
       @renderMissiles Hero.sprite.x, Hero.sprite.y + 60, 0, 32, 350
 
     Hero.addXP = (data) ->
-      do @levelUp if data.user.levelUp
+      @toGo = Math.round(100*Hero.xp / Hero.xpToGo)
+      width = "#{@toGo}%"
+      if data.user.levelUp
+        do @levelUp
+        width = '0%'
       @xp = data.user.xp
+
+      $('div.progress-bar').css({
+        width: width
+        })
       do @game.digest
 
     Hero.xpToLevel = ->
@@ -59,8 +71,12 @@ app.factory 'Hero', (Arrow) ->
 
     Hero.speed = do Hero.speedCalc
     Hero.fireRate = do Hero.fireRateCalc
-    Hero.numArrowsShot = do Hero.numArrowsCalc
+    Hero.numArrowsShot = Math.ceil(do Hero.numArrowsCalc)
     Hero.arrowSpeed = do Hero.arrowSpeedCalc
+    Hero.toGo = Math.round(100*Hero.xp / Hero.xpToGo)
+    $('div.progress-bar').css({
+      width: "#{Hero.toGo}%"
+    })
 
     Hero.damage = ->
       Hero.sprite.animations.play 'damage_down', 15, false
@@ -124,7 +140,13 @@ app.factory 'Hero', (Arrow) ->
       Hero.sprite.animations.add("right", Phaser.Animation.generateFrameNames('player_walk_right', 0, 11, '.png', 4), 30, false)
       Hero.sprite.animations.add("up", Phaser.Animation.generateFrameNames('player_walk_up', 0, 11, '.png', 4), 30, false)
 
-      Hero.sprite.animations.add("attack_down", Phaser.Animation.generateFrameNames('player_attack_down', 0, 4, '.png', 4), 15, false)
+      collisionHeight = Hero.sprite.body.sourceHeight * 0.65
+      collisionHeightOffset = Hero.sprite.body.sourceHeight * 0.25
+      collisionWidth = Hero.sprite.body.sourceWidth * 0.75
+      collisionWidthOffset = Hero.sprite.body.sourceWidth * 0.125
+
+      Hero.sprite.body.setSize(collisionWidth, collisionHeight, collisionWidthOffset, collisionHeightOffset)
+
       Hero.sprite.animations.add("attack_up", Phaser.Animation.generateFrameNames('player_attack_up', 0, 4, '.png', 4), 15, false)
       Hero.sprite.animations.add("attack_left", Phaser.Animation.generateFrameNames('player_attack_left', 0, 4, '.png', 4), 15, false)
       Hero.sprite.animations.add("attack_right", Phaser.Animation.generateFrameNames('player_attack_right', 0, 4, '.png', 4), 15, false)
@@ -147,19 +169,19 @@ app.factory 'Hero', (Arrow) ->
       Hero.sprite.body.velocity.x = 0
       Hero.sprite.body.velocity.y = 0
 
-      if Hero.sprite.x < 0
+      if Hero.sprite.x < 0 - collisionWidthOffset
         Hero.sprite.x = (Hero.game.realWidth) - Hero.startOnScreenPos
         Hero.game.trigger('changeMap', 'left')
 
-      if Hero.sprite.x > Hero.game.realWidth
+      if Hero.sprite.x > Hero.game.realWidth + collisionWidthOffset
         Hero.sprite.x = Hero.startOnScreenPos
         Hero.game.trigger('changeMap', 'right')
 
-      if Hero.sprite.y < 0
+      if Hero.sprite.y < 0 - collisionHeightOffset
         Hero.sprite.y = Hero.game.realHeight - Hero.startOnScreenPos
         Hero.game.trigger('changeMap', 'up')
 
-      if Hero.sprite.y > Hero.game.realHeight
+      if Hero.sprite.y > Hero.game.realHeight + collisionHeightOffset
         Hero.sprite.y = Hero.startOnScreenPos
         Hero.game.trigger('changeMap', 'down')
 

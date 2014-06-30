@@ -19,16 +19,20 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
 
   $scope.glued = true
 
+  $scope.editMap = () ->
+    game.logout()
+
   $scope.makeMap = (direction) ->
+    # game.logout()
     $scope.borders[direction] = true
     map.game.physics.arcade.checkCollision[direction] = false
     MapAPI.makeMap().get({direction: direction, mapId: map.mapId})
 
   app = Events({})
-  window.game = game = null
+  window.game = $scope.game = game = null
   hero = null
   map = null
-  players = {}
+  # game.players = {}
   mapId = null
   initialMap = null
   upScreen = null
@@ -51,12 +55,13 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
         initialMap = mapData
         $scope.mapId = mapData._id
         canvasWidth = $('#game-canvas').width()
-        game = new Phaser.Game(canvasWidth, 600, Phaser.CANVAS, "game-canvas",
+        $scope.game = game = new Phaser.Game(canvasWidth, 600, Phaser.CANVAS, "game-canvas",
           preload: preload
           create: create
           update: update
           render : render
         )
+        game.players = {}
         $scope.hero = hero = Events(Hero(game, Phaser, playerInfo))
         game.rootUrl = rootUrl
         game.enemies = []
@@ -81,7 +86,7 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
       createExplosions()
       app.isLoaded = true
       renderMap()
-    Socket SERVER_URL, game, players, Phaser
+    Socket SERVER_URL, game, game.players, Phaser
 
     game.load.spritesheet 'kaboom', 'assets/explosion.png', 64, 64, 23
     game.load.image 'lifebar', 'assets/lifebar.png'
@@ -172,7 +177,7 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
           game.physics.arcade.collide(hero.arrow.arrows, enemy.sprite, arrowHurt, null, enemy)
           game.physics.arcade.collide(enemy.sprite, map.collisionLayer)
           enemy.update()
-      for player of players
+      for player of game.players
         if player.update then do player.update
 
   hurtHero = (heroSprite, enemySprite) ->
