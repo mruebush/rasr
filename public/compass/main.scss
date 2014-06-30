@@ -234,6 +234,26 @@ button.btn.btn-primary {
   }
 }
 
+span.xp-tag {
+  position: absolute;
+  width: 100%;
+  left: 14%;
+}
+
+div.progress {
+  background-color: rgba(250,250,250,0.50);
+  height: 21px;
+  padding: 2px 5px;
+  width: 76%;
+}
+
+div.progress-bar {
+  width: 0%;
+  background-color: rgba(255,210,180,0.75);
+  color: black;
+  height: 21px;
+}
+
 div.sidebar {
   position: absolute;
   left: 73%;
