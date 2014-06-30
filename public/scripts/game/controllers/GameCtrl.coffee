@@ -51,7 +51,7 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
         initialMap = mapData
         $scope.mapId = mapData._id
         canvasWidth = $('#game-canvas').width()
-        game = new Phaser.Game(canvasWidth, 600, Phaser.CANVAS, "game-canvas",
+        game = $scope.game = new Phaser.Game(canvasWidth, 600, Phaser.CANVAS, "game-canvas",
           preload: preload
           create: create
           update: update
