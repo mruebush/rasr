@@ -1,7 +1,4 @@
 app.factory 'Hero', (Arrow) ->
-  expText = null
-  healthText = null
-  manaText = null
   nextFire = 0
   arrowIndex = 0
   numArrows = 50
@@ -75,8 +72,22 @@ app.factory 'Hero', (Arrow) ->
         segments -= heartSegment
         heartRemoved = true
 
+      Hero.healthBar.clear()
+
+      color = switch
+        when @meta.health < 25 then color = 0xFF0000
+        when @meta.health < 50 then color = 0xFF9900
+        when @meta.health < 75 then color = 0x00FF00
+        else 0x009933
+
+      Hero.healthBar.lineStyle 10, color, 1
+      Hero.healthBar.moveTo(0, -10)
+      Hero.healthBar.lineTo((Hero.sprite.body.width / 100) * @meta.health, -10)
+
       if @meta.health <= 0
         do Hero.game.gameOver
+
+
 
     Hero.createArrows = ->
       # taken care of by "Arrow" Service
@@ -86,10 +97,27 @@ app.factory 'Hero', (Arrow) ->
       Hero.game.load.atlasXML "player", "assets/player.png", "assets/player.xml"
       Hero.game.load.image "arrow", "assets/bullet.png"
 
+    Hero.attachHealthBar = ->
+      Hero.healthBar = game.add.graphics 0, 0
+      Hero.healthBar.lineStyle 10, 0x009933, 1
+      Hero.healthBar.moveTo(0, -10)
+      Hero.healthBar.lineTo(Hero.sprite.body.width, -10)
+      Hero.sprite.addChild(Hero.healthBar)
+      
+
+    Hero.attachName = (name)->
+      style = { font: "15px Arial", align: "center" }
+      text = game.add.text 10, -20, name, style
+      text.shadowBlur = 5
+      Hero.sprite.addChild text
+
     Hero.create = ->
       Hero.sprite = Hero.game.add.sprite(Hero.meta.x, Hero.meta.y, "player")
+
       Hero.game.physics.enable(Hero.sprite, Hero.phaser.Physics.ARCADE)
       Hero.sprite.body.collideWorldBounds = true
+
+      do Hero.attachHealthBar
 
       Hero.sprite.animations.add("down", Phaser.Animation.generateFrameNames('player_walk_down', 0, 11, '.png', 4), 30, false)
       Hero.sprite.animations.add("left", Phaser.Animation.generateFrameNames('player_walk_left', 0, 11, '.png', 4), 30, false)
