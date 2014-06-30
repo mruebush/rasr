@@ -27,12 +27,14 @@ app.factory 'Hero', (Arrow) ->
       @renderMissiles Hero.sprite.x, Hero.sprite.y + 60, 0, 32, 350
 
     Hero.addXP = (data) ->
+      console.log data
+      @xp = data.user.xp
       @toGo = Math.round(100*Hero.xp / Hero.xpToGo)
       width = "#{@toGo}%"
       if data.user.levelUp
         do @levelUp
         width = '0%'
-      @xp = data.user.xp
+        Hero.xpToGo = do Hero.xpToLevel
 
       $('div.progress-bar').css({
         width: width
