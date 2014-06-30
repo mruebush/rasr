@@ -40,7 +40,6 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
   user = $scope.currentUser.name
   explosions = null
   collisionsDebug = false
-  app.renderedEnemies = {}
   
   # MAKE INITIAL AJAX CALL FOR PLAYER INFO
   initialize = ->
@@ -81,7 +80,6 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
       hero.createArrows()
       createExplosions()
       app.isLoaded = true
-      app.renderedEnemies = {}
       renderMap()
     Socket SERVER_URL, game, players, Phaser
 
@@ -166,9 +164,8 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
       game.physics.arcade.collide(hero.arrow.arrows, hero.sprite, arrowHurt, null, hero)
       for enemy in game.enemies
         if enemy and enemy.alive
-          if (not app.renderedEnemies[enemy.dbId])
-            app.renderedEnemies[enemy.dbId] = true
-            game.layerRendering.addAt(enemy.sprite, 3)
+          game.layerRendering.addAt(enemy.sprite, 4)
+
           hero.sprite.facing = hero.facing
           game.physics.arcade.collide(hero.sprite, enemy.sprite, hurtHero, null, hero)
           game.physics.arcade.collide(hero.arrow.arrows, enemy.sprite, arrowHurt, null, enemy)
