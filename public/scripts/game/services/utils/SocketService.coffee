@@ -45,9 +45,7 @@ app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
 
       players = {}
 
-    game.on 'move', (data) ->
-      if players[data.user]
-        players[data.user].move data
+
 
     game.gameOver = () ->
       socket.emit 'gameOver', 
@@ -237,6 +235,11 @@ app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
         user: game.user
         message: message
         # room: game.mapId
+
+    game.on 'move', (data) ->
+      if players[data.user]
+        # console.log "#{data.user} moved to #{data.x},#{data.y}"
+        players[data.user].move data
 
     game.move = (data) ->
       socket.emit 'move',

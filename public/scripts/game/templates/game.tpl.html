@@ -7,6 +7,8 @@
       </div>
 
     </div>
+
+    max width: 319
     
     <div class="sidebar col-md-3">
       <div class="stats">
@@ -14,14 +16,14 @@
         <div class="stats-item"><span class="meta">LEVEL </span><span class="description"> {{ hero.level }}</span></div>
 
 
-      <div class="stats-item" style="height: 21px;">
+      <div class="stats-item" style="height: 21px; width: 100%">
         <span class="meta">
           XP
         </span>
 
           <div class="progress">
-            <div class="progress-bar" role="progressbar" aria-valuenow="{{ hero.xp }}" aria-valuemin="0" aria-valuemax="{{ hero.xpToGo }}">
-            <span class="xp-tag">{{ hero.toGo }} %</span>
+            <div class="progress-bar" role="progressbar" aria-valuenow="{{ game.hero.xp }}" aria-valuemin="0" aria-valuemax="{{ game.hero.xpToGo }}">
+            <span class="xp-tag">{{ game.hero.toGo }} %</span>
           </div>
           </div>
 

@@ -23,9 +23,16 @@ app.factory 'Hero', (Arrow) ->
       @renderMissiles Hero.sprite.x, Hero.sprite.y + 60, 0, 32, 350
 
     Hero.addXP = (data) ->
-      do @levelUp if data.user.levelUp
-      @xp = data.user.xp
       @toGo = Math.round(100*Hero.xp / Hero.xpToGo)
+      width = "#{@toGo}%"
+      if data.user.levelUp
+        do @levelUp
+        width = '0%'
+      @xp = data.user.xp
+
+      $('div.progress-bar').css({
+        width: width
+        })
       do @game.digest
 
     Hero.xpToLevel = ->
@@ -66,6 +73,9 @@ app.factory 'Hero', (Arrow) ->
     Hero.numArrowsShot = Math.ceil(do Hero.numArrowsCalc)
     Hero.arrowSpeed = do Hero.arrowSpeedCalc
     Hero.toGo = Math.round(100*Hero.xp / Hero.xpToGo)
+    $('div.progress-bar').css({
+      width: "#{Hero.toGo}%"
+    })
 
     Hero.damage = ->
       Hero.sprite.animations.play 'damage_down', 15, false
