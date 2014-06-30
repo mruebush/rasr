@@ -32,13 +32,13 @@
       <div class="stats">
         <div class="stats-item"><span class="meta">NAME </span><span class="description"> {{ hero.meta.username }}</span></div>
         <div class="stats-item"><span class="meta">LEVEL </span><span class="description"> {{ hero.level }}</span></div>
-        <div class="stats-item"><span class="meta">XP </span><span class="description"> {{ hero.xp }}</span></div>
+        <div class="stats-item"><span class="meta">XP </span><span class="description"> {{ hero.xp }} / {{ hero.xpToGo }}</span></div>
         <div class="stats-item"><span class="meta">SPEED </span><span class="description"> {{ hero.speed }}</span></div>
         <div class="stats-item"><span class="meta">DMG </span><span class="description"> {{ hero.dmg }}</span></div>
       </div>
       
       <div class="controls">
-        <a id="map-id" class="btn btn-danger" href="/edit/{{ mapId }}">Edit map here</a>
+        <a id="map-id" class="btn btn-danger" href="/edit/{{ map.mapId }}">Edit map here</a>
       </div>
     </div>
 

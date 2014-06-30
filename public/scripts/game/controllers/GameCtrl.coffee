@@ -39,6 +39,7 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
   rootUrl = ''
   user = $scope.currentUser.name
   explosions = null
+  collisionsDebug = false
   
   # MAKE INITIAL AJAX CALL FOR PLAYER INFO
   initialize = ->
@@ -50,10 +51,11 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
         initialMap = mapData
         $scope.mapId = mapData._id
         canvasWidth = $('#game-canvas').width()
-        game = new Phaser.Game(canvasWidth, 600, Phaser.AUTO, "game-canvas",
+        game = new Phaser.Game(canvasWidth, 600, Phaser.CANVAS, "game-canvas",
           preload: preload
           create: create
           update: update
+          # render : render
         )
         $scope.hero = hero = Events(Hero(game, Phaser, playerInfo))
         game.rootUrl = rootUrl
@@ -62,12 +64,18 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
         game.realWidth = 20 * 64
         game.realHeight = 12 * 64
 
+  render = ->
+    if collisionsDebug
+      game.debug.body(hero.sprite)
+      for enemy in game.enemies
+        if enemy.alive
+          game.debug.body(enemy.sprite)
+
   preload = ->
     game.load.atlasXML "enemy", "assets/enemy.png", "assets/enemy.xml"
-    map = Events(Map(game, Phaser, mapId))
+    $scope.map = map = Events(Map(game, Phaser, mapId))
     game.user = user
     map.on 'finishLoad', ->
-      $scope.mapId = map.mapId
       hero.arrow.arrows.destroy()
       hero.createArrows()
       createExplosions()
@@ -89,6 +97,7 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
     game.hero = hero
     game._createCtrls = _createCtrls
     game.addChat = addChat
+    game.digest = digest
 
   create = ->
     game.lifebar = game.add.sprite(0, 0, 'lifebar')
@@ -142,8 +151,9 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
     game.layerRendering.add(game.lifebar)
     game.layerRendering.add(game.hearts)
     for layer in map.layers
-      if layer.name = 'collision'
+      if layer.name == 'collision'
         map.collisionLayer = layer 
+        map.collisionLayer.debug = collisionsDebug
 
   update = ->
     if app.isLoaded
@@ -153,8 +163,7 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
       game.physics.arcade.collide(hero.arrow.arrows, map.collisionLayer, tileCollision)
       game.physics.arcade.collide(hero.arrow.arrows, hero.sprite, arrowHurt, null, hero)
       for enemy in game.enemies
-        if enemy.alive
-          hero.sprite.facing = hero.facing
+        if enemy and enemy.alive
           game.physics.arcade.collide(hero.sprite, enemy.sprite, hurtHero, null, hero)
           game.physics.arcade.collide(hero.arrow.arrows, enemy.sprite, arrowHurt, null, enemy)
           game.physics.arcade.collide(enemy.sprite, map.collisionLayer)
@@ -203,6 +212,9 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
         left: !!data.leftScreen
       for border, value of $scope.borders
         map.game.physics.arcade.checkCollision[border] = !value
+
+  digest = ->
+    do $scope.$apply
 
   do initialize
 

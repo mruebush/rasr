@@ -39,19 +39,21 @@ app.service 'Map', (MapAPI) ->
 
     Map.create = (triggerEnter) ->
       map = Map.game.add.tilemap('map')
+
       for tileset in Map.mapData.tilesets
         map.addTilesetImage(tileset.name)
 
+      Map.layers = []
       for layerInfo in Map.mapData.layers
         layer = map.createLayer(layerInfo.name)
         layer.name = layerInfo.name
-        Map.layers.push(layer)
-        layer.resizeWorld()
         if layer.name is 'collision'
           collisions = []
           for id in layerInfo.data
             collisions.push id if id
-          map.setCollision(_.uniq(collisions), true, layer) 
+          map.setCollision(_.uniq(collisions), true, layer)
+        layer.resizeWorld()
+        Map.layers.push(layer)
 
 
       Map.game._createCtrls(Map.mapData)

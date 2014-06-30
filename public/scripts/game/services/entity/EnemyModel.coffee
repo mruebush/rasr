@@ -42,6 +42,7 @@ app.service 'Enemy', ->
       , 500
 
     Enemy.derender = ->
+      Enemy.alive = false
       do Enemy.sprite.kill
       clearInterval Enemy.timer
       clearInterval Enemy.reportTimer
@@ -49,8 +50,6 @@ app.service 'Enemy', ->
     Enemy.damage = ->
       do Enemy.reportDirection
       Enemy.game.damageEnemy Enemy
-      if Enemy.health <= 0
-        Enemy.game.killEnemy Enemy
 
       return true
 
