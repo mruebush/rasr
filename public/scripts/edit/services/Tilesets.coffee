@@ -3,6 +3,7 @@ app.factory('Tilesets', ['TilesetView', '$rootScope', (TilesetView, $rootScope) 
   Tilesets.collection = {}
   Editor = undefined
   count = undefined 
+  newSet = []
   tilesetCount = 0
   
   # ======================== 
@@ -48,9 +49,7 @@ app.factory('Tilesets', ['TilesetView', '$rootScope', (TilesetView, $rootScope) 
 
   
   # ================= 
-  
   # ====== ADD ====== 
-  
   # ================= 
   Tilesets.add = (data) ->
     @total += 1
