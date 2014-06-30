@@ -97,12 +97,10 @@ app.factory('Export', ['$rootScope', 'SERVER_URL', 'GET_SCREEN', 'GAME_SCREEN', 
       delete output['tilesetsToSave']
       output = JSON.stringify(output)
       anchor.href = "data:application/json;charset=UTF-8;," + encodeURIComponent(output)
-      debugger;
 
     $http.put("#{SERVER_URL}#{GET_SCREEN}/#{Editor.cached._id}", { map: output })
       .success ->
         for key, set of Editor.cached.tilesetsToSave
-          debugger
           set.data.image = set.data.name
           $http.post("#{SAVE_TILESET}", set)
         $('#dialog').dialog('close')
