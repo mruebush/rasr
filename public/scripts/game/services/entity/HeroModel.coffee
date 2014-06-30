@@ -21,7 +21,7 @@ app.factory 'Hero', (Arrow) ->
       @speed = do @speedCalc
       @xpToGo = do @xpToLevel
       @fireRate = do @fireRateCalc
-      @numArrowsShot = do @numArrowsCalc
+      @numArrowsShot = Math.ceil(do Hero.numArrowsCalc)
       @arrowSpeed = do @arrowSpeedCalc
       @game.shoot Hero.game.user, Hero.game.mapId, Hero.sprite.x, Hero.sprite.y, 0, 32, @directionFacing
       @renderMissiles Hero.sprite.x, Hero.sprite.y + 60, 0, 32, 350
