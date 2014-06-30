@@ -14,7 +14,8 @@ app.factory 'Hero', (Arrow) ->
 
     Hero.levelUp = ->
       @level++
-      @speed += do @speedCalc
+      @speed = do @speedCalc
+      @xpToGo = do @xpToLevel
       @fireRate = do @fireRateCalc
       @numArrowsShot = do @numArrowsCalc
       @arrowSpeed = do @arrowSpeedCalc
@@ -25,6 +26,9 @@ app.factory 'Hero', (Arrow) ->
       do @levelUp if data.user.levelUp
       @xp = data.user.xp
       do @game.digest
+
+    Hero.xpToLevel = ->
+      return Math.floor(Math.exp(0.5 * @level))
 
     Hero.speedCalc = ->
       170 + Math.floor(15 * Math.log(@level))
@@ -47,6 +51,7 @@ app.factory 'Hero', (Arrow) ->
     Hero.level = meta.level
     Hero.dmg = meta.dmg
     Hero.xp = meta.xp
+    Hero.xpToGo = do Hero.xpToLevel
 
     Hero.upKey = null
     Hero.downKey = null
