@@ -12,7 +12,7 @@ app.directive('scrollGlue', ->
       shouldActivateAutoScroll = ->
         el.scrollTop + el.clientHeight + 1 >= el.scrollHeight
 
-      scope.$watch "chats.length", ->
+      scope.$watch 'chats.length', ->
         if ngModel.$viewValue
           scrollToBottom() 
 
