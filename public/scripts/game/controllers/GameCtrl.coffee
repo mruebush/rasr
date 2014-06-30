@@ -164,6 +164,9 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
       game.physics.arcade.collide(hero.arrow.arrows, hero.sprite, arrowHurt, null, hero)
       for enemy in game.enemies
         if enemy and enemy.alive
+          game.layerRendering.addAt(enemy.sprite, 4)
+
+          hero.sprite.facing = hero.facing
           game.physics.arcade.collide(hero.sprite, enemy.sprite, hurtHero, null, hero)
           game.physics.arcade.collide(hero.arrow.arrows, enemy.sprite, arrowHurt, null, enemy)
           game.physics.arcade.collide(enemy.sprite, map.collisionLayer)
