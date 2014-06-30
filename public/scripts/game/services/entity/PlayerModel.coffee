@@ -1,7 +1,7 @@
 app.factory 'Player', ->
-  Player = {}
 
   return (game, phaser, meta) ->
+    Player = {}
     Player.game = game
     Player.phaser = phaser
     Player.meta = meta
@@ -33,22 +33,23 @@ app.factory 'Player', ->
     Player.move = (data) ->
 
       dir = data.dir
-      Player.sprite.y = data.y
-      Player.sprite.x = data.x
+
+      @sprite.y = data.y
+      @sprite.x = data.x
 
       if dir is 'up'
-        Player.sprite.animations.play "up", 5, false
+        @sprite.animations.play "up", 5, false
       else if dir is 'down'
-        Player.sprite.animations.play "down", 5, false
+        @sprite.animations.play "down", 5, false
       if dir is 'left'
-        Player.sprite.animations.play "left", 5, false
+        @sprite.animations.play "left", 5, false
       else if dir is 'right'
-        Player.sprite.animations.play "right", 5, false
+        @sprite.animations.play "right", 5, false
 
-      do Player.update
+      do @update
       
     Player.update = ->
-      Player.sprite.bringToTop()
+      @sprite.bringToTop()
       return
 
     return Player
