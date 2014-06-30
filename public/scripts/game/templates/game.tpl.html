@@ -8,8 +8,6 @@
 
     </div>
 
-    max width: 319
-    
     <div class="sidebar col-md-3">
       <div class="stats">
         <div class="stats-item"><span class="meta">NAME </span><span class="description"> {{ hero.meta.username }}</span></div>
@@ -41,7 +39,7 @@
         <div class="form-group">
           <form id="sendMessage" ng-submit="sendChat()">
             <div class="input-group">
-              <input type="text" ng-model="chatToSend" on-focus-disable-hero class="form-control chatToSend" placeholder"Chat with your fella' playa's">
+              <input type="text" class="form-control chatToSend" ng-model="chatToSend" on-focus-disable-hero placeholder"Chat with your fella' playa's">
             <span class="input-group-btn">
               <button class="btn btn-primary" type="submit">send</button>
             </span>

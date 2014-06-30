@@ -29,7 +29,7 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
     MapAPI.makeMap().get({direction: direction, mapId: map.mapId})
 
   app = Events({})
-  window.game = game = null
+  window.game = $scope.game = game = null
   hero = null
   map = null
   # game.players = {}
@@ -55,7 +55,7 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
         initialMap = mapData
         $scope.mapId = mapData._id
         canvasWidth = $('#game-canvas').width()
-        game = $scope.game = new Phaser.Game(canvasWidth, 600, Phaser.CANVAS, "game-canvas",
+        $scope.game = game = new Phaser.Game(canvasWidth, 600, Phaser.CANVAS, "game-canvas",
           preload: preload
           create: create
           update: update
