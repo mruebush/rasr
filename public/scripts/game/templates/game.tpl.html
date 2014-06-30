@@ -12,7 +12,23 @@
       <div class="stats">
         <div class="stats-item"><span class="meta">NAME </span><span class="description"> {{ hero.meta.username }}</span></div>
         <div class="stats-item"><span class="meta">LEVEL </span><span class="description"> {{ hero.level }}</span></div>
-        <div class="stats-item"><span class="meta">XP </span><span class="description"> {{ hero.xp }}  ({{ hero.xpToGo - hero.xp }}  to level-up) </span></div>
+
+
+      <div class="stats-item" style="height: 21px;">
+        <span class="meta">
+          XP
+        </span>
+
+          <div class="progress">
+            <div class="progress-bar" role="progressbar" aria-valuenow="{{ hero.xp }}" aria-valuemin="0" aria-valuemax="{{ hero.xpToGo }}">
+            {{ hero.toGo }} %
+          </div>
+          </div>
+
+      </div>
+      
+
+
         <div class="stats-item"><span class="meta">SPEED </span><span class="description"> {{ hero.speed }}</span></div>
         <div class="stats-item"><span class="meta">FIREBALLS </span><span class="description"> {{ hero.numArrowsShot }}</span></div>
       </div>

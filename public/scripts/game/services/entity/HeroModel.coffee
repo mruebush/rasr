@@ -25,6 +25,7 @@ app.factory 'Hero', (Arrow) ->
     Hero.addXP = (data) ->
       do @levelUp if data.user.levelUp
       @xp = data.user.xp
+
       do @game.digest
 
     Hero.xpToLevel = ->
@@ -64,6 +65,7 @@ app.factory 'Hero', (Arrow) ->
     Hero.fireRate = do Hero.fireRateCalc
     Hero.numArrowsShot = Math.ceil(do Hero.numArrowsCalc)
     Hero.arrowSpeed = do Hero.arrowSpeedCalc
+    Hero.toGo = Math.round(100*Hero.xp / Hero.xpToGo)
 
     Hero.damage = ->
       Hero.sprite.animations.play 'damage_down', 15, false
