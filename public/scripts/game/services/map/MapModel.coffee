@@ -31,7 +31,7 @@ app.service 'Map', (MapAPI) ->
       loader.tilemap('map', null, data, Map.Phaser.Tilemap.TILED_JSON)
 
       for tileset in data.tilesets
-        Map.tiles[tileset.name] = loader.image(tileset.name, "assets/tilemaps/tiles/" + tileset.image, 32, 32)
+        Map.tiles[tileset.name] = loader.image(tileset.name, "assets/tilemaps/tiles/" + tileset.image, tileset.tileheight, tileset.tilewidth)
 
       loader.start();
       loader.onLoadComplete.add =>

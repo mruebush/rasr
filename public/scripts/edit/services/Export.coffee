@@ -1,4 +1,4 @@
-app.factory('Export', ['$rootScope', 'SERVER_URL', 'GET_SCREEN', 'GAME_SCREEN', '$state', '$http', ($rootScope, SERVER_URL, GET_SCREEN, GAME_SCREEN, $state, $http) ->
+app.factory('Export', ['$rootScope', 'SERVER_URL', 'GET_SCREEN', 'GAME_SCREEN', 'SAVE_TILESET', '$state', '$http', ($rootScope, SERVER_URL, GET_SCREEN, GAME_SCREEN, SAVE_TILESET, $state, $http) ->
   Export = {}
   Editor = undefined
   
@@ -72,10 +72,12 @@ app.factory('Export', ['$rootScope', 'SERVER_URL', 'GET_SCREEN', 'GAME_SCREEN', 
 
       output.tilesets = []
       gid = 1
-      for tileset of Editor.Tilesets.collection
-        tileset = Editor.Tilesets.collection[tileset]
+      for key, tileset of Editor.Tilesets.collection
         image = tileset.image.split("/")
-        tileset.image = image[image.length - 1]
+        if tileset.alpha is null
+          tileset.image = tileset.name
+        else
+          tileset.image = image[image.length - 1]
         output.tilesets.push
           name: tileset.name
           image: tileset.image
@@ -92,12 +94,15 @@ app.factory('Export', ['$rootScope', 'SERVER_URL', 'GET_SCREEN', 'GAME_SCREEN', 
         height: window.parseInt(Editor.$("#canvas").css("height"), 10)
 
       _.extend output, Editor.cached
+      delete output['tilesetsToSave']
       output = JSON.stringify(output)
       anchor.href = "data:application/json;charset=UTF-8;," + encodeURIComponent(output)
 
     $http.put("#{SERVER_URL}#{GET_SCREEN}/#{Editor.cached._id}", { map: output })
       .success ->
-        # location.href = "#{location.origin}#{GAME_SCREEN}"
+        for key, set of Editor.cached.tilesetsToSave
+          set.data.image = set.data.name
+          $http.post("#{SAVE_TILESET}", set)
         $('#dialog').dialog('close')
         $state.go('game')
 

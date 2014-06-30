@@ -1,3 +1,13 @@
+.row-not-found {
+  padding: 100px 0;
+  font-size: 2em;
+}
+
+.not-found-container {
+  background-color: rgba(175, 233, 182, 1);
+  font-family: 'Audiowide', Rockwell, Monaco, monospace;
+}
+
 .landing-container {
   /*background-color: #D2FF6E;*/
   background-color: rgba(175, 233, 182, 0.8);

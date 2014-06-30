@@ -18,4 +18,6 @@
 
   app.constant("SIGNUP", "/auth/signup");
 
+  app.constant("SAVE_TILESET", "/tileset/save");
+
 }).call(this);
