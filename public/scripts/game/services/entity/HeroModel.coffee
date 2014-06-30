@@ -25,7 +25,7 @@ app.factory 'Hero', (Arrow) ->
     Hero.addXP = (data) ->
       do @levelUp if data.user.levelUp
       @xp = data.user.xp
-
+      @toGo = Math.round(100*Hero.xp / Hero.xpToGo)
       do @game.digest
 
     Hero.xpToLevel = ->
