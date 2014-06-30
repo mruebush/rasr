@@ -7,7 +7,8 @@ app.config ($stateProvider, $locationProvider, $httpProvider, $urlRouterProvider
     controller: "AppCtrl"
   ).state("404",
     url: "/404"
-    template: "/js/core/templates/404.tpl.html"
+    templateUrl: "/js/core/templates/404.tpl.html"
+    controller: "404Ctrl"
   ).state("login",
     url: "/login"
     templateUrl: "/js/core/templates/login.tpl.html"
