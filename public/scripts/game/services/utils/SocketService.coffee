@@ -146,7 +146,8 @@ app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
 
     game.on 'shoot', (data) ->
       game.hero.renderMissiles data.x, data.y, data.angle, data.num
-      players[data.user].animateShoot data.dir
+      if players[data.user]
+        players[data.user].animateShoot data.dir
 
     
     game.logout = (x, y) ->
@@ -201,7 +202,7 @@ app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
         players[player.user] = player
 
       for enemy in game.enemies
-        do enemy.derender
+        if enemy then do enemy.derender
 
       data.enemies = data.enemies || []
       game.enemies = []
@@ -228,8 +229,8 @@ app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
       if players[user]
         do players[user].sprite.kill
         delete players[user]
-      else
-        do game.hero.sprite.kill
+      # else
+      #   do game.hero.sprite.kill
 
     game.message = (message) ->
       socket.emit 'message',
