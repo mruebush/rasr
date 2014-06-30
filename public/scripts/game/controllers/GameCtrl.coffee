@@ -56,7 +56,7 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
           preload: preload
           create: create
           update: update
-          render : render
+          # render : render
         )
         $scope.hero = hero = Events(Hero(game, Phaser, playerInfo))
         game.rootUrl = rootUrl
@@ -165,7 +165,7 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
       game.physics.arcade.collide(hero.arrow.arrows, map.collisionLayer, tileCollision)
       game.physics.arcade.collide(hero.arrow.arrows, hero.sprite, arrowHurt, null, hero)
       for enemy in game.enemies
-        if enemy.alive
+        if enemy and enemy.alive
           if (not app.renderedEnemies[enemy.dbId])
             app.renderedEnemies[enemy.dbId] = true
             game.layerRendering.addAt(enemy.sprite, 3)
@@ -220,7 +220,7 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
         map.game.physics.arcade.checkCollision[border] = !value
 
   digest = ->
-    $scope.$apply
+    do $scope.$apply
 
   do initialize
 
