@@ -67,11 +67,12 @@ app.factory 'Hero', (Arrow) ->
 
     Hero.damage = ->
       Hero.sprite.animations.play 'damage_down', 15, false
+      console.log(Hero.meta, Hero.meta.health)
       Hero.meta.health--
       heartRemoved = false if @meta.health <= segments
       if @meta.health <= segments and not heartRemoved
         do Hero.game.hearts.children.pop
-        segments -= 20
+        segments -= heartSegment
         heartRemoved = true
 
       if @meta.health <= 0
