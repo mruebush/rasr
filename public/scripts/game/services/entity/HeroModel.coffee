@@ -85,7 +85,6 @@ app.factory 'Hero', (Arrow) ->
       Hero.game.physics.enable(Hero.sprite, Hero.phaser.Physics.ARCADE)
       Hero.sprite.body.collideWorldBounds = true
 
-      # Hero.sprite.body.setSize(Hero.sprite.body.halfWidth, -Hero.sprite.body.sourceHeight / 2, Hero.sprite.body.sourceWidth / 4, Hero.sprite.body.sourceHeight)
       Hero.sprite.animations.add("down", Phaser.Animation.generateFrameNames('player_walk_down', 0, 11, '.png', 4), 30, false)
       Hero.sprite.animations.add("left", Phaser.Animation.generateFrameNames('player_walk_left', 0, 11, '.png', 4), 30, false)
       Hero.sprite.animations.add("right", Phaser.Animation.generateFrameNames('player_walk_right', 0, 11, '.png', 4), 30, false)
