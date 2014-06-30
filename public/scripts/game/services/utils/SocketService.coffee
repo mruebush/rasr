@@ -11,6 +11,10 @@ app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
 
     game.on 'login', () ->
       socket.emit 'login', game.user
+      $('.top').tooltip({
+        trigger: 'hover'
+        })
+      $('.dropdown-toggle').dropdown()
 
     game.on 'enterMap', () ->
       game.enemyData = game.mapData.enemies || []

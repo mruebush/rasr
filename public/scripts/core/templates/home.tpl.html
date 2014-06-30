@@ -1,9 +1,57 @@
 <!-- <div ng-include="'partials/navbar'"></div> -->
 
-<div class="landing">
+<!-- <div class="landing">
   <h1>RASR</h1>
   <p>RASR is an open source world building game. Finally, you can build the world the way you wanted to with your peers. It's a 
       great way to build new friendships and explore the world!</p>
   <p>Brewed in San Francisco, by Sean, Roberto, Andrew, and Romain. Built with <a href="http://phaser.io">Phaser</a>.</p>
   <a href="/game" class="btn btn-primary">Play!</a>
+</div>
+ -->
+
+ <div class="container landing-container">
+  <div class="text-center title">
+    <img class="title-photo" src="assets/homeScreenshot.jpg">
+    <div class="title-text">
+      <h1 class="rasr">This is RASR</h1>
+    </div>
+  
+    
+    <div class="welcome-text text-center" ng-show="username">
+      <h2>Welcome: {{ username }}</h2>
+    </div>
+
+    <div class="first-time-texts" ng-hide="username">
+      <div class="row">
+        <div class="col-sm-1">
+        </div>
+        <div class="col-sm-4">
+          <button class="btn btn-block btn-welcome btn-login" ng-click="login()"><h2>Login?</h2></button>
+        </div>
+        <div class="col-sm-2">
+        </div>
+        <div class="col-sm-4">
+          <button class="btn btn-block btn-welcome btn-signup" ng-click="signup()"><h2>Signup!</h2></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="welcome" ng-show="username">
+    <div class="row">
+      <div class="col-sm-4">
+      </div>
+      <div class="col-sm-4">
+        <button class="btn btn-block btn-welcome btn-play" ng-click="play()"> Play on </button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-5">
+      </div>
+      <div class="col-sm-2">
+        <button class="btn btn-block btn-welcome btn-settings" ng-click="settings()"> Settings </button>
+      </div>
+    </div>
+  </div>
 </div>
