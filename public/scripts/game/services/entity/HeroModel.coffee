@@ -100,8 +100,8 @@ app.factory 'Hero', (Arrow) ->
       collisionWidth = Hero.sprite.body.sourceWidth * 0.75
       collisionWidthOffset = Hero.sprite.body.sourceWidth * 0.125
 
-      # Hero.sprite.body.setSize(Hero.sprite.body.halfWidth, -Hero.sprite.body.sourceHeight / 2, Hero.sprite.body.sourceWidth / 4, Hero.sprite.body.sourceHeight)
       Hero.sprite.body.setSize(collisionWidth, collisionHeight, collisionWidthOffset, collisionHeightOffset)
+
       Hero.sprite.animations.add("attack_up", Phaser.Animation.generateFrameNames('player_attack_up', 0, 4, '.png', 4), 15, false)
       Hero.sprite.animations.add("attack_left", Phaser.Animation.generateFrameNames('player_attack_left', 0, 4, '.png', 4), 15, false)
       Hero.sprite.animations.add("attack_right", Phaser.Animation.generateFrameNames('player_attack_right', 0, 4, '.png', 4), 15, false)
