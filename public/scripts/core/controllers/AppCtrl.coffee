@@ -1,4 +1,13 @@
-app.controller "AppCtrl", ($scope, $location) ->
+app.controller "AppCtrl", ($scope, $location, $window, $state) ->
+  $scope.username = $window.localStorage.currentUser
+  $scope.play = ->
+    $state.go('game')
+  $scope.settings = ->
+    $state.go('settings')
+  $scope.login = ->
+    $state.go('login')
+  $scope.signup = ->
+    $state.go('signup')
 
 # Intercept 401s and redirect you to login
 app.config(($stateProvider, $locationProvider, $httpProvider, $urlRouterProvider) ->
