@@ -20,7 +20,7 @@ img {
 }
 
 .container {
-  background: rgba(250,250,250,0.85);
+  background: rgba(255,255,255,.8);
   margin-bottom: 10px;
   border-radius: 10px;
   padding: 10px 15px 0 15px;
@@ -115,7 +115,11 @@ span.glyphicon {
 }
 
 .landing {
+  .row {
+    margin-bottom: 10px;
+  }
   position: fixed;
+  text-align: center;
   width: 400px;
   height: 400px;
   background: rgba(250,250,250,0.9);

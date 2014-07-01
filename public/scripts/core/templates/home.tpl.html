@@ -9,48 +9,28 @@
 </div>
  -->
 
- <div class="container landing-container">
-  <div class="text-center title">
-    <img class="title-photo" src="assets/homeScreenshot.jpg">
-    <div class="title-text">
-      <h1 class="rasr">This is RASR</h1>
-    </div>
-  
-    
-    <div class="welcome-text text-center" ng-show="username">
-      <h2>Welcome: {{ username }}</h2>
-    </div>
-
-    <div class="first-time-texts" ng-hide="username">
-      <div class="row">
-        <div class="col-sm-1">
-        </div>
-        <div class="col-sm-4">
-          <button class="btn btn-block btn-welcome btn-login" ng-click="login()"><h2>Login?</h2></button>
-        </div>
-        <div class="col-sm-2">
-        </div>
-        <div class="col-sm-4">
-          <button class="btn btn-block btn-welcome btn-signup" ng-click="signup()"><h2>Signup!</h2></button>
-        </div>
+<div class="container landing">
+  <div class="row">
+    <h1>RASR</h1>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div ng-show="username">
+        <h2>Welcome: {{ username }}</h2>
+        <button class="btn btn-primary " ng-click="play()"> Play on </button>
+        <button class="btn btn-primary " ui-sref="about">About</button>
+        <button class="btn btn-primary" ng-click="settings()"> Settings </button>
+      </div>
+      <div ng-hide="username">
+        <button class="btn btn-primary" ng-click="login()">Login?</button>
+        <button class="btn btn-primary " ui-sref="about">About</button>
+        <button class="btn btn-primary" ng-click="signup()">Signup!</button>
       </div>
     </div>
   </div>
-
-
-  <div class="welcome" ng-show="username">
-    <div class="row">
-      <div class="col-sm-4 col-md-offset-4">
-        <button class="btn btn-block btn-welcome btn-play" ng-click="play()"> Play on </button>
-        <button class="btn btn-block btn-welcome btn-play" ui-sref="about">About</button>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-sm-5">
-      </div>
-      <div class="col-sm-2">
-        <button class="btn btn-block btn-welcome btn-settings" ng-click="settings()"> Settings </button>
-      </div>
+  <div class="row">
+    <div class="col-md-12">
+      <img src="/assets/screenshots/home.jpg" alt="RASR">
     </div>
   </div>
 </div>

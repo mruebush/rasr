@@ -1,10 +1,12 @@
 (function() {
   "use strict";
-  var app;
+  var app, server;
 
   window.app = app = angular.module("komApp", ["ngCookies", "ngResource", "ngSanitize", "ui.router"]);
 
-  app.constant("SERVER_URL", "http://rasr-server.azurewebsites.net");
+  server = location.origin.indexOf('localhost') !== -1 ? "http://localhost:3000" : "http://rasr-server.azurewebsites.net";
+
+  app.constant("SERVER_URL", server);
 
   app.constant("GET_SCREEN", "/api/screen");
 
