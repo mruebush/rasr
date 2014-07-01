@@ -1,8 +1,8 @@
 # RASR - A HTML5, multiplayer, tilebased game
 
-Cooperative multiplayer game where players can build diverse maps or explore the world and fight creatures. 
+RASR is a cooperative multiplayer game where players can build diverse maps or explore the world and fight creatures. 
 
-We wanted to create an environment where players can express themselves through the art of map editing, while being able to explore and see what other users have created. This was also a good opportunity to integrate a wide range of technologies, from sophisticated frameworks such as Angular and Phaser.io, to cutting edge real-time engines like Socket.io
+We wanted to create an environment where players could express themselves through the art of map editing, while being able to explore and see what other users have created. This was also a good opportunity to integrate a wide range of technologies, from sophisticated frameworks such as Angular and Phaser.io, to cutting edge real-time engines like Socket.io
 
 Players can explore the world, fight creatures, gain rewards, interact with other players and their surroundings.
 They also have the possibility to build and customize the world.
@@ -11,7 +11,9 @@ Using the arrow keys, the player is able to move through their surroundings and 
 
 ## Getting Started
 
-To get you started you can simply clone the rasr and rasr-server repository and install the dependencies with bower and npm
+Our deployed version is up and running at: [http://rasr.azurewebsites.net](http://rasr.azurewebsites.net)
+
+Or if you prefer to run it locally, simply clone the rasr and rasr-server repository and install the dependencies with bower and npm
 
 ### Prerequisites
 
