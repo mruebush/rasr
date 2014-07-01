@@ -174,10 +174,11 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
 
           hero.sprite.facing = hero.facing
           game.physics.arcade.collide(hero.sprite, enemy.sprite, hurtHero, null, hero)
-          game.physics.arcade.collide(hero.arrow.arrows, enemy.sprite, arrowHurt, null, enemy)
+          game.physics.arcade.collide(hero.arrow.arrows, enemy.sprite, arrowHurt, null, enemy, true)
           game.physics.arcade.collide(enemy.sprite, map.collisionLayer)
           enemy.update()
       for player of game.players
+        game.physics.arcade.collide(hero.arrow.arrows, player.sprite, arrowHurt, null, player)
         if player.update then do player.update
 
   hurtHero = (heroSprite, enemySprite) ->
@@ -186,10 +187,10 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
   tileCollision = (arrow, tile) ->
     arrow.kill()
 
-  arrowHurt = (sprite, arrow) ->
+  arrowHurt = (sprite, arrow, enemy = false) ->
     explosion.call(@)
-    @damage()
     arrow.kill()
+    do @damage if enemy
 
   createExplosions = ->
     explosions = game.add.group()
