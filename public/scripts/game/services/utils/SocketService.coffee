@@ -16,7 +16,7 @@ app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
         })
       $('.dropdown-toggle').dropdown()
 
-    game.on 'enterMap', () ->
+    game.on 'enterMap', ->
       game.enemyData = game.mapData.enemies || []
 
       enemies = []
@@ -87,7 +87,6 @@ app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
       return enemy
 
     game.reviveEnemy = (data) ->
-      console.log('enemy revived!');
       game.enemies[data.enemyId] = createEnemy data
 
     _enemyReviveListener = ->
@@ -219,8 +218,6 @@ app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
       if game.players[user]
         do game.players[user].sprite.kill
         delete game.players[user]
-      # else
-      #   do game.hero.sprite.kill
 
     game.message = (message) ->
       socket.emit 'message',
@@ -230,7 +227,6 @@ app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
 
     game.on 'move', (data) ->
       if game.players[data.user]
-        # console.log "#{data.user} moved to #{data.x},#{data.y}"
         game.players[data.user].move data
 
     game.move = (data) ->
