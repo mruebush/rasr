@@ -4,7 +4,7 @@
 
   window.app = app = angular.module("komApp", ["ngCookies", "ngResource", "ngSanitize", "ui.router"]);
 
-  app.constant("SERVER_URL", "http://127.0.0.1:3000");
+  app.constant("SERVER_URL", "http://rasr-server.azurewebsites.net");
 
   app.constant("GET_SCREEN", "/api/screen");
 
