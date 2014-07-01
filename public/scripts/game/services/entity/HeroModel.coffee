@@ -185,23 +185,23 @@ app.factory 'Hero', (Arrow) ->
 
       if Hero.sprite.x < 0 - collisionWidthOffset
         # if game.mapData.leftScreen
-          Hero.sprite.x = (Hero.game.realWidth) - Hero.startOnScreenPos
-          Hero.game.trigger('changeMap', 'left')
+        Hero.sprite.x = (Hero.game.realWidth) - Hero.startOnScreenPos
+        Hero.game.trigger('changeMap', 'left')
 
       if Hero.sprite.x > Hero.game.realWidth + collisionWidthOffset
         # if game.mapData.rightSreen
-          Hero.sprite.x = Hero.startOnScreenPos
-          Hero.game.trigger('changeMap', 'right')
+        Hero.sprite.x = Hero.startOnScreenPos
+        Hero.game.trigger('changeMap', 'right')
 
       if Hero.sprite.y < 0 - collisionHeightOffset
         # if game.mapData.upScreen
-          Hero.sprite.y = Hero.game.realHeight - Hero.startOnScreenPos
-          Hero.game.trigger('changeMap', 'up')
+        Hero.sprite.y = Hero.game.realHeight - Hero.startOnScreenPos
+        Hero.game.trigger('changeMap', 'up')
 
       if Hero.sprite.y > Hero.game.realHeight + collisionHeightOffset
         # if game.mapData.downScreen
-          Hero.sprite.y = Hero.startOnScreenPos
-          Hero.game.trigger('changeMap', 'down')
+        Hero.sprite.y = Hero.startOnScreenPos
+        Hero.game.trigger('changeMap', 'down')
 
       if Hero.upKey.isDown
         Hero.bored = 0
