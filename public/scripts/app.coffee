@@ -5,8 +5,10 @@ window.app = app = angular.module("komApp", [
   "ngSanitize"
   "ui.router"
 ])
-app.constant "SERVER_URL", "http://rasr-server.azurewebsites.net"
-# app.constant "SERVER_URL", "http://rasrapi.azurewebsites.net
+
+server = if location.origin.indexOf('localhost') != -1 then "http://localhost:3000" else "http://rasr-server.azurewebsites.net"
+
+app.constant "SERVER_URL", server
 app.constant "GET_SCREEN", "/api/screen" # api/screen/:screenId
 app.constant "MOVE_SCREEN", "/api/screen/move" # api/screen/move/:direction/:currentScreenId
 app.constant "MAKE_SCREEN", "/api/screen/make" # api/screen/move/:direction/:currentScreenId
