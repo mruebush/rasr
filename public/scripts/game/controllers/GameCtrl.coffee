@@ -20,12 +20,10 @@ app.controller 'GameCtrl', ['$scope', '$window', '$location', 'User', 'Auth', 'M
   $scope.glued = true
 
   $scope.editMap = () ->
-    console.log 'clicked'
     game.logout()
     $location.path("/edit/#{game.mapId}")
 
   $scope.makeMap = (direction) ->
-    # game.logout()
     $scope.borders[direction] = true
     map.game.physics.arcade.checkCollision[direction] = false
     MapAPI.makeMap().get({direction: direction, mapId: map.mapId})
