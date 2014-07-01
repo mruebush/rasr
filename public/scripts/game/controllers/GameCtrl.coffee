@@ -103,6 +103,7 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
     game._createCtrls = _createCtrls
     game.addChat = addChat
     game.digest = digest
+    game.gameOver = gameOver
 
   create = ->
     game.lifebar = game.add.sprite(0, 0, 'lifebar')
@@ -225,6 +226,14 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
 
   digest = ->
     do $scope.$apply
+
+  gameOver = ->
+    socket.emit 'gameOver',
+      user: game.user
+      room: game.mapId
+    $scope.$apply ->
+      $scope.gameOver = true;
+
 
   do initialize
 

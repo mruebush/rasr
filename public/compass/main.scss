@@ -277,6 +277,9 @@ canvas {
 
 #game-canvas {
   clear: both;
+  position: relative;
+  /*background-color: black;*/
+  /*z-index: 1000;*/
 }
 
 .teams {
@@ -287,3 +290,35 @@ canvas {
     -moz-filter: grayscale(100%);
   }
 }
+
+#game-over {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 600px;
+  width: 945px;
+  background-color: black;
+  opacity: 0.2;
+}
+
+.animate.ng-show.ng-show-active {
+  -webkit-transition:all linear 1s;
+  -moz-transition:all linear 1s;
+  -ms-transition:all linear 1s;
+  -o-transition:all linear 1s;
+  transition:all linear 1s;
+  opacity: 0;
+}
+
+.animate.ng-show {
+  opacity:0.6;
+}
+
+.box-show-setup, .box-hide-setup {
+}
+
+.box-show-setup { opacity:0; }
+.box-show-setup.box-show-start { opacity:1; }
+
+.box-hide-setup { opacity:1; }
+.box-hide-setup.box-hide-start { opacity:0; }

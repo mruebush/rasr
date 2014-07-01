@@ -19,6 +19,7 @@ app.factory 'Player', ->
       Player.game.physics.enable(Player.sprite, Player.phaser.Physics.ARCADE)
       Player.sprite.body.collideWorldBounds = true
       Player.sprite.body.bounce.set(1)
+      
       collisionHeight = Hero.sprite.body.sourceHeight * 0.65;
       collisionHeightOffset = Hero.sprite.body.sourceHeight * 0.25;
       collisionWidth = Hero.sprite.body.sourceWidth * 0.75;

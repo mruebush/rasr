@@ -4,7 +4,7 @@ app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
       'sync disconnect on unload': true
     )
 
-    window.socket = socket
+    window.socket = game.socket = socket
     window.players = game.players
 
     mapId = game.mapId
@@ -44,13 +44,6 @@ app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
         do player.sprite.kill
 
       game.players = {}
-
-
-
-    game.gameOver = () ->
-      socket.emit 'gameOver', 
-        user: game.user
-        room: game.mapId
 
     _gameOverListener = () ->
       socket.on 'gameOver', (data) ->

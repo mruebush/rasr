@@ -3,7 +3,13 @@
     <div class="col-xs-9">
       
       <div id="game-container">
-        <div id="game-canvas"></div>
+        <div id="game-canvas">
+          <!-- <div id="game-over" ng-show="gameOver" ng-animate="'box'"></div> -->
+          <div id="game-over" ng-show="gameOver" class="animate"></div>
+          <div id="restart-game" ng-show="gameOver">
+            <button class="btn" ng-click="restart()">RESTART?</button>
+          </div>
+        </div>
       </div>
 
     </div>
@@ -40,7 +46,7 @@
       </div>
       <div class="chatbox">
         <div scroll-glue ng-model="glued" class="messages">
-          <div ng-repeat="chat in chats">{{ chat.user }} [<span class='timestamp'></span>]: {{ chat.message }}</div>
+          <div ng-repeat="chat in chats"><b>{{ chat.user }}</b> [<span class='timestamp'></span>]: {{ chat.message }}</div>
         </div>
         <div class="form-group">
           <form id="sendMessage" ng-submit="sendChat()">
