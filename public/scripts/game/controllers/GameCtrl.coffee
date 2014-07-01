@@ -220,6 +220,11 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
         left: !!data.leftScreen
       for border, value of $scope.borders
         map.game.physics.arcade.checkCollision[border] = !value
+      for dir, value of $scope.borders
+        if value
+          $scope[dir] = "chevron-#{dir}"
+        else
+          $scope[dir] = "plus"
 
   digest = ->
     do $scope.$apply

@@ -1,5 +1,5 @@
 app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
-  return (rootUrl, game, players, Phaser) ->
+  return (rootUrl, game, players, Phaser, $scope) ->
     socket = io.connect(SERVER_URL, 
       'sync disconnect on unload': true
     )
@@ -61,12 +61,10 @@ app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
       socket.emit 'enemyMoving', data
 
     game.on 'addXP', (data) ->
-      console.log 'adding xp'
       game.hero.addXP data
 
     _addXPListener = () ->
       socket.on 'addXP', (data) ->
-        console.log 'addXP', data
         if data.user.username is game.user
           game.trigger 'addXP', data
 
@@ -206,7 +204,6 @@ app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
 
       data.enemies = data.enemies || []
       game.enemies = []
-
 
       for enemyType of data.enemies
         type = data.enemies[enemyType]
