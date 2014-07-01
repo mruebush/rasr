@@ -1,7 +1,7 @@
 'use strict'
 
-app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 'Enemy', 'Player', 'Events', 'Socket', 'PlayerAPI', 'MapAPI', 'SERVER_URL'
- ($scope, $window, User, Auth, Map, Hero, Enemy, Player, Events, Socket, PlayerAPI, MapAPI, SERVER_URL) ->
+app.controller 'GameCtrl', ['$scope', '$window', '$location', 'User', 'Auth', 'Map', 'Hero', 'Enemy', 'Player', 'Events', 'Socket', 'PlayerAPI', 'MapAPI', 'SERVER_URL'
+ ($scope, $window, $location, User, Auth, Map, Hero, Enemy, Player, Events, Socket, PlayerAPI, MapAPI, SERVER_URL) ->
   $scope.currentUser = $window.userData;
   $scope.chats = []
   $scope.sendChat = ->
@@ -21,9 +21,9 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
 
   $scope.editMap = () ->
     game.logout()
+    $location.path("/edit/#{game.mapId}")
 
   $scope.makeMap = (direction) ->
-    # game.logout()
     $scope.borders[direction] = true
     map.game.physics.arcade.checkCollision[direction] = false
     MapAPI.makeMap().get({direction: direction, mapId: map.mapId})
@@ -223,6 +223,11 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
         left: !!data.leftScreen
       for border, value of $scope.borders
         map.game.physics.arcade.checkCollision[border] = !value
+      for dir, value of $scope.borders
+        if value
+          $scope[dir] = "chevron-#{dir}"
+        else
+          $scope[dir] = "plus"
 
   digest = ->
     do $scope.$apply

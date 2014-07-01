@@ -12,7 +12,7 @@ app.factory 'Player', ->
 
     Player.preload = ->
       Player.game.load.atlasXML "player", "assets/player.png", "assets/player.xml"
-      Player.game.load.image 'arrow', 'assets/bullet.png'
+      Player.game.load.image "arrow", 'assets/bullet.png'
 
     Player.create = ->
       Player.sprite = Player.game.add.sprite(Player.meta.x, Player.meta.y, "player")
