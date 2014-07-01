@@ -15,11 +15,23 @@ body {
     background-size: cover;
 }
 
+img {
+  width: 100%;
+}
+
 .container {
   background: white;
   margin-bottom: 10px;
   border-radius: 10px;
-  padding: 10px 15px 0 15px
+  padding: 10px 15px 0 15px;
+  display: table;
+  margin-top: 20px;
+}
+
+.container.about {
+  .row {
+    margin-bottom: 30px;
+  }
 }
 
 .game {
@@ -36,15 +48,6 @@ body {
   right: 0;
   bottom: 0;
   height: 621px;
-}
-
-div.col-md-9 {
-  position: absolute;
-  top: 1.5%;
-}
-
-.controls {
-
 }
 
 div.tooltip.fade.top.in {
@@ -192,10 +195,6 @@ span.glyphicon {
 }
 
 div.input-group {
-  top: 94%;
-  left: 5%;
-  position: absolute;
-  width: 317px;
 }
 
 button.btn.btn-primary {
@@ -220,7 +219,7 @@ button.btn.btn-primary {
 }
 
 .messages {
-  height: 250px;
+  height: 90%;
   width: 100%;
   overflow-y: scroll;
   overflow-x: hidden;
@@ -239,7 +238,7 @@ button.btn.btn-primary {
       text-align: center;
       display: block;
       float: left;
-      width: 75px;
+      width: 30%;
       font-size: 12px;
       padding: 2px 5px;
       background-color: rgb(206, 69, 140);
@@ -251,7 +250,7 @@ button.btn.btn-primary {
         1px 1px 0 #000;  
     }
     .description {
-      width: 236px;
+      width: calc(70% - 5px);
       text-align: center;
       border-radius: 2px;
       display: inline-block;
@@ -265,89 +264,29 @@ button.btn.btn-primary {
 }
 
 span.xp-tag.description {
-  position: absolute;
-  width: 67%;
-  left: 26%;
 }
 
-div.progress {
-  background-color: rgba(250,250,250,0.50);
-  height: 21px;
-  padding: 2px 5px;
-  width: 76%;
+.progress {
+  // padding: 2px 5px;
+  margin-bottom: 0 !important;
 }
 
-div.progress-bar {
-  width: 0%;
+.progress-bar {
   background-color: rgba(202,122,69,1);
-  color: black;
-  height: 21px;
 }
 
-div.sidebar {
-  position: absolute;
-  left: 73%;
-  width: 27%;
-  top: 1.5%;
+.sidebar {
 }
 
-/*.message {
-  text-align: left;
-}
-*/
 .chatToSend {
   border-radius: 3px;
   background-color: rgba(200,200,200,0.1);
 }
 
-/*andrews border stuff*/
 canvas {
   text-align: center;
   border-radius: 5px
 }
-
-/*.border {
-  position: fixed;
-}
-
-.border-top, .border-bottom {
-  width: 900px;
-  height: 50px;
-}
-
-.border-right, .border-left {
-  width: 50px;
-  height: 700px;
-}
-
-.border-top {
-  top: 0;
-  left: 0;
-}
-
-.border-bottom {
-  top: 650px;
-  left: 0;
-}
-
-.border-right {
-  top: 0;
-  left: 850px;
-}
-
-.border-left {
-  top: 0;
-  left: 0;
-}
-*/
-/*.no-bordering-screen {
-  background-color: black;
-}
-*//*
-.hidden {
-  display: inline;
-}
-*/
 .labels-game {
   position: relative;
 }
@@ -369,5 +308,13 @@ canvas {
 
 #game-canvas {
   clear: both;
+}
 
+.teams {
+  img {
+    width: 75%;
+    filter: grayscale(100%);
+    -webkit-filter: grayscale(100%);
+    -moz-filter: grayscale(100%);
+  }
 }
