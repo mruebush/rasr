@@ -15,11 +15,24 @@ body {
     background-size: cover;
 }
 
+img {
+  width: 100%;
+}
+
 .container {
   background: white;
+  // width: 1260px !important;
   margin-bottom: 10px;
   border-radius: 10px;
-  padding: 10px 15px 0 15px
+  padding: 10px 15px 0 15px;
+  display: table;
+  margin-top: 20px;
+}
+
+.container.about {
+  .row {
+    margin-bottom: 30px;
+  }
 }
 
 .game {
@@ -338,5 +351,13 @@ canvas {
 
 #game-canvas {
   clear: both;
+}
 
+.teams {
+  img {
+    width: 75%;
+    filter: grayscale(100%);
+    -webkit-filter: grayscale(100%);
+    -moz-filter: grayscale(100%);
+  }
 }
