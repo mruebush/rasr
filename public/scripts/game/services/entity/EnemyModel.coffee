@@ -51,10 +51,29 @@ app.service 'Enemy', ->
       do Enemy.reportDirection
       Enemy.game.damageEnemy Enemy
 
+      Enemy.healthBar.clear()
+
+      color = switch
+        when Enemy.health < 2 then color = 0xFF0000
+        when Enemy.health < 3 then color = 0xFF9900
+        when Enemy.health < 4 then color = 0x00FF00
+        else 0x009933
+
+      Enemy.healthBar.lineStyle 10, color, 1
+      Enemy.healthBar.moveTo(-10, -30)
+      Enemy.healthBar.lineTo((Enemy.sprite.body.width / 100) * Enemy.health * 20, -30)
+
       return true
 
     Enemy.preload = ->
       Enemy.game.load.atlasXML "enemy", "images/enemy.png", "images/enemy.xml"
+
+    Enemy.attachHealthBar = ->
+      Enemy.healthBar = game.add.graphics 0, 0
+      Enemy.healthBar.lineStyle 10, 0x009933, 1
+      Enemy.healthBar.moveTo(-10, -30)
+      Enemy.healthBar.lineTo(Enemy.sprite.body.width, -30)
+      Enemy.sprite.addChild(Enemy.healthBar)
 
     Enemy.create = ->
       Enemy.sprite = Enemy.game.add.sprite(Enemy.x, Enemy.y, "enemy")
@@ -63,6 +82,9 @@ app.service 'Enemy', ->
       Enemy.sprite.body.collideWorldBounds = true
       Enemy.sprite.body.setSize(Enemy.sprite.body.sourceWidth, Enemy.sprite.body.halfHeight, 0, Enemy.sprite.body.height / 3)
       Enemy.sprite.anchor.setTo(.3, .5)
+      
+      do Enemy.attachHealthBar
+
       Enemy.sprite.animations.add("up", Phaser.Animation.generateFrameNames('enemy_move_up', 0, 10, '.png', 4), 30, false)
       Enemy.sprite.animations.add("left", Phaser.Animation.generateFrameNames('enemy_move_left', 0, 10, '.png', 4), 30, false)
       Enemy.sprite.animations.add("right", Phaser.Animation.generateFrameNames('enemy_move_right', 0, 10, '.png', 4), 30, false)
