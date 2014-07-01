@@ -247,10 +247,10 @@ button.btn.btn-primary {
   }
 }
 
-span.xp-tag {
+span.xp-tag.description {
   position: absolute;
-  width: 100%;
-  left: 14%;
+  width: 67%;
+  left: 26%;
 }
 
 div.progress {
@@ -262,7 +262,7 @@ div.progress {
 
 div.progress-bar {
   width: 0%;
-  background-color: rgba(255,210,180,0.75);
+  background-color: rgba(202,122,69,1);
   color: black;
   height: 21px;
 }
@@ -270,7 +270,8 @@ div.progress-bar {
 div.sidebar {
   position: absolute;
   left: 73%;
-  width: 27%
+  width: 27%;
+  top: 1.5%;
 }
 
 /*.message {

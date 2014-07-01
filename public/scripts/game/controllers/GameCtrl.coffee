@@ -59,7 +59,7 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
           preload: preload
           create: create
           update: update
-          # render : render
+          render : render
         )
         game.players = {}
         $scope.hero = hero = Events(Hero(game, Phaser, playerInfo))
@@ -121,6 +121,7 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
     hero.create()
     game.hero = hero
     game.hero
+    game.hero.attachName(user)
     
     enemies = []
     enemyPositions = {}
