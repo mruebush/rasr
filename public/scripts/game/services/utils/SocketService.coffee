@@ -4,8 +4,8 @@ app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
       'sync disconnect on unload': true
     )
 
-    window.socket = socket
-    window.players = game.players
+    # window.socket = socket
+    # window.players = game.players
 
     mapId = game.mapId
 
@@ -94,7 +94,6 @@ app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
       return enemy
 
     game.reviveEnemy = (data) ->
-      console.log('enemy revived!');
       game.enemies[data.enemyId] = createEnemy data
 
     _enemyReviveListener = ->
