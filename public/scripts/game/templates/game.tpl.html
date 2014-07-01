@@ -35,8 +35,8 @@
       
 
 
-        <div class="stats-item"><span class="meta">SPEED </span><span class="description"> {{ hero.speed }}</span></div>
-        <div class="stats-item"><span class="meta">FIREBALLS </span><span class="description"> {{ hero.numArrowsShot }}</span></div>
+        <div class="stats-item"><span class="meta">SPEED </span><span class="description"> {{ game.hero.speed }}</span></div>
+        <div class="stats-item"><span class="meta">FIREBALLS </span><span class="description"> {{ game.hero.numArrowsShot }}</span></div>
       </div>
       <div class="chatbox">
         <div scroll-glue ng-model="glued" class="messages">
@@ -56,20 +56,37 @@
 
     </div>
 
-  <div class="btn-group top" data-toggle="tooltip" data-placement="top"
-  title="Map Editor">
+<!-- title="Map Editor" data-toggle="tooltip" data-placement="top" -->
+
+  <div class="btn-group top" >
   
-  <button type='button' class='btn btn-default btn-sm dropdown-toggle' data-toggle="dropdown">
+  <button ng-click="editMap()" id="add-here" type='button' class='btn btn-default btn-sm'> 
     <span class='glyphicon glyphicon-globe'></span>
-    <span class="caret"></span>
   </button>
-  <ul class="dropdown-menu" role="menu">
+
+   <button ng-click="makeMap('right')" id="add-right" type='button' class='btn btn-default btn-sm'>
+    <span class='glyphicon glyphicon-{{ right }}'></span>
+  </button>
+
+   <button ng-click="makeMap('top')" id="add-top" type='button' class='btn btn-default btn-sm'>
+      <span class='glyphicon glyphicon-{{ up }}'></span>
+  </button>
+
+   <button ng-click="makeMap('down')" id="add-down" type='button' class='btn btn-default btn-sm'>
+    <span class='glyphicon glyphicon-{{ down }}'></span>
+  </button>
+
+   <button ng-click="makeMap('left')" id="add-left" type='button' class='btn btn-default btn-sm'>
+    <span class='glyphicon glyphicon-{{ left }}'></span>
+  </button>
+
+<!--   <ul class="dropdown-menu" role="menu">
     <li><a ng-hide="borders.up" ng-click="makeMap('top')" href="#">Add top map</a></li>
     <li><a ng-hide="borders.right" ng-click="makeMap('right')" href="#">Add right map</a></li>
     <li><a ng-hide="borders.down" ng-click="makeMap('down')" href="#">Add bottom map</a></li>
     <li><a ng-hide="borders.left" ng-click="makeMap('left')" href="#">Add left map</a></li>
     <li><a href="/edit/{{ map.mapId }}">Edit this map</a></li>
-  </ul>
+  </ul> -->
   
   </div>
 </div>
