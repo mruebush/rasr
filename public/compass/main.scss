@@ -64,9 +64,7 @@ ul.dropdown-menu {
 }
 
 
-#add-here, #add-right {
-  
-  
+#add-here, #add-right, #add-top, #add-down, #add-left {
   border: 0px;
   background: rgba(250,250,250,0.3);
   left: 4%;
@@ -75,14 +73,28 @@ ul.dropdown-menu {
 div.top {
   position: absolute;
   bottom: 11%;
-  left: 3%;
+  left: 5%;
 }
 
 #add-right {
   
   top: 84%;
-  left: 4%;
+  left: 4.5%;
 
+}
+
+#add-top {
+  left: -35.5%;
+  top: -37px;
+}
+
+#add-left {
+  left: -96%;
+}
+
+#add-down {
+  left: -55.5%;
+  bottom: -37px;
 }
 
 button.btn.btn-default.btn-sm.dropdown-toggle {
