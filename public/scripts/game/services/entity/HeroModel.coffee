@@ -24,7 +24,6 @@ app.factory 'Hero', (Arrow) ->
       @renderMissiles Hero.sprite.x, Hero.sprite.y + 60, 0, 32, 350
 
     Hero.addXP = (data) ->
-      console.log data
       @xp = data.user.xp
       @toGo = Math.round(100*Hero.xp / Hero.xpToGo)
       width = "#{@toGo}%"
@@ -81,8 +80,7 @@ app.factory 'Hero', (Arrow) ->
     })
 
     Hero.damage = ->
-      Hero.sprite.animations.play 'damage_down', 15, false
-      console.log(Hero.meta, Hero.meta.health)
+      Hero.sprite.animations.play 'damage_' + Hero.directionFacing, 15, false
       Hero.meta.health--
       heartRemoved = false if @meta.health <= segments
       if @meta.health <= segments and not heartRemoved
@@ -122,7 +120,6 @@ app.factory 'Hero', (Arrow) ->
       Hero.healthBar.lineTo(Hero.sprite.body.width, -10)
       Hero.sprite.addChild(Hero.healthBar)
       
-
     Hero.attachName = (name)->
       style = { font: "15px Arial", align: "center" }
       text = game.add.text 10, -20, name, style
