@@ -69,6 +69,7 @@ app.factory 'Hero', (Arrow) ->
     Hero.rightKey = null
     Hero.spaceBar = null
     Hero.directionFacing = 'down'
+    Hero.died = false
 
     Hero.speed = do Hero.speedCalc
     Hero.fireRate = do Hero.fireRateCalc
@@ -101,6 +102,10 @@ app.factory 'Hero', (Arrow) ->
       Hero.healthBar.lineTo((Hero.sprite.body.width / 100) * @meta.health, -10)
 
       if @meta.health <= 0
+        Hero.sprite.animations.play "die", 15, false
+        Hero.died = true
+        Hero.sprite.body.velocity.x = 0
+        Hero.sprite.body.velocity.y = 0
         do Hero.game.gameOver
 
 
@@ -134,10 +139,10 @@ app.factory 'Hero', (Arrow) ->
 
       do Hero.attachHealthBar
 
-      Hero.sprite.animations.add("down", Phaser.Animation.generateFrameNames('player_walk_down', 0, 11, '.png', 4), 30, false)
-      Hero.sprite.animations.add("left", Phaser.Animation.generateFrameNames('player_walk_left', 0, 11, '.png', 4), 30, false)
-      Hero.sprite.animations.add("right", Phaser.Animation.generateFrameNames('player_walk_right', 0, 11, '.png', 4), 30, false)
-      Hero.sprite.animations.add("up", Phaser.Animation.generateFrameNames('player_walk_up', 0, 11, '.png', 4), 30, false)
+      Hero.sprite.animations.add("down", Phaser.Animation.generateFrameNames('walk_down', 0, 11, '.png', 4), 30, false)
+      Hero.sprite.animations.add("left", Phaser.Animation.generateFrameNames('walk_left', 0, 11, '.png', 4), 30, false)
+      Hero.sprite.animations.add("right", Phaser.Animation.generateFrameNames('walk_right', 0, 11, '.png', 4), 30, false)
+      Hero.sprite.animations.add("up", Phaser.Animation.generateFrameNames('walk_up', 0, 11, '.png', 4), 30, false)
 
       collisionHeight = Hero.sprite.body.sourceHeight * 0.65
       collisionHeightOffset = Hero.sprite.body.sourceHeight * 0.25
@@ -146,25 +151,30 @@ app.factory 'Hero', (Arrow) ->
 
       Hero.sprite.body.setSize(collisionWidth, collisionHeight, collisionWidthOffset, collisionHeightOffset)
 
-      Hero.sprite.animations.add("attack_up", Phaser.Animation.generateFrameNames('player_attack_up', 0, 4, '.png', 4), 15, false)
-      Hero.sprite.animations.add("attack_left", Phaser.Animation.generateFrameNames('player_attack_left', 0, 4, '.png', 4), 15, false)
-      Hero.sprite.animations.add("attack_right", Phaser.Animation.generateFrameNames('player_attack_right', 0, 4, '.png', 4), 15, false)
-      Hero.sprite.animations.add("attack_down", Phaser.Animation.generateFrameNames('player_attack_down', 0, 4, '.png', 4), 15, false)
+      Hero.sprite.animations.add("attack_up", Phaser.Animation.generateFrameNames('attack_up', 0, 4, '.png', 4), 15, false)
+      Hero.sprite.animations.add("attack_left", Phaser.Animation.generateFrameNames('attack_left', 0, 4, '.png', 4), 15, false)
+      Hero.sprite.animations.add("attack_right", Phaser.Animation.generateFrameNames('attack_right', 0, 4, '.png', 4), 15, false)
+      Hero.sprite.animations.add("attack_down", Phaser.Animation.generateFrameNames('attack_down', 0, 4, '.png', 4), 15, false)
 
-      Hero.sprite.animations.add("damage_up", Phaser.Animation.generateFrameNames('player_take_damage_from_up', 0, 10, '.png', 4), 30, false)
-      Hero.sprite.animations.add("damage_left", Phaser.Animation.generateFrameNames('player_take_damage_from_left', 0, 10, '.png', 4), 30, false)
-      Hero.sprite.animations.add("damage_right", Phaser.Animation.generateFrameNames('player_take_damage_from_right', 0, 10, '.png', 4), 30, false)
-      Hero.sprite.animations.add("damage_down", Phaser.Animation.generateFrameNames('player_take_damage_from_down', 0, 10, '.png', 4), 30, false)
+      Hero.sprite.animations.add("damage_up", Phaser.Animation.generateFrameNames('take_damage_from_up', 0, 10, '.png', 4), 30, false)
+      Hero.sprite.animations.add("damage_left", Phaser.Animation.generateFrameNames('take_damage_from_left', 0, 10, '.png', 4), 30, false)
+      Hero.sprite.animations.add("damage_right", Phaser.Animation.generateFrameNames('take_damage_from_right', 0, 10, '.png', 4), 30, false)
+      Hero.sprite.animations.add("damage_down", Phaser.Animation.generateFrameNames('take_damage_from_down', 0, 10, '.png', 4), 30, false)
 
-      Hero.sprite.animations.add("up", Phaser.Animation.generateFrameNames('player_walk_up', 0, 11, '.png', 4), 30, false)
-      Hero.sprite.animations.add("left", Phaser.Animation.generateFrameNames('player_walk_left', 0, 11, '.png', 4), 30, false)
-      Hero.sprite.animations.add("right", Phaser.Animation.generateFrameNames('player_walk_right', 0, 11, '.png', 4), 30, false)
-      Hero.sprite.animations.add("down", Phaser.Animation.generateFrameNames('player_walk_down', 0, 11, '.png', 4), 30, false)
+      Hero.sprite.animations.add("up", Phaser.Animation.generateFrameNames('walk_up', 0, 11, '.png', 4), 30, false)
+      Hero.sprite.animations.add("left", Phaser.Animation.generateFrameNames('walk_left', 0, 11, '.png', 4), 30, false)
+      Hero.sprite.animations.add("right", Phaser.Animation.generateFrameNames('walk_right', 0, 11, '.png', 4), 30, false)
+      Hero.sprite.animations.add("down", Phaser.Animation.generateFrameNames('walk_down', 0, 11, '.png', 4), 30, false)
+
+      Hero.sprite.animations.add("die", Phaser.Animation.generateFrameNames('die_', 1, 5, '.png', 2), 15, false)
+
 
       Hero._setControls()
       Hero.createArrows()
 
     Hero.update = ->
+      if (Hero.died)
+        return
       Hero.sprite.body.velocity.x = 0
       Hero.sprite.body.velocity.y = 0
 
