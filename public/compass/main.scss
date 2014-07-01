@@ -63,22 +63,40 @@ ul.dropdown-menu {
   top: -284%
 }
 
-button.btn.btn-default.btn-sm, div.top {
-  position: absolute;
-  top: 91%;
+
+#add-here, #add-right {
+  
+  
   border: 0px;
   background: rgba(250,250,250,0.3);
-  left: 1.7%;
+  left: 4%;
+}
+
+div.top {
+  position: absolute;
+  bottom: 11%;
+  left: 3%;
+}
+
+#add-right {
+  
+  top: 84%;
+  left: 4%;
+
 }
 
 button.btn.btn-default.btn-sm.dropdown-toggle {
   position: relative;
 }
 
-span.glyphicon.glyphicon-globe {
+span.glyphicon {
   font-size: 1.8em;
   position: relative;
   top: 3px;
+}
+
+.glyphicon-globe {
+  top: 10%;
 }
 
 .landing {
