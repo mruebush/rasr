@@ -63,6 +63,7 @@ app.controller 'GameCtrl', ['$scope', '$window', '$location', 'User', 'Auth', 'M
         )
         game.players = {}
         $scope.hero = hero = Events(Hero(game, Phaser, playerInfo))
+        game.mapData = mapData
         game.rootUrl = rootUrl
         game.enemies = []
         game = Events(game)
@@ -165,9 +166,6 @@ app.controller 'GameCtrl', ['$scope', '$window', '$location', 'User', 'Auth', 'M
     if app.isLoaded
       map.update()
       hero.update()
-      game.physics.arcade.collide(hero.sprite, map.collisionLayer)
-      game.physics.arcade.collide(hero.arrow.arrows, map.collisionLayer, tileCollision)
-      game.physics.arcade.collide(hero.arrow.arrows, hero.sprite, arrowHurt, null, hero)
       for enemy in game.enemies
         if enemy and enemy.alive
           game.layerRendering.addAt(enemy.sprite, 4)
@@ -179,6 +177,9 @@ app.controller 'GameCtrl', ['$scope', '$window', '$location', 'User', 'Auth', 'M
           enemy.update()
       for player of game.players
         if player.update then do player.update
+      game.physics.arcade.collide(hero.sprite, map.collisionLayer)
+      game.physics.arcade.collide(hero.arrow.arrows, map.collisionLayer, tileCollision)
+      game.physics.arcade.collide(hero.arrow.arrows, hero.sprite, arrowHurt, null, hero)
 
   hurtHero = (heroSprite, enemySprite) ->
     @damage()
