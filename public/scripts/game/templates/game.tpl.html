@@ -5,17 +5,16 @@
       <div id="game-container">
         <div id="game-canvas">
           <!-- <div id="game-over" ng-show="gameOver" ng-animate="'box'"></div> -->
-          <div id="game-over" ng-show="gameOver" class="animate"></div>
-          <div id="restart-game" ng-show="gameOver">
-            <button class="btn" ng-click="restart()">RESTART?</button>
-          </div>
+          <div id="game-over" ng-show="gameOver"></div>
+             <div ng-show="gameOver" class="game-over-message">
+              <div>GAME OVER</div>
+              <button class="game-over-btn btn btn-danger" ng-click="restart()">REVIVE?</button>
+            </div>
         </div>
       </div>
 
     </div>
 
-    
-    
     <div class="sidebar col-xs-3">
       <div class="stats">
         <div class="stats-item">
@@ -23,9 +22,7 @@
           <span class="description"> {{ hero.meta.username }}</span>
         </div>
 
-
         <div class="stats-item"><span class="meta">LEVEL </span><span class="description"> {{ hero.level }}</span></div>
-
 
       <div class="stats-item">
         <span class="meta">
@@ -74,7 +71,7 @@
     <span class='glyphicon glyphicon-{{ right }}'></span>
   </button>
 
-   <button ng-click="makeMap('top')" id="add-top" type='button' class='btn btn-default btn-sm'>
+   <button ng-click="makeMap('up')" id="add-up" type='button' class='btn btn-default btn-sm'>
       <span class='glyphicon glyphicon-{{ up }}'></span>
   </button>
 
@@ -85,22 +82,6 @@
    <button ng-click="makeMap('left')" id="add-left" type='button' class='btn btn-default btn-sm'>
     <span class='glyphicon glyphicon-{{ left }}'></span>
   </button>
-
-<!--   <ul class="dropdown-menu" role="menu">
-    <li><a ng-hide="borders.up" ng-click="makeMap('top')" href="#">Add top map</a></li>
-    <li><a ng-hide="borders.right" ng-click="makeMap('right')" href="#">Add right map</a></li>
-    <li><a ng-hide="borders.down" ng-click="makeMap('down')" href="#">Add bottom map</a></li>
-    <li><a ng-hide="borders.left" ng-click="makeMap('left')" href="#">Add left map</a></li>
-    <li><a href="/edit/{{ map.mapId }}">Edit this map</a></li>
-  </ul> -->
   
   </div>
 </div>
-
- <!--        <button class="btn btn-danger left createables" ng-hide="borders.left" ng-click="makeMap('left')">Create new screen to the left</button> -->
-        <!-- <button class="btn btn-danger up createables" ng-hide="borders.up" ng-click="makeMap('up')">Create new screen above</button> -->
-        <!-- <button class="btn btn-danger right createables" ng-hide="borders.right" ng-click="makeMap('right')">Create new screen to the right</button> -->
-        <!-- <button class="btn btn-danger down createables" ng-hide="borders.down" ng-click="makeMap('down')">Create new screen below</button> -->
-
-
-
