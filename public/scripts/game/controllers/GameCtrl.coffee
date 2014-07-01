@@ -1,7 +1,7 @@
 'use strict'
 
-app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 'Enemy', 'Player', 'Events', 'Socket', 'PlayerAPI', 'MapAPI', 'SERVER_URL'
- ($scope, $window, User, Auth, Map, Hero, Enemy, Player, Events, Socket, PlayerAPI, MapAPI, SERVER_URL) ->
+app.controller 'GameCtrl', ['$scope', '$window', '$location', 'User', 'Auth', 'Map', 'Hero', 'Enemy', 'Player', 'Events', 'Socket', 'PlayerAPI', 'MapAPI', 'SERVER_URL'
+ ($scope, $window, $location, User, Auth, Map, Hero, Enemy, Player, Events, Socket, PlayerAPI, MapAPI, SERVER_URL) ->
   $scope.currentUser = $window.userData;
   $scope.chats = []
   $scope.sendChat = ->
@@ -20,7 +20,9 @@ app.controller 'GameCtrl', ['$scope', '$window', 'User', 'Auth', 'Map', 'Hero', 
   $scope.glued = true
 
   $scope.editMap = () ->
+    console.log 'clicked'
     game.logout()
+    $location.path("/edit/#{game.mapId}")
 
   $scope.makeMap = (direction) ->
     # game.logout()
