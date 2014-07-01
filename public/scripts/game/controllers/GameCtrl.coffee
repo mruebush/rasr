@@ -25,8 +25,20 @@ app.controller 'GameCtrl', ['$scope', '$window', '$state', '$stateParams', '$loc
 
   $scope.makeMap = (direction) ->
     $scope.borders[direction] = true
+    $scope[direction] = "chevron-#{direction}"
+    $(".btn#{direction}").prop('disabled', true)
     map.game.physics.arcade.checkCollision[direction] = false
     MapAPI.makeMap().get({direction: direction, mapId: map.mapId})
+    # if direction is 'leftScreen'
+    #   game.mapData.leftScreen = true
+    # if direction is 'rightScreen'
+    #   game.mapData.rightScreen = true
+    # if direction is 'upScreen'
+    #   game.mapData.upScreen = true
+    # if direction is 'downScreen'
+    #   game.mapData.downScreen = true
+
+
 
   $scope.restart = ->
     game.hero.died = false
@@ -43,7 +55,7 @@ app.controller 'GameCtrl', ['$scope', '$window', '$state', '$stateParams', '$loc
     game.trigger 'login'
 
   app = Events({})
-  window.game = $scope.game = game = null
+  $scope.game = game = null
   hero = null
   map = null
   # game.players = {}
@@ -77,6 +89,7 @@ app.controller 'GameCtrl', ['$scope', '$window', '$state', '$stateParams', '$loc
         )
         game.players = {}
         $scope.hero = hero = Events(Hero(game, Phaser, playerInfo))
+        game.mapData = mapData
         game.rootUrl = rootUrl
         game.enemies = []
         game = Events(game)
@@ -112,7 +125,7 @@ app.controller 'GameCtrl', ['$scope', '$window', '$state', '$stateParams', '$loc
     app.trigger 'create'
     app.isLoaded = true
 
-    window.game = game
+    # window.game = game
     game.hero = hero
     game._createCtrls = _createCtrls
     game.addChat = addChat
@@ -180,9 +193,6 @@ app.controller 'GameCtrl', ['$scope', '$window', '$state', '$stateParams', '$loc
     if app.isLoaded
       map.update()
       hero.update()
-      game.physics.arcade.collide(hero.sprite, map.collisionLayer)
-      game.physics.arcade.collide(hero.arrow.arrows, map.collisionLayer, tileCollision)
-      game.physics.arcade.collide(hero.arrow.arrows, hero.sprite, arrowHurt, null, hero)
       for enemy in game.enemies
         if enemy and enemy.alive
           game.layerRendering.addAt(enemy.sprite, 4)
@@ -195,6 +205,9 @@ app.controller 'GameCtrl', ['$scope', '$window', '$state', '$stateParams', '$loc
       for player of game.players
         game.physics.arcade.collide(hero.arrow.arrows, player.sprite, arrowHurt, null, player)
         if player.update then do player.update
+      game.physics.arcade.collide(hero.sprite, map.collisionLayer)
+      game.physics.arcade.collide(hero.arrow.arrows, map.collisionLayer, tileCollision)
+      game.physics.arcade.collide(hero.arrow.arrows, hero.sprite, arrowHurt, null, hero)
 
   hurtHero = (heroSprite, enemySprite) ->
     @damage()
@@ -240,8 +253,11 @@ app.controller 'GameCtrl', ['$scope', '$window', '$state', '$stateParams', '$loc
       for dir, value of $scope.borders
         if value
           $scope[dir] = "chevron-#{dir}"
+          enable = true
         else
           $scope[dir] = "plus"
+          enable = false
+        $(".btn#{dir}").prop('disabled', enable)
 
   digest = ->
     do $scope.$apply
