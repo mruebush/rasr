@@ -25,11 +25,13 @@ app.controller 'GameCtrl', ['$scope', '$window', '$location', 'User', 'Auth', 'M
 
   $scope.makeMap = (direction) ->
     $scope.borders[direction] = true
+    $scope[direction] = "chevron-#{direction}"
     map.game.physics.arcade.checkCollision[direction] = false
     MapAPI.makeMap().get({direction: direction, mapId: map.mapId})
 
+
   app = Events({})
-  window.game = $scope.game = game = null
+  $scope.game = game = null
   hero = null
   map = null
   # game.players = {}
@@ -98,7 +100,7 @@ app.controller 'GameCtrl', ['$scope', '$window', '$location', 'User', 'Auth', 'M
     app.trigger 'create'
     app.isLoaded = true
 
-    window.game = game
+    # window.game = game
     game.hero = hero
     game._createCtrls = _createCtrls
     game.addChat = addChat
