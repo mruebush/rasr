@@ -4,7 +4,7 @@
 
   window.app = app = angular.module("komApp", ["ngCookies", "ngResource", "ngSanitize", "ui.router"]);
 
-  app.constant("SERVER_URL", "http://10.4.30.248:3000");
+  app.constant("SERVER_URL", "http://localhost:3000");
 
   app.constant("GET_SCREEN", "/api/screen");
 

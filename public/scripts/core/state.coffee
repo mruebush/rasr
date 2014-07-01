@@ -17,8 +17,12 @@ app.config ($stateProvider, $locationProvider, $httpProvider, $urlRouterProvider
     url: "/signup"
     templateUrl: "/js/core/templates/signup.tpl.html"
     controller: "SignupCtrl"
-  ).state "settings",
+  ).state("settings",
     url: "/settings"
     templateUrl: "/js/core/templates/settings.tpl.html"
     controller: "SettingsCtrl"
     authenticate: true
+  ).state "about",
+    url: "/about"
+    templateUrl: "/js/core/templates/about.tpl.html"
+
