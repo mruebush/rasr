@@ -70,6 +70,8 @@ app.factory 'Hero', (Arrow) ->
     Hero.spaceBar = null
     Hero.directionFacing = 'down'
     Hero.died = false
+    Hero.bored = 0
+    Hero.veryBored = 0
 
     Hero.speed = do Hero.speedCalc
     Hero.fireRate = do Hero.fireRateCalc
@@ -167,8 +169,11 @@ app.factory 'Hero', (Arrow) ->
       Hero.sprite.animations.add("down", Phaser.Animation.generateFrameNames('walk_down', 0, 11, '.png', 4), 30, false)
 
       Hero.sprite.animations.add("die", Phaser.Animation.generateFrameNames('die_', 1, 5, '.png', 2), 15, false)
+      Hero.sprite.animations.add("bored", Phaser.Animation.generateFrameNames('bored_', 1, 4, '.png', 2), 5, false)
+      Hero.sprite.animations.add("very_bored", Phaser.Animation.generateFrameNames('very_bored_', 1, 9, '.png', 2), 5, false)
 
 
+      Hero.sprite.frameName = "bored_04.png"
       Hero._setControls()
       Hero.createArrows()
 
@@ -195,6 +200,8 @@ app.factory 'Hero', (Arrow) ->
         Hero.game.trigger('changeMap', 'down')
 
       if Hero.upKey.isDown
+        Hero.bored = 0
+        Hero.veryBored = 0
         Hero.sprite.body.velocity.y = -Hero.speed
         Hero.sprite.animations.play "up", 30, false
         Hero.directionFacing = 'up'
@@ -203,6 +210,8 @@ app.factory 'Hero', (Arrow) ->
           x: Hero.sprite.x
           y: Hero.sprite.y
       else if Hero.downKey.isDown
+        Hero.bored = 0
+        Hero.veryBored = 0
         Hero.sprite.body.velocity.y = Hero.speed
         Hero.sprite.animations.play "down", 30, false
         Hero.directionFacing = 'down'
@@ -211,6 +220,8 @@ app.factory 'Hero', (Arrow) ->
           x: Hero.sprite.x
           y: Hero.sprite.y
       else if Hero.leftKey.isDown
+        Hero.bored = 0
+        Hero.veryBored = 0
         Hero.sprite.body.velocity.x = -Hero.speed
         Hero.sprite.animations.play "left", 30, false
         Hero.directionFacing = 'left'
@@ -219,6 +230,8 @@ app.factory 'Hero', (Arrow) ->
          x: Hero.sprite.x
          y: Hero.sprite.y
       else if Hero.rightKey.isDown
+        Hero.bored = 0
+        Hero.veryBored = 0
         Hero.sprite.body.velocity.x = Hero.speed
         Hero.sprite.animations.play "right", 30, false
         Hero.directionFacing = 'right'
@@ -227,9 +240,20 @@ app.factory 'Hero', (Arrow) ->
           x: Hero.sprite.x
           y: Hero.sprite.y
       else if Hero.spaceBar.isDown
+        Hero.bored = 0
+        Hero.veryBored = 0
         Hero.sprite.animations.play "attack_#{Hero.directionFacing}", 15, false
         Hero.fire();
-
+      else
+        Hero.bored += 1
+        if Hero.veryBored >= 3
+          Hero.sprite.animations.play "very_bored", 5, false
+          Hero.veryBored = 0
+          Hero.bored = 0
+        else if Hero.bored >= 300
+          Hero.sprite.animations.play "bored", 5, false
+          Hero.bored = 0
+          Hero.veryBored +=1
       # Hero.sprite.bringToTop()
 
       return
