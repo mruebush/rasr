@@ -6,6 +6,8 @@
 
   app.constant("SERVER_URL", "http://rasr-server.azurewebsites.net");
 
+  app.constant("SERVER_URL", "localhost:3000");
+
   app.constant("GET_SCREEN", "/api/screen");
 
   app.constant("MOVE_SCREEN", "/api/screen/move");
