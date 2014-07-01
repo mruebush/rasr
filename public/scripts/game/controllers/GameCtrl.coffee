@@ -26,6 +26,7 @@ app.controller 'GameCtrl', ['$scope', '$window', '$location', 'User', 'Auth', 'M
   $scope.makeMap = (direction) ->
     $scope.borders[direction] = true
     $scope[direction] = "chevron-#{direction}"
+    $(".btn#{direction}").prop('disabled', true)
     map.game.physics.arcade.checkCollision[direction] = false
     MapAPI.makeMap().get({direction: direction, mapId: map.mapId})
 
@@ -226,8 +227,11 @@ app.controller 'GameCtrl', ['$scope', '$window', '$location', 'User', 'Auth', 'M
       for dir, value of $scope.borders
         if value
           $scope[dir] = "chevron-#{dir}"
+          enable = true
         else
           $scope[dir] = "plus"
+          enable = false
+        $(".btn#{dir}").prop('disabled', enable)
 
   digest = ->
     do $scope.$apply
