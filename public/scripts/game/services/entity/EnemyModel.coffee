@@ -49,7 +49,7 @@ app.service 'Enemy', ->
 
     Enemy.damage = ->
       do Enemy.reportDirection
-      Enemy.game.damageEnemy Enemy
+      Enemy.game.damageEnemy @
 
       Enemy.healthBar.clear()
 
@@ -61,7 +61,7 @@ app.service 'Enemy', ->
 
       Enemy.healthBar.lineStyle 10, color, 1
       Enemy.healthBar.moveTo(-10, -30)
-      Enemy.healthBar.lineTo((Enemy.sprite.body.width / 100) * Enemy.health * 20, -30)
+      Enemy.healthBar.lineTo((Enemy.sprite.body.width / 100) * Enemy.health * 10, -30)
 
       return true
 
@@ -72,7 +72,7 @@ app.service 'Enemy', ->
       Enemy.healthBar = game.add.graphics 0, 0
       Enemy.healthBar.lineStyle 10, 0x009933, 1
       Enemy.healthBar.moveTo(-10, -30)
-      Enemy.healthBar.lineTo(Enemy.sprite.body.width, -30)
+      Enemy.healthBar.lineTo(Enemy.sprite.body.width / 2, -30)
       Enemy.sprite.addChild(Enemy.healthBar)
 
     Enemy.create = ->
