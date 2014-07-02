@@ -5,8 +5,8 @@
       <div id="game-container">
         <div id="game-canvas">
           <!-- <div id="game-over" ng-show="gameOver" ng-animate="'box'"></div> -->
-          <div id="game-over" ng-show="gameOver"></div>
-             <div ng-show="gameOver" class="game-over-message">
+          <div id="game-over" ng-show="hero.gameOver"></div>
+             <div ng-show="hero.gameOver" class="game-over-message">
               <div>GAME OVER</div>
               <button class="game-over-btn btn btn-danger" ng-click="restart()">REVIVE?</button>
             </div>

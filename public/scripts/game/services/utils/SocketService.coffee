@@ -1,5 +1,5 @@
 app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
-  return (rootUrl, game, players, Phaser, $scope) ->
+  return (rootUrl, game, players, Phaser) ->
     socket = io.connect(SERVER_URL, 
       'sync disconnect on unload': true
     )
@@ -233,6 +233,13 @@ app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
         room: game.mapId
         x: data.x
         y: data.y
+
+    game.gameOver = ->
+      socket.emit 'gameOver',
+        user: game.user
+        room: game.mapId
+      game.hero.gameOver = true;
+      do game.digest
 
     _moveListener = (user) ->
       socket.on 'move', (data) ->
