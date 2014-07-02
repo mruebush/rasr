@@ -3,13 +3,18 @@
     <div class="col-xs-9">
       
       <div id="game-container">
-        <div id="game-canvas"></div>
+        <div id="game-canvas">
+          <!-- <div id="game-over" ng-show="gameOver" ng-animate="'box'"></div> -->
+          <div id="game-over" ng-show="hero.gameOver"></div>
+             <div ng-show="hero.gameOver" class="game-over-message">
+              <div>GAME OVER</div>
+              <button class="game-over-btn btn btn-danger" ng-click="restart()">REVIVE?</button>
+            </div>
+        </div>
       </div>
 
     </div>
 
-    
-    
     <div class="sidebar col-xs-3">
       <div class="stats">
         <div class="stats-item">
@@ -17,9 +22,7 @@
           <span class="description"> {{ hero.meta.username }}</span>
         </div>
 
-
         <div class="stats-item"><span class="meta">LEVEL </span><span class="description"> {{ hero.level }}</span></div>
-
 
       <div class="stats-item">
         <span class="meta">
@@ -40,7 +43,7 @@
       </div>
       <div class="chatbox">
         <div scroll-glue ng-model="glued" class="messages">
-          <div ng-repeat="chat in chats">{{ chat.user }} [<span class='timestamp'></span>]: {{ chat.message }}</div>
+          <div ng-repeat="chat in chats"><b>{{ chat.user }}</b> [<span class='timestamp'></span>]: {{ chat.message }}</div>
         </div>
         <div class="form-group">
           <form id="sendMessage" ng-submit="sendChat()">
@@ -68,7 +71,7 @@
     <span class='glyphicon glyphicon-{{ right }}'></span>
   </button>
 
-   <button ng-click="makeMap('up')" id="create-top" type='button' class='btn btn-default btn-sm btnup'>
+   <button ng-click="makeMap('up')" id="add-up" type='button' class='btn btn-default btn-sm'>
       <span class='glyphicon glyphicon-{{ up }}'></span>
   </button>
 
@@ -79,14 +82,6 @@
    <button ng-click="makeMap('left')" id="add-left" type='button' class='btn btn-default btn-sm btnleft'>
     <span class='glyphicon glyphicon-{{ left }}'></span>
   </button>
- 
+
   </div>
 </div>
-
- <!--        <button class="btn btn-danger left createables" ng-hide="borders.left" ng-click="makeMap('left')">Create new screen to the left</button> -->
-        <!-- <button class="btn btn-danger up createables" ng-hide="borders.up" ng-click="makeMap('up')">Create new screen above</button> -->
-        <!-- <button class="btn btn-danger right createables" ng-hide="borders.right" ng-click="makeMap('right')">Create new screen to the right</button> -->
-        <!-- <button class="btn btn-danger down createables" ng-hide="borders.down" ng-click="makeMap('down')">Create new screen below</button> -->
-
-
-

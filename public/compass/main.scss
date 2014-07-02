@@ -67,7 +67,7 @@ ul.dropdown-menu {
 }
 
 
-#add-here, #add-right, #create-top, #add-down, #add-left {
+#add-here, #add-right, #add-up, #add-down, #add-left {
   border: 0px;
   background: rgba(250,250,250,0.3);
   left: 4%;
@@ -86,7 +86,7 @@ div.top {
 
 }
 
-#create-top {
+#add-up {
   left: -35.5%;
   top: -37px;
 }
@@ -120,8 +120,8 @@ span.glyphicon {
   }
   position: fixed;
   text-align: center;
-  width: 400px;
-  height: 400px;
+  width: 500px;
+  height: 500px;
   background: rgba(250,250,250,0.9);
   border-radius: 10px;
   top:0;right:0;bottom:0;left:0;
@@ -208,6 +208,7 @@ button.btn.btn-primary {
   text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
 
 }
+
 
 .chatbox {
   height: 485px;
@@ -312,6 +313,9 @@ canvas {
 
 #game-canvas {
   clear: both;
+  position: relative;
+  /*background-color: black;*/
+  /*z-index: 1000;*/
 }
 
 .teams {
@@ -321,4 +325,31 @@ canvas {
     -webkit-filter: grayscale(100%);
     -moz-filter: grayscale(100%);
   }
+}
+
+#game-over {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 600px;
+  width: 945px;
+  background-color: black;
+  opacity: 0.6;
+}
+
+.game-over-message {
+  font-family: 'Audiowide', Rockwell, Monaco, monospace;
+  position: absolute;
+  top: 40%;
+  left: 40%;
+  color: white;
+}
+
+.game-over-btn {
+  margin: 20px;
+}
+
+.github {
+  width: 17%;
+  z-index: 100;
 }

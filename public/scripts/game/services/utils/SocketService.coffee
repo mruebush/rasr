@@ -1,11 +1,8 @@
 app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
-  return (rootUrl, game, players, Phaser, $scope) ->
+  return (rootUrl, game, players, Phaser) ->
     socket = io.connect(SERVER_URL, 
       'sync disconnect on unload': true
     )
-
-    # window.socket = socket
-    # window.players = game.players
 
     mapId = game.mapId
 
@@ -16,7 +13,7 @@ app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
         })
       $('.dropdown-toggle').dropdown()
 
-    game.on 'enterMap', () ->
+    game.on 'enterMap', ->
       game.enemyData = game.mapData.enemies || []
 
       enemies = []
@@ -44,13 +41,6 @@ app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
         do player.sprite.kill
 
       game.players = {}
-
-
-
-    game.gameOver = () ->
-      socket.emit 'gameOver', 
-        user: game.user
-        room: game.mapId
 
     _gameOverListener = () ->
       socket.on 'gameOver', (data) ->
@@ -225,8 +215,6 @@ app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
       if game.players[user]
         do game.players[user].sprite.kill
         delete game.players[user]
-      # else
-      #   do game.hero.sprite.kill
 
     game.message = (message) ->
       socket.emit 'message',
@@ -236,7 +224,6 @@ app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
 
     game.on 'move', (data) ->
       if game.players[data.user]
-        # console.log "#{data.user} moved to #{data.x},#{data.y}"
         game.players[data.user].move data
 
     game.move = (data) ->
@@ -246,6 +233,13 @@ app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
         room: game.mapId
         x: data.x
         y: data.y
+
+    game.gameOver = ->
+      socket.emit 'gameOver',
+        user: game.user
+        room: game.mapId
+      game.hero.gameOver = true;
+      do game.digest
 
     _moveListener = (user) ->
       socket.on 'move', (data) ->
