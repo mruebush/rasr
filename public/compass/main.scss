@@ -19,6 +19,26 @@ img {
   width: 100%;
 }
 
+ul.unstyled {
+  list-style: none;
+}
+
+li > span.glyphicon {
+  font-size: 0.5em;
+}
+
+.sean {
+  position: absolute;
+  top: 117%;
+  left: 20%;   
+}
+
+.name {
+  position: absolute;
+  top: 110%;
+  left: 15%; 
+}
+
 .container {
   background: rgba(255,255,255,.8);
   margin-bottom: 10px;
@@ -67,7 +87,7 @@ ul.dropdown-menu {
 }
 
 
-#add-here, #add-right, #add-up, #add-down, #add-left {
+#add-here, #add-right, #create-up, #add-down, #add-left {
   border: 0px;
   background: rgba(250,250,250,0.3);
   left: 4%;
@@ -86,7 +106,7 @@ div.top {
 
 }
 
-#add-up {
+#create-up {
   left: -35.5%;
   top: -37px;
 }
