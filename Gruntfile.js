@@ -131,4 +131,10 @@ module.exports = function (grunt) {
     'ngmin',
     'uglify'
   ]);
+
+  grunt.registerTask('deploy', [
+    'clean:dist',
+    'coffee',
+    'concat'
+  ]);
 };
