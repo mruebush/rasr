@@ -71,12 +71,10 @@ app.service 'Map', (MapAPI) ->
     Map.reload = (direction) ->
       layer.destroy() for layer in Map.layers
       Map.layers = []
+
       loader = new Map.Phaser.Loader(Map.game)
       Map.reloadMap(loader, direction)
 
     Map.update = ->
-
-    Map._makeMap = (direction, mapId) ->
-      MapAPI.makeMap().get({direction: direction, mapId: mapId})
-
+      
     return Map
