@@ -56,7 +56,7 @@ app.factory 'Hero', (Arrow) ->
     Hero.phaser = phaser
     Hero.meta = meta
     Hero.sprite = null
-    Hero.startOnScreenPos = 10
+    Hero.startOnScreenPos = 20
     Hero.png = meta.png
     Hero.level = meta.level
     Hero.dmg = meta.dmg
@@ -184,24 +184,24 @@ app.factory 'Hero', (Arrow) ->
       Hero.sprite.body.velocity.y = 0
 
       if Hero.sprite.x < 0 - collisionWidthOffset
-        # if game.mapData.leftScreen
-        Hero.sprite.x = (Hero.game.realWidth) - Hero.startOnScreenPos
-        Hero.game.trigger('changeMap', 'left')
+        if game.mapData.leftScreen
+          Hero.sprite.x = (Hero.game.realWidth) - Hero.startOnScreenPos
+          Hero.game.trigger('changeMap', 'left')
 
       if Hero.sprite.x > Hero.game.realWidth + collisionWidthOffset
-        # if game.mapData.rightSreen
-        Hero.sprite.x = Hero.startOnScreenPos
-        Hero.game.trigger('changeMap', 'right')
+        if game.mapData.rightScreen
+          Hero.sprite.x = Hero.startOnScreenPos
+          Hero.game.trigger('changeMap', 'right')
 
       if Hero.sprite.y < 0 - collisionHeightOffset
-        # if game.mapData.upScreen
-        Hero.sprite.y = Hero.game.realHeight - Hero.startOnScreenPos
-        Hero.game.trigger('changeMap', 'up')
+        if game.mapData.upScreen
+          Hero.sprite.y = Hero.game.realHeight - Hero.startOnScreenPos
+          Hero.game.trigger('changeMap', 'up')
 
       if Hero.sprite.y > Hero.game.realHeight + collisionHeightOffset
-        # if game.mapData.downScreen
-        Hero.sprite.y = Hero.startOnScreenPos
-        Hero.game.trigger('changeMap', 'down')
+        if game.mapData.downScreen
+          Hero.sprite.y = Hero.startOnScreenPos
+          Hero.game.trigger('changeMap', 'down')
 
       if Hero.upKey.isDown
         Hero.bored = 0

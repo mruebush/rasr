@@ -29,16 +29,7 @@ app.controller 'GameCtrl', ['$scope', '$window', '$location', 'User', 'Auth', 'M
     $(".btn#{direction}").prop('disabled', true)
     map.game.physics.arcade.checkCollision[direction] = false
     MapAPI.makeMap().get({direction: direction, mapId: map.mapId})
-    # if direction is 'leftScreen'
-    #   game.mapData.leftScreen = true
-    # if direction is 'rightScreen'
-    #   game.mapData.rightScreen = true
-    # if direction is 'upScreen'
-    #   game.mapData.upScreen = true
-    # if direction is 'downScreen'
-    #   game.mapData.downScreen = true
-
-
+    game.mapData[direction + 'Screen'] = true
 
   app = Events({})
   $scope.game = game = null
