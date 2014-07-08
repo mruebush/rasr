@@ -135,6 +135,7 @@ module.exports = function (grunt) {
   grunt.registerTask('deploy', [
     'clean:dist',
     'coffee',
-    'concat'
+    'compass',
+    'copy'
   ]);
 };
