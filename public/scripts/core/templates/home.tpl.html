@@ -1,13 +1,6 @@
-<!-- <div ng-include="'partials/navbar'"></div> -->
 
-<!-- <div class="landing">
-  <h1>RASR</h1>
-  <p>RASR is an open source world building game. Finally, you can build the world the way you wanted to with your peers. It's a 
-      great way to build new friendships and explore the world!</p>
-  <p>Brewed in San Francisco, by Sean, Roberto, Andrew, and Romain. Built with <a href="http://phaser.io">Phaser</a>.</p>
-  <a href="/game" class="btn btn-primary">Play!</a>
-</div>
- -->
+<a href="https://github.com/rising-thunder/rasr"><img class="github" style="position: fixed; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/e7bbb0521b397edbd5fe43e7f760759336b5e05f/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677265656e5f3030373230302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png"></a>
+
 
 <div class="container landing">
   <div class="row">
@@ -17,14 +10,14 @@
     <div class="col-md-12">
       <div ng-show="username">
         <h2>Welcome: {{ username }}</h2>
-        <button class="btn btn-primary " ng-click="play()"> Play on </button>
-        <button class="btn btn-primary " ui-sref="about">About</button>
-        <button class="btn btn-primary" ng-click="settings()"> Settings </button>
+        <button class="btn btn-primary btn-lg" ng-click="play()"> Play on </button>
+        <button class="btn btn-primary btn-lg" ui-sref="about">About</button>
+        <button class="btn btn-primary btn-lg" ng-click="settings()"> Settings </button>
       </div>
       <div ng-hide="username">
-        <button class="btn btn-primary" ng-click="login()">Login?</button>
-        <button class="btn btn-primary " ui-sref="about">About</button>
-        <button class="btn btn-primary" ng-click="signup()">Signup!</button>
+        <button class="btn btn-primary btn-lg" ng-click="login()">Login?</button>
+        <button class="btn btn-primary btn-lg" ui-sref="about">About</button>
+        <button class="btn btn-primary btn-lg" ng-click="signup()">Signup!</button>
       </div>
     </div>
   </div>

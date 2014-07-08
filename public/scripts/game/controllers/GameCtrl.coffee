@@ -1,7 +1,7 @@
 'use strict'
 
-app.controller 'GameCtrl', ['$scope', '$window', '$location', 'User', 'Auth', 'Map', 'Hero', 'Enemy', 'Player', 'Events', 'Socket', 'PlayerAPI', 'MapAPI', 'SERVER_URL'
- ($scope, $window, $location, User, Auth, Map, Hero, Enemy, Player, Events, Socket, PlayerAPI, MapAPI, SERVER_URL) ->
+app.controller 'GameCtrl', ['$scope', '$window', '$state', '$stateParams', '$location', 'User', 'Auth', 'Map', 'Hero', 'Enemy', 'Player', 'Events', 'Socket', 'PlayerAPI', 'MapAPI', 'SERVER_URL'
+ ($scope, $window, $state, $stateParams, $location, User, Auth, Map, Hero, Enemy, Player, Events, Socket, PlayerAPI, MapAPI, SERVER_URL) ->
   $scope.currentUser = $window.userData;
   $scope.chats = []
   $scope.sendChat = ->
@@ -30,6 +30,20 @@ app.controller 'GameCtrl', ['$scope', '$window', '$location', 'User', 'Auth', 'M
     map.game.physics.arcade.checkCollision[direction] = false
     MapAPI.makeMap().get({direction: direction, mapId: map.mapId})
     game.mapData[direction + 'Screen'] = true
+
+  $scope.restart = ->
+    game.hero.died = false
+    game.hero.gameOver = false
+    game.hero.meta.health = 101
+    do game.hero.damage
+    game.hero.xp = Math.floor(game.hero.xp * 0.2)
+    game.hero.toGo = Math.round(100*game.hero.xp / game.hero.xpToGo)
+    initPos = 95
+    offset = 28
+    y = 13
+    for i in [0...5]
+      game.hearts.add(game.add.sprite(initPos + offset*i, y, 'heart'))
+    game.trigger 'login'
 
   app = Events({})
   $scope.game = game = null
@@ -62,7 +76,7 @@ app.controller 'GameCtrl', ['$scope', '$window', '$location', 'User', 'Auth', 'M
           preload: preload
           create: create
           update: update
-          render : render
+          # render: render
         )
         game.players = {}
         $scope.hero = hero = Events(Hero(game, Phaser, playerInfo))
@@ -179,6 +193,7 @@ app.controller 'GameCtrl', ['$scope', '$window', '$location', 'User', 'Auth', 'M
           game.physics.arcade.collide(enemy.sprite, map.collisionLayer)
           enemy.update()
       for player of game.players
+        game.physics.arcade.collide(hero.arrow.arrows, player.sprite, arrowHurt, null, player)
         if player.update then do player.update
       game.physics.arcade.collide(hero.sprite, map.collisionLayer)
       game.physics.arcade.collide(hero.arrow.arrows, map.collisionLayer, tileCollision)
@@ -192,8 +207,8 @@ app.controller 'GameCtrl', ['$scope', '$window', '$location', 'User', 'Auth', 'M
 
   arrowHurt = (sprite, arrow) ->
     explosion.call(@)
-    @damage()
     arrow.kill()
+    do @damage if @damage
 
   createExplosions = ->
     explosions = game.add.group()

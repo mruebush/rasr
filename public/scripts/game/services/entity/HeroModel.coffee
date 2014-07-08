@@ -3,7 +3,6 @@ app.factory 'Hero', (Arrow) ->
   arrowIndex = 0
   numArrows = 50
   heartRemoved = false
-  segments = 80
   heartSegment = 20
   Hero = {}
   collisionHeight = null
@@ -83,34 +82,33 @@ app.factory 'Hero', (Arrow) ->
     })
 
     Hero.damage = ->
-      Hero.sprite.animations.play 'damage_' + Hero.directionFacing, 15, false
-      Hero.meta.health--
-      heartRemoved = false if @meta.health <= segments
-      if @meta.health <= segments and not heartRemoved
-        do Hero.game.hearts.children.pop
-        segments -= heartSegment
-        heartRemoved = true
+      if Hero.died is false
+        Hero.sprite.animations.play 'damage_' + Hero.directionFacing, 15, false
+        Hero.meta.health = Math.max(Hero.meta.health - 1, 0)
+        if @meta.health <= (Hero.game.hearts.length - 1) * heartSegment
+          do Hero.game.hearts.children.pop
 
-      Hero.healthBar.clear()
+        Hero.healthBar.clear()
 
-      color = switch
-        when @meta.health < 25 then color = 0xFF0000
-        when @meta.health < 50 then color = 0xFF9900
-        when @meta.health < 75 then color = 0x00FF00
-        else 0x009933
+        color = switch
+          when @meta.health < 25 then color = 0xFF0000
+          when @meta.health < 50 then color = 0xFF9900
+          when @meta.health < 75 then color = 0x00FF00
+          else 0x009933
 
-      Hero.healthBar.lineStyle 10, color, 1
-      Hero.healthBar.moveTo(0, -10)
-      Hero.healthBar.lineTo((Hero.sprite.body.width / 100) * @meta.health, -10)
+        Hero.healthBar.lineStyle 10, color, 1
+        Hero.healthBar.moveTo(0, -10)
+        Hero.healthBar.lineTo((Hero.sprite.body.width / 100) * @meta.health, -10)
 
-      if @meta.health <= 0
-        Hero.sprite.animations.play "die", 15, false
-        Hero.died = true
+        if @meta.health <= 0
+          Hero.sprite.animations.play "die", 15, false
+          Hero.died = true
+          Hero.sprite.body.velocity.x = 0
+          Hero.sprite.body.velocity.y = 0
+          do Hero.game.gameOver
+      else
         Hero.sprite.body.velocity.x = 0
         Hero.sprite.body.velocity.y = 0
-        do Hero.game.gameOver
-
-
 
     Hero.createArrows = ->
       # taken care of by "Arrow" Service
@@ -138,8 +136,6 @@ app.factory 'Hero', (Arrow) ->
 
       Hero.game.physics.enable(Hero.sprite, Hero.phaser.Physics.ARCADE)
       Hero.sprite.body.collideWorldBounds = true
-
-      do Hero.attachHealthBar
 
       Hero.sprite.animations.add("down", Phaser.Animation.generateFrameNames('walk_down', 0, 11, '.png', 4), 30, false)
       Hero.sprite.animations.add("left", Phaser.Animation.generateFrameNames('walk_left', 0, 11, '.png', 4), 30, false)
@@ -172,6 +168,7 @@ app.factory 'Hero', (Arrow) ->
       Hero.sprite.animations.add("bored", Phaser.Animation.generateFrameNames('bored_', 1, 4, '.png', 2), 5, false)
       Hero.sprite.animations.add("very_bored", Phaser.Animation.generateFrameNames('very_bored_', 1, 9, '.png', 2), 5, false)
 
+      do Hero.attachHealthBar
 
       Hero.sprite.frameName = "bored_04.png"
       Hero._setControls()
