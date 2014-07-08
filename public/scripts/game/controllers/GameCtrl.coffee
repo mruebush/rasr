@@ -221,7 +221,7 @@ app.controller 'GameCtrl', ['$scope', '$window', '$state', '$stateParams', '$loc
   explosion = ->
     explosionAnimation = explosions.getFirstExists(false)
     if explosionAnimation
-      explosionAnimation.reset(@sprite.x, @sprite.y)
+      # explosionAnimation.reset(@sprite.x, @sprite.y)
       explosionAnimation.play('kaboom', 30, false, true)
 
   addChat = (chat) ->
