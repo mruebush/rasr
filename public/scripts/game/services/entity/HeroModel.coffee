@@ -1,16 +1,16 @@
 app.factory 'Hero', (Arrow) ->
-  nextFire = 0
-  arrowIndex = 0
-  numArrows = 50
-  heartRemoved = false
-  heartSegment = 20
-  Hero = {}
-  collisionHeight = null
-  collisionHeightOffset = null
-  collisionWidth = null
-  collisionWidthOffset = null
-
+  
   return (game, phaser, meta) ->
+    Hero = {}
+    nextFire = 0
+    arrowIndex = 0
+    numArrows = 50
+    heartRemoved = false
+    heartSegment = 20
+    collisionHeight = null
+    collisionHeightOffset = null
+    collisionWidth = null
+    collisionWidthOffset = null
 
     Hero.levelUp = ->
       @level++

@@ -168,7 +168,7 @@ app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
           heroJoined data
 
     playerJoined = (data) ->
-      player = new Player(game, Phaser,
+      player = Player(game, Phaser,
         x: data.x
         y: data.y
       )
@@ -179,7 +179,7 @@ app.factory 'Socket', (Player, Enemy, Messages, SERVER_URL) ->
 
     heroJoined = (data) ->
       for other in data.others
-        player = new Player(game, Phaser,
+        player = Player(game, Phaser,
           x: other.x
           y: other.y
         )
