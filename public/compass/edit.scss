@@ -593,7 +593,7 @@ ul#layerlist > li.active {
 }
 
 .ui-widget-overlay {
-	position: absolute;
+	position: fixed;
 	top: 0px;
 	left: 0px;
 	background-color: rgba(0, 0, 0, 0.5);
